@@ -1,0 +1,174 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Application Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register all of the routes for an application.
+| It's a breeze. Simply tell Laravel the URIs it should respond to
+| and give it the controller to call when that URI is requested.
+|
+*/
+Route::group(['middleware' => 'cors'], function () 
+{  
+
+	Route::get('/', function () {
+    return response()->json(['status'=>'ok','aplicacion'=>'aplicacion de saludos'],200);
+	});
+	Route::resource('pais','PaisController');
+	Route::resource('usuarios','UserController',['only' => ['store', 'update', 'show','destroy','index']]);
+	Route::resource('roles','RolController',['only' => ['store','show','index']]);   
+	Route::post('login','ApiAuthController@userAuth');
+
+ // permite buscar paciente por el ci
+     Route::get('personas_ci/{per_ci}','PersonaController@buscar_persona');
+ //crear,editar,ver,eliminar,listar persona
+    Route::resource('persona', 'PersonaController', ['only' => ['store', 'update', 'show','destroy','index']]);
+    // ver datos del funcionario por el per_id
+    Route::get('funcionarios_per/{per_id}','FuncionarioController@ver_funcionario');
+
+    Route::resource('usacsia','UsacsiaController', ['only'=>['index','update','show']]);
+    Route::resource('telefono','TelefonoController', ['only'=>['index','update']]);
+    Route::resource('enfermedad','EnfermedadController', ['only'=>['index','show','store','update','destroy']]);
+
+    //Listar tratamientos de una enfermedad enf_id
+    Route::get('tratamientos_x_enfermedad/{enfe_id}','EnfermedadController@tratamientos_x_enfermedad');
+    //Listar tratamientos de un parasito par_id
+    Route::get('tratamientos_x_parasito/{par_id}','Parasito_tratamientoController@tratamientos_x_parasito');
+
+    Route::resource('tratamiento','TratamientoController', ['only'=>['index','show','store','update','destroy']]);
+    Route::post('enfermedad_tratamiento','Enfermedad_tratamientoController@store');
+    
+
+    /*vero*/
+    Route::resource('parasito_tratamiento','Parasito_tratamientoController',['only'=>['store','destroy']]);
+    //tratamientos que no estan asignados a un parasito
+    Route::get('tratamiento2/{par_id}','Parasito_tratamientoController@sin_asignar');
+    Route::resource('muestra','MuestraController', ['only'=>['store','index','show']]);
+    Route::get('buscar_numero_muestra/{mue_id}','MuestraController@buscar_numero_muestra');
+    /*vero*/
+
+
+    Route::resource('parasito','ParasitoController',['only'=>['index','show','store','update','destroy']]);
+    Route::resource('ficha','FichaController', ['only'=>['index','show','store','update','destroy']]);
+
+    Route::resource('trat_de_parasitos_en_la_prueba','Prueba_par_tratController', ['only'=>['index','show','store','update','destroy']]);
+    
+    Route::resource('prueba_laboratorio','Prueba_laboratorioController', ['only'=>['index','show','store','update','destroy']]);
+    //retorna la ultima prueba laboratorio que se realizó
+    Route::get('ultima_prueba_laboratorio/{pt_id}','Prueba_laboratorioController@ultima_pl_tramite');
+    
+
+    Route::resource('prueba_par','Prueba_parController', ['only'=>['store','update','destroy']]);
+    Route::get('parasitosprueba/{pl_id}','Prueba_parController@parasitosprueba');
+    Route::get('parasitos_no_prueba/{pl_id}','Prueba_parController@parasitos_no_prueba');
+
+
+
+
+    // Route::get('personatramite/{pt_id}', 'Persona_tramiteController@personadetramite');
+
+
+
+
+    /*wen*/
+    Route::get('ambiente','AmbienteController@index');
+    Route::post('ambiente','AmbienteController@store');
+
+    /*CONSULTORIO*/
+   Route::resource('consultorio','ConsultorioController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+    Route::post('ambiente_consultorio','ConsultorioController@crear_ambiente_consultorio');
+    Route::get('lis_consultorio','ConsultorioController@listar_consultorios');
+/*LABORATORIO*/
+    Route::resource('laboratorio','LaboratorioController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+    Route::post('ambiente_laboratorio','LaboratorioController@crear_ambiente_laboratorio');
+    Route::get('lis_laboratorio','LaboratorioController@listar_laboratorios');
+/*TRAMITES*/
+    Route::get('tramite','TramiteController@index');
+    Route::resource('tramite','TramiteController',['only' => ['store', 'update', 'destroy', 'show']]);
+/*PERSONA_TRAMITE*///============================================================
+    Route::resource('pers_tra','Persona_tramiteController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+    //buscar persona_tramite
+    Route::get('buscar_persona_tramite/{per_ci}','Persona_tramiteController@buscar_persona_tramite');
+    Route::get('buscar_persona_tramite_ficha/{per_ci}','Persona_tramiteController@buscar_persona_tramite_ficha');
+
+
+    Route::get('tramites_x_tipo_tramite/{tra_id}','Persona_tramiteController@listar_x_tipo_tramite');
+    // jhon------------------------------fichas por fecha
+    Route::get('fichasfecha','FichaController@fichasfecha');
+    //jhon ultima ficha atendida del tramite
+    Route::get('ultimafichaatendida/{pt_id}','Persona_tramiteController@ultimafichaatendida');
+
+    /*/PERSONA_TRAMITE*///============================================================
+/*PRUEBA MEDICA*/
+    Route::resource('prueba_medica','Prueba_medicaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+    /* jhon  historial clinico perci de persona*/
+    Route::get('pruebamedicapersona/{per_ci}', 'Prueba_medicaController@pruebamedicapersona');
+    /*jhon ----estado de prueba enfermedad desde si al menos 1 es positivo=>false pruebas enfermedades*/
+    Route::get('estadopruebamedica/{pm_id}', 'Prueba_medicaController@estadopruebamedica');
+/*PRUEBA ENFERMEDAD*/
+    Route::resource('prueba_enfermedad','Prueba_enfermedadController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+/*    */
+    Route::get('consulta/{pm_id}','Prueba_medicaController@listar_enfermedades_prueba');
+    Route::post('consulta','Prueba_EnfermedadController@crear_prueba_medica_enfermedad');
+/*CARIES*/
+    Route::resource('caries','CariesController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+
+    /*--*/
+
+
+    /*jhon*/
+    //listar servicios
+    Route::get('servicio','ServicioController@index');
+    //listar departamentos
+    Route::get('departamento','DepartamentoController@index');
+    //listar provincias
+    Route::get('provincia','ProvinciaController@index');
+    //listar provincia por departamento
+    Route::get('provincia/{dep_id}','ProvinciaController@pronvicia_departamento');
+    //listar municipios
+    Route::get('municipio','MunicipioController@index');
+    //listar municipio por provincia 
+    Route::get('municipio/{pro_id}','MunicipioController@municipio_provincia');
+    //listar zona por municipio
+    Route::get('zona/{mun_id}', 'ZonaController@index');
+
+    //listar funcionarios por cargo 
+    Route::get('funcionario_cargo/{cargo}', 'FuncionarioController@listaporcargo');
+    //crear persona y funcionario
+    Route::post('funcionario_persona', 'FuncionarioController@crear_funcionario');
+    // operaciones con funcionario, crear funcionario desde una persona existente 
+    Route::resource('funcionario','FuncionarioController',['only' => ['index', 'store', 'update', 'show','destroy']]);
+    //editar solo datos del funcionario
+     Route::put('funcio/{fun_id}', 'FuncionarioController@editar_fun');
+
+
+    //operaciones con firma para crear debe corresponder al cargo
+    Route::resource('funcionario/firma','FirmaController',['only' => ['index', 'store', 'update', 'show']]);
+
+    // Route::get('fecha', 'HorarioController@index');
+    // index input(fun_id)
+    // store input(ser_id, amb_id, fun_id, hor_fecha_inicio, hor_fecha_final)
+    Route::resource('horario', 'HorarioController', ['only' =>['index', 'store', 'update', 'show']]);
+
+   
+    //JHON empresa
+    Route::resource('establecimiento_solicitante','EstablecimientoSolicitanteController', ['only' =>['index', 'store', 'update', 'show']]);
+    //jhon empresa operaciones
+    Route::resource('empresa', 'EmpresaController', ['only' =>['index', 'store', 'update', 'show']]);
+
+    //jhon fichas
+    Route::resource('ficha', 'FichaController',['only' =>['index', 'store', 'update', 'show']]);
+
+    /*EMPRESA wendy -- 13-12-17*/
+    Route::resource('empresa','EmpresaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+// permite listar a personas que ya concluyeron su tramite
+     Route::get('lista_final','Persona_tramiteController@lista_pers_tra');
+     // permite listar a personas que ya concluyeron su tramite
+     Route::get('ver_c/{pt_id}','Persona_tramiteController@ver');
+
+      // listar usuaios funcionarios ya creados
+     Route::get('usuarios_fun','UserController@usuarios_funcionarios');
+
+});
