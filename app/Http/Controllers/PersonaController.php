@@ -111,7 +111,7 @@ class PersonaController extends Controller
             {
                 return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra la persona con ese código.'])],404);
             }
-        $imagen = Imagen::where('per_id', $per_id)->get();
+        $imagen = Imagen::where('per_id', $per_id)->first();
         
         $zona= Zona::find($persona->zon_id);
         $municipio=Municipio::find($zona->mun_id);
@@ -128,8 +128,11 @@ class PersonaController extends Controller
 
 
         $persona= Persona::where('per_ci',$per_ci)/*->whereNull('paciente.deleted_at')*/->select('persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci','per_ci_expedido','per_fecha_nacimiento','per_email','per_numero_celular','per_genero')->get()->first();
+        if (!$persona) {
+            return response()->json(['mensaje'=>'exito','persona'=>0],200); 
+        }
 
-        return response()->json(['mensaje'=>'exito','persona'=>$persona],200); 
+        return response()->json(['mensaje'=>'exito','persona' => $persona],200); 
     }
 
 

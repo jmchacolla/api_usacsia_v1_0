@@ -28,6 +28,7 @@ class Persona_tramiteController extends Controller
             1: lista de tramites de carnet sanitario
             2: lista de tramites de certificado sanitario
         */
+
         $pers_tramite=Persona_tramite::select('pt_id','tramite.tra_nombre', 'persona.per_id','persona.per_ci','persona.per_nombres','persona.per_apellido_primero','persona.per_apellido_segundo','persona.per_fecha_nacimiento', 'persona.per_genero','persona.per_ocupacion','pt_tipo_tramite')
         ->join('tramite','tramite.tra_id','=','persona_tramite.tra_id')
         ->join('persona', 'persona.per_id', '=', 'persona_tramite.per_id')
@@ -110,7 +111,7 @@ class Persona_tramiteController extends Controller
         }
         $tramite=Tramite::find($persona_tramite->tra_id);
         $persona=Persona::find($persona_tramite->per_id);
-        $imagen=Imagen::where('per_id', $persona->per_id)->get();
+        $imagen=Imagen::where('per_id', $persona->per_id)->first();
         $zon_id=$persona->zon_id;
         $zona=Zona::find($zon_id);
         $municipio=Municipio::find($zona->mun_id);
