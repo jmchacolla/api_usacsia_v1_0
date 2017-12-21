@@ -144,7 +144,7 @@ class Persona_tramiteController extends Controller
         ->where('persona_tramite.pt_estado_tramite','!=',$vencido)
         ->join('persona', 'persona.per_id','=', 'persona_tramite.per_id')
         ->where('persona.per_ci', $per_ci)
-        ->orderBy('persona_tramite.created_at')
+        ->orderBy('persona_tramite.created_at', 'desc')
         ->first();
 
         if ($persona_tramite)
@@ -178,9 +178,8 @@ class Persona_tramiteController extends Controller
         ->where('prueba_medica.estado','OK')
         ->join('prueba_laboratorio','prueba_laboratorio.pt_id','=','persona_tramite.pt_id')
         ->where('prueba_laboratorio.estado','OK')*/
-        ->orderBy('persona_tramite.created_at')
+        ->orderBy('persona_tramite.created_at', 'desc')
         ->get();
-
         return response()->json(['status'=>'ok','msg'=>'exito',"persona_tramite"=>$persona_tramite], 200);
     }
      
@@ -199,7 +198,7 @@ class Persona_tramiteController extends Controller
         ->where('persona_tramite.pt_estado_tramite','!=',$vencido)
         ->join('persona', 'persona.per_id','=', 'persona_tramite.per_id')
         ->where('persona.per_ci', $per_ci)
-        ->orderBy('persona_tramite.created_at')
+        ->orderBy('persona_tramite.created_at','desc')
         ->first();
 
         if ($persona_tramite)
@@ -247,15 +246,39 @@ class Persona_tramiteController extends Controller
         return response()->json(['status'=>'ok','pertramite'=>$resultado],200);
        
     }
-
+    /*Retorna la ultima pm y la ultima ficha atendidos del y'tramite*/
     public function ultimafichaatendida($pt_id)
     {
-        $ficha=Ficha::where('ficha.pt_id', $pt_id)/*->where('fic_estado','=','ATENDIDO')*/->orderBy('ficha.created_at')->first();
+        $ficha=Ficha::where('ficha.pt_id', $pt_id)/*->where('fic_estado','=','ATENDIDO')*/->orderBy('ficha.created_at','desc')->first();
         if (!$ficha) {
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra la registro con ese código.'])],404);
         }
-        return response()->json(['status'=>'ok','ficha'=>$ficha],200);
+        $prueba_medica=Prueba_medica::where('fic_id',$ficha->fic_id)
+        ->first();
+        return response()->json(['status'=>'ok','ficha'=>$ficha, 'prueba_medica'=>$prueba_medica],200);
     }
+    /*Buscardor para realizar seguimiento, input per_ci & pt_numero_tramite; ouput pt_id*/
+    public function seguimiento(Request $request)
+    {
+       $per_ci=$request->per_ci;
+       $pt_numero_tramite=$request->pt_numero_tramite;
+
+       $persona=Persona::where('per_ci', $per_ci)->first();
+       if (!$persona) {
+           // return response()->json(['errors'=>array(['code'=>404,'message'=>'Cedula de identidad o número de trámite incorrecto.'])],404);
+           return response()->json(['status'=>'ok','message'=>'Cedula de identidad o número de trámite incorrecto.'],200);
+       }
+       $pertramite=Persona_tramite::where('pt_numero_tramite', $pt_numero_tramite)
+       ->orderBy('created_at', 'desc')
+       ->first();
+       if (!$pertramite){
+           // return response()->json(['errors'=>array(['code'=>404,'message'=>'Cedula de identidad o número de trámite incorrecto.'])],404);
+           return response()->json(['status'=>'ok','message'=>'Cedula de identidad o número de trámite incorrecto.'],200);
+       }
+       return response()->json(['status'=>'ok','pt_id'=>$pertramite->pt_id],200);
+
+    }
+
 
 
 
