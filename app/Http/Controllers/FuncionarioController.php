@@ -141,7 +141,7 @@ class FuncionarioController extends Controller
         }else{
             $persona->per_genero='FEMENINO';
         }
-        $imagen=Imagen::where('per_id', $per_id)->get();
+        $imagen=Imagen::where('per_id', $per_id)->first();
         $zon_id=$persona->zon_id;
         $zona=Zona::find($zon_id);
         $municipio=Municipio::find($zona->mun_id);
@@ -231,7 +231,8 @@ class FuncionarioController extends Controller
 
         if (!$funcionario)
         {
-             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una persona con ese código.'])],404);
+             /*return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una persona con ese código.','length'=>0])],404);*/
+             return response()->json(['errors'=>404,'message'=>'No se encuentra una persona con ese código.','length'=>0],200);
         }
 
        
