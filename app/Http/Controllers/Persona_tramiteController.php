@@ -28,11 +28,9 @@ class Persona_tramiteController extends Controller
             1: lista de tramites de carnet sanitario
             2: lista de tramites de certificado sanitario
         */
-<<<<<<< HEAD
-        $pers_tramite=Persona_tramite::select('tramite.tra_nombre', 'persona.per_id','persona.per_ci','persona.per_nombres','persona.per_apellido_primero','persona.per_apellido_segundo','persona.per_fecha_nacimiento', 'persona.per_genero','persona.per_ocupacion','pt_tipo_tramite','persona_tramite.pt_id')
-=======
+
         $pers_tramite=Persona_tramite::select('pt_id','tramite.tra_nombre', 'persona.per_id','persona.per_ci','persona.per_nombres','persona.per_apellido_primero','persona.per_apellido_segundo','persona.per_fecha_nacimiento', 'persona.per_genero','persona.per_ocupacion','pt_tipo_tramite')
->>>>>>> 156d81a4e47ed038f12c3181d3276877a35316f8
+
         ->join('tramite','tramite.tra_id','=','persona_tramite.tra_id')
         ->join('persona', 'persona.per_id', '=', 'persona_tramite.per_id')
         ->where('persona_tramite.tra_id', $tra_id)
