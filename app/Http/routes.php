@@ -174,4 +174,8 @@ Route::group(['middleware' => 'cors'], function ()
       // listar usuaios funcionarios ya creados
      Route::get('usuarios_fun','UserController@usuarios_funcionarios');
 
+      /*jhon 201217*/
+      /*SEGUIMIENTO TRAMITE CaS*/
+     Route::get('seguimiento', 'Persona_tramiteController@seguimiento');
+
 });

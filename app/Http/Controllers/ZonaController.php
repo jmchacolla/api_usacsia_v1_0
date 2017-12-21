@@ -11,7 +11,7 @@ class ZonaController extends Controller
 {
     public function index($mun_id)
     {
-        $zona = Zona::where('mun_id', $mun_id)->get();
+        $zona = Zona::where('mun_id', $mun_id)->orderBy('zon_nombre')->get();
         return response()->json(['status'=>'ok','mensaje'=>'exito','zona'=>$zona],200);
     }
 }
