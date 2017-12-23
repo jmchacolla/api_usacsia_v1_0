@@ -27,6 +27,26 @@ class MuestraController extends Controller
         $muestra =new Muestra();
         $muestra->pt_id=$request->pt_id;
         $muestra->mue_num_muestra=$numero_muestra;
+
+        /*vero---verifica si un tramite ya tuvo una prueba de laboratorio, para ver si este numero de muestra es nuevo o control---*/
+        $pt_id=$muestra->pt_id;
+        $tramitenovencido=Persona_tramite::find($pt_id)
+        ->where('pt_estado_pago','!=','VENCIDO')
+        ->get();
+        if($tramitenovencido){
+            $tramitepruebalaboratorio = Muestra::where('muestra.pt_id',$pt_id)
+            ->join('prueba_laboratorio','prueba_laboratorio.mue_id','=','muestra.mue_id')->first();
+            if($tramitepruebalaboratorio){
+                $muestra->mue_tipo = 'CONTROL';
+            }else{
+                $muestra->mue_tipo = 'PRUEBA';
+            }    
+        }else{
+            return response()->json(['status'=>'ok',"msg" => "Tramite con pago vencido"],200);     
+        }
+
+        /*vero fin*/
+
         $muestra->save();
 
         return response()->json(['status'=>'ok',"msg" => "exito",'muestra'=>$muestra],200); 
