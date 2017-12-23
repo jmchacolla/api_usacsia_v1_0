@@ -15,6 +15,7 @@ use App\Models\Prueba_enfermedad;
 use App\Models\Funcionario;
 use App\Models\Persona;
 use App\Models\Enfermedad;
+use App\Models\Receta;
 
 class Prueba_medicaController extends Controller
 {
@@ -130,8 +131,12 @@ class Prueba_medicaController extends Controller
         ->join('enfermedad','enfermedad.enfe_id', '=', 'prueba_enfermedad.enfe_id')
         ->orderby('enfermedad.enfe_id')
         ->get();
+        // retorna la receta del tratamiento
+        $receta=Receta::where('pm_id', $pm_id)
+        ->orderBy('created_at', 'desc')
+        ->first();
          //saca datos de prueba medica
-        $prueba_medica=compact('prueba_medica','persona_tra','servicio','funcionario','paciente','pruebas');
+        $prueba_medica=compact('prueba_medica','persona_tra','servicio','funcionario','paciente','pruebas','receta');
        return response()->json(['status'=>'ok','prueba_medica'=>$prueba_medica],200);
     }
 

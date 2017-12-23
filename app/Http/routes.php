@@ -178,4 +178,7 @@ Route::group(['middleware' => 'cors'], function ()
       /*SEGUIMIENTO TRAMITE CaS*/
      Route::get('seguimiento', 'Persona_tramiteController@seguimiento');
 
+
+     /*jhon----operacines con receta*/
+     Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
 });
