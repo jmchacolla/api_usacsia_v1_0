@@ -15,6 +15,7 @@ use App\Models\Municipio;
 use App\Models\Provincia;
 use App\Models\Departamento;
 use App\Models\Ficha;
+use App\Models\Receta;
 use App\Models\Prueba_medica;
 use App\Models\Prueba_laboratorio;
 
@@ -256,7 +257,12 @@ class Persona_tramiteController extends Controller
         }
         $prueba_medica=Prueba_medica::where('fic_id',$ficha->fic_id)
         ->first();
-        return response()->json(['status'=>'ok','ficha'=>$ficha, 'prueba_medica'=>$prueba_medica],200);
+        if ($prueba_medica) {
+            $receta=Receta::where('pm_id',$prueba_medica->pm_id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        }
+        return response()->json(['status'=>'ok','ficha'=>$ficha, 'prueba_medica'=>$prueba_medica, 'receta'=>$receta],200);
     }
     /*Buscardor para realizar seguimiento, input per_ci & pt_numero_tramite; ouput pt_id*/
     public function seguimiento(Request $request)
