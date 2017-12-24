@@ -14,10 +14,11 @@ Route::group(['middleware' => 'cors'], function ()
 {  
 
 	Route::get('/', function () {
-    return response()->json(['status'=>'ok','aplicacion'=>'aplicacion de saludos'],200);
+    return response()->json(['status'=>'ok','aplicacion'=>'welcome API_USACSIAS JAJAJA'], 200);
 	});
 	Route::resource('pais','PaisController');
 	Route::resource('usuarios','UserController',['only' => ['store', 'update', 'show','destroy','index']]);
+    /*dorys para las sesiones*/
 	Route::resource('roles','RolController',['only' => ['store','show','index']]);   
 	Route::post('login','ApiAuthController@userAuth');
 
@@ -32,6 +33,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('telefono','TelefonoController', ['only'=>['index','update']]);
     Route::resource('enfermedad','EnfermedadController', ['only'=>['index','show','store','update','destroy']]);
 
+    /*desde vero*/
     //Listar tratamientos de una enfermedad enf_id
     Route::get('tratamientos_x_enfermedad/{enfe_id}','EnfermedadController@tratamientos_x_enfermedad');
     //Listar tratamientos de un parasito par_id
@@ -41,14 +43,13 @@ Route::group(['middleware' => 'cors'], function ()
     Route::post('enfermedad_tratamiento','Enfermedad_tratamientoController@store');
     
 
-    /*vero*/
+    
     Route::resource('parasito_tratamiento','Parasito_tratamientoController',['only'=>['store','destroy']]);
     //tratamientos que no estan asignados a un parasito
     Route::get('tratamiento2/{par_id}','Parasito_tratamientoController@sin_asignar');
     Route::resource('muestra','MuestraController', ['only'=>['store','index','show']]);
     Route::get('buscar_numero_muestra/{mue_id}','MuestraController@buscar_numero_muestra');
-    /*vero*/
-
+    
 
     Route::resource('parasito','ParasitoController',['only'=>['index','show','store','update','destroy']]);
     Route::resource('ficha','FichaController', ['only'=>['index','show','store','update','destroy']]);
@@ -63,8 +64,8 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('prueba_par','Prueba_parController', ['only'=>['store','update','destroy']]);
     Route::get('parasitosprueba/{pl_id}','Prueba_parController@parasitosprueba');
     Route::get('parasitos_no_prueba/{pl_id}','Prueba_parController@parasitos_no_prueba');
-
-
+    Route::resource('documento_tramite','DocumentoTramiteController',['only'=>['index','store','update']]);
+    /*vero*/
 
 
     // Route::get('personatramite/{pt_id}', 'Persona_tramiteController@personadetramite');
@@ -85,15 +86,17 @@ Route::group(['middleware' => 'cors'], function ()
     Route::post('ambiente_laboratorio','LaboratorioController@crear_ambiente_laboratorio');
     Route::get('lis_laboratorio','LaboratorioController@listar_laboratorios');
 /*TRAMITES*/
+    /*tramites--vero  --arreglar las rutas*/
     Route::get('tramite','TramiteController@index');
     Route::resource('tramite','TramiteController',['only' => ['store', 'update', 'destroy', 'show']]);
 /*PERSONA_TRAMITE*///============================================================
     Route::resource('pers_tra','Persona_tramiteController',['only' => ['store', 'update', 'destroy', 'show','index']]);
-    //buscar persona_tramite
+    //buscar persona_tramite --vero
     Route::get('buscar_persona_tramite/{per_ci}','Persona_tramiteController@buscar_persona_tramite');
+    //vero -- buscar tramite de la personapara ver si ya tiene una ficha el dia de hoy
     Route::get('buscar_persona_tramite_ficha/{per_ci}','Persona_tramiteController@buscar_persona_tramite_ficha');
 
-
+    //vero -- listar todos los tramites de 1 carnet sanitario o 2 certificado sanitario
     Route::get('tramites_x_tipo_tramite/{tra_id}','Persona_tramiteController@listar_x_tipo_tramite');
     // jhon------------------------------fichas por fecha
     Route::get('fichasfecha','FichaController@fichasfecha');
