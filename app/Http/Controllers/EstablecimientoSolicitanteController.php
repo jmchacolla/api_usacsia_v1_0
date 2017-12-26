@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use App\Http\Requests;
 use App\Models\EstablecimientoSolicitante;
 use App\Models\EmpresaPropietario;
+use App\Models\EmpresaTramite;
 use App\Models\Zona;
 use App\Models\Municipio;
 use App\Models\Provincia;
@@ -26,8 +27,8 @@ class EstablecimientoSolicitanteController extends Controller
         # crea un establecimiento solicitante
     public function store(Request $request)
     {
-        $est_sol = new EstablecimientoSolicitante();
 
+        $est_sol = new EstablecimientoSolicitante();
         $est_sol->coo_per_id=$request->coo_per_id;
         $est_sol->zon_id=$request->zon_id;
         $est_sol->ess_razon_social=Str::upper($request->ess_razon_social);
@@ -42,8 +43,19 @@ class EstablecimientoSolicitanteController extends Controller
         $est_sol->ess_altitud=$request->ess_altitud;//guarda vacio si no se envia nada
         $est_sol->save();
 
+        $est_sol = new Empresa();
+        $est_sol->emp_rubro=$request->emp_rubro;
+        $est_sol->emp_nit=$request->emp_nit;
+        emp_url_nit
+        emp_url_licencia
+        $est_sol->ess_razon_social=Str::upper($request->ess_razon_social);
+        $est_sol->ess_telefono=$request->ess_telefono;
+        $est_sol->save();
 
-
+        $empresapropietario = new EmpresaPropietario();
+        $empresapropietario->emp_id=->emp_id;
+        $empresapropietario->pro_id=->pro_id;
+        $empresapropietario->save();
 
         return response()->json(["msg" => "exito", "est_sol" => $est_sol], 200);
 

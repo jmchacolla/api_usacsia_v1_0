@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -34,7 +34,8 @@ class EmpresaPropietario extends Model
     /**
      * @var array
      */
-    protected $fillable = ['emp_id', 'pro_id', 'created_at', 'updated_at', 'deleted_at', 'userid_at'];
+    protected $fillable = ['emp_id', 'pro_id'];
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'userid_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
