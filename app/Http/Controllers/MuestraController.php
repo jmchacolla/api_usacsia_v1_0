@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Models\Muestra;
 use App\Models\Prueba_laboratorio;
+use App\Models\Persona_tramite;
 
 class MuestraController extends Controller
 {
