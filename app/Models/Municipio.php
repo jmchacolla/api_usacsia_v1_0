@@ -39,7 +39,8 @@ class Municipio extends Model
     /**
      * @var array
      */
-    protected $fillable = ['pro_id', 'reg_id', 'mun_cod_sice', 'pro_cod_sice', 'mun_nombre', 'created_at', 'updated_at', 'deleted_at', 'userid_at'];
+    protected $fillable = ['pro_id', 'reg_id', 'mun_cod_sice', 'pro_cod_sice', 'mun_nombre'];
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'userid_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

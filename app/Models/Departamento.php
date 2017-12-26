@@ -33,7 +33,8 @@ class Departamento extends Model
     /**
      * @var array
      */
-    protected $fillable = ['dep_nombre', 'created_at', 'updated_at', 'deleted_at', 'userid_at'];
+    protected $fillable = ['dep_nombre'];
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'userid_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

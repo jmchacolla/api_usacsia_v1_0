@@ -5,52 +5,51 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property Propietario $propietario
+ * @property Persona $persona
+ * @property int $pnat_id
  * @property int $pro_id
- * @property int $dep_id
- * @property int $pro_cod_sice
- * @property string $pro_nombre
+ * @property int $per_id
  * @property string $created_at
  * @property string $updated_at
  * @property string $deleted_at
  * @property int $userid_at
- * @property Departamento $departamento
- * @property Municipio[] $municipios
  */
-class Provincia extends Model
+class PersonaNatural extends Model
 {
     /**
      * The table associated with the model.
      * 
      * @var string
      */
-    protected $table = 'provincia';
+    protected $table = 'p_natural';
 
     /**
      * The primary key for the model.
      * 
      * @var string
      */
-    protected $primaryKey = 'pro_id';
+    protected $primaryKey = 'pnat_id';
 
     /**
      * @var array
      */
-    protected $fillable = ['dep_id', 'pro_cod_sice', 'pro_nombre'];
+    protected $fillable = ['pro_id', 'per_id'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'userid_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function departamento()
+    public function propietario()
     {
-        return $this->belongsTo('App\Departamento', 'dep_id', 'dep_id');
+        return $this->belongsTo('App\Propietario', 'pro_id', 'pro_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function municipios()
+    public function persona()
     {
-        return $this->hasMany('App\Municipio', 'pro_id', 'pro_id');
+        return $this->belongsTo('App\Persona', 'per_id', 'per_id');
     }
 }

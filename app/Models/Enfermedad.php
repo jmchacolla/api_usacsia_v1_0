@@ -40,7 +40,9 @@ class Enfermedad extends Model
      * @var array
      */
     protected $fillable = ['enfe_nombre', 'enfe_causas', 'enfe_descripcion', 'enfe_prevencion', 'enfe_necesita_ref'];
-    protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'userid_at'];
+    protected $hidden = ['created_at', 'updated_at', 'userid_at'];
+    protected $dates=['deleted_at'];
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

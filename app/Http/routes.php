@@ -208,4 +208,16 @@ Route::group(['middleware' => 'cors'], function ()
      Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
      
 
+
+     /*jhon operaciones arancel categoria*/
+     Route::resource('categoria', 'CategoriaController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
+     /*jhon operaciones arancel subclasificacion*/
+     Route::resource('subclasificacion', 'SubclasificacionController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
+     /*jhon operaciones arancel clasificacion especialidad*/
+     Route::resource('clasificacion_especialidad', 'ClasificacionEspecialidadController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
+     /*jhon operaciones arancel clasificacion general*/
+     Route::resource('clasificacion_general', 'ClasificacionGeneralController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
+     /*jhon operaciones arancel clasificacion general*/
+    Route::resource('empresa_tramite', 'EmpresaTramiteController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
+
 });
