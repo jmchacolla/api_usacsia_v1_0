@@ -14,6 +14,8 @@ use App\Models\Persona;
 use App\Models\Propietario;
 use App\Models\EmpresaPropietario;
 use App\Models\PersonaNatural;
+use App\Models\PersonaJuridica;
+
 
 class EmpresaTramiteController extends Controller
 {
@@ -91,35 +93,35 @@ class EmpresaTramiteController extends Controller
         $empt->save();
         return response()->json(['status'=>'ok',"mensaje"=>"modificado exitosamente","empt"=>$empt,"est"=>$est,"empresa"=>$empresa], 200);
     }
-    public function buscarpropietario(Request $request)
+    public function buscarpropietario($parametro)
     {   
-        $persona=Persona::select('persona.per_ci', 'establecimiento_solicitante.ess_id', 'empresa.emp_id')
+        $persona=Persona::select('persona', 'establecimiento_solicitante', 'empresa')
         ->join('p_natural', 'p_natural.per_id','=', 'persona.per_id')
         ->join('propietario', 'propietario.pro_id', '=', 'p_natural.pro_id')
         ->join('empresa_propietario', 'empresa_propietario.pro_id', '=', 'propietario.pro_id')
         ->join('empresa', 'empresa.emp_id', '=', 'empresa_propietario.emp_id')
         ->join('establecimiento_solicitante', 'establecimiento_solicitante.ess_id', '=', 'empresa.ess_id')
-        ->where('per_ci', $request->parametro)
+        ->where('per_ci', $parametro)
         ->get();
-        if (!$persona){
-            $ess=EstablecimientoSolicitante::where('ess_razon_social', $request->parametro)->get();
+        if (sizeof($persona)<=0){
+            $ess=EstablecimientoSolicitante::where('ess_razon_social', $parametro)->first();
             if (!$ess) {
                 return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
             }
             $empresa=Empresa::where('ess_id', $ess->ess_id)->first();
             $empresa_propietario=EmpresaPropietario::where('emp_id', $empresa->emp_id)->first();
-            $propietario=Propietario::where('pro_id', 'empresa_propietario.pro_id')->first();
-            if ($propietario->pro_tipo='J') {
-                $pjuridica=PersonaJuridica::where('pro_id', $propietario->pro_tipo)->first();
+            $propietario=Propietario::where('pro_id', $empresa_propietario->pro_id)->first();
+            $tipo=$propietario->pro_tipo;
+            if($tipo=='J') {
+                $pjuridica=PersonaJuridica::where('pro_id', $propietario->pro_id)->first();
                 return response()->json(['status'=>'ok',"mensaje"=>"Encontrado","ess"=>$ess, "empresa"=>$empresa, "empresa_propietario"=>$empresa_propietario,"propietario"=>$propietario, "pjuridica"=>$pjuridica], 200);
             }
-            $pnat=PersonaNatural::where('pro_id', $propietario->pro_tipo)->first();
+            $pnat=PersonaNatural::where('pro_id', $propietario->pro_id)->first();
             $per=Persona::where('per_id', $pnat->per_id)->first();
 
-            return response()->json(['status'=>'ok',"mensaje"=>"Encontrado","ess"=>$ess, "empresa"=>$empresa, "empresa_propietario"=>$empresa_propietario,"propietario"=>$propietario, "pnat"=>$pnat, "per"=>$per], 200);
+            return response()->json(['status'=>'ok',"mensaje"=>"Encontrado","ess"=>$ess, "empresa"=>$empresa,"empresa_propietario"=>$empresa_propietario,"propietario"=>$propietario, "pnat"=>$pnat, "per"=>$per], 200);
         }
-        return response()->json(['status'=>'ok',"mensaje"=>"Encontrado empresa","persona"=>$persona], 200);
-          
+        return response()->json(['status'=>'ok',"mensaje"=>"Encontrado empresa 2","persona"=>$persona], 200);
     }
 
 }

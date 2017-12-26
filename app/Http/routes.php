@@ -207,5 +207,5 @@ Route::group(['middleware' => 'cors'], function ()
      /*jhon operaciones arancel clasificacion general*/
     Route::resource('empresa_tramite', 'EmpresaTramiteController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
     /*jhon   busca por per_ci o ess_razon_social*/
-    Route::get('buscarpropietario', 'EmpresaTramiteController@buscarpropietario');
+    Route::get('buscarpropietario/{parametro}', 'EmpresaTramiteController@buscarpropietario');
 });
