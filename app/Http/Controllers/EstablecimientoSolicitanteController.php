@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use App\Http\Requests;
 use App\Models\EstablecimientoSolicitante;
 use App\Models\Propietario;
+use App\Models\PersonaNatural;
 use App\Models\EmpresaPropietario;
 use App\Models\RubroEmpresa;
 use App\Models\EmpresaTramite;
@@ -45,7 +46,7 @@ class EstablecimientoSolicitanteController extends Controller
         $est_sol->save();
 
         $empresa = new Empresa();
-        $empresa->emp_kardex=$request->emp_kardex;
+        $empresa->ess_id=$est_sol->ess_id;
         $empresa->emp_nit=$request->emp_nit;
         $empresa->emp_url_nit=$request->emp_url_nit;
         $empresa->emp_url_licencia=$request->emp_url_licencia;
@@ -60,9 +61,14 @@ class EstablecimientoSolicitanteController extends Controller
         $propietario->pro_tipo=$request->pro_tipo;
         $propietario->save();
 
+        $personatural = new PersonaNatural();
+        $personatural->pro_id=$propietario->pro_id;
+        $personatural->per_id=$request->per_id;
+        $personatural->save();
+
         $empresapropietario = new EmpresaPropietario();
         $empresapropietario->emp_id=$empresa->emp_id;
-        $empresapropietario->pro_id=-$propietario->pro_id;
+        $empresapropietario->pro_id=$propietario->pro_id;
         $empresapropietario->save();
 
         $empresatramite = new EmpresaTramite();
@@ -74,9 +80,9 @@ class EstablecimientoSolicitanteController extends Controller
         enviar
         empresa
         */
-        
+        $result=compact('est_sol','empresa','rubroempresa');
 
-        return response()->json(["msg" => "exito", "est_sol" => $est_sol], 200);
+        return response()->json(["msg" => "exito", "est_sol" => $result], 200);
     }
     //actualizar
     public function update(Request $request)
