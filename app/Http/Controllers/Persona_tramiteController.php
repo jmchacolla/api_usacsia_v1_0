@@ -174,6 +174,7 @@ class Persona_tramiteController extends Controller
         $vencido="VENCIDO";*/
         $persona_tramite = Persona_tramite::select('persona_tramite.pt_id','persona_tramite.pt_estado_tramite','persona.per_id','per_nombres','per_apellido_primero', 'per_apellido_segundo', 'per_ci', 'per_ocupacion','per_ci_expedido')
         ->where('pt_estado_tramite','CONCLUIDO')
+        ->orWhere('pt_estado_tramite','APROBADO')
         ->join('persona', 'persona.per_id','=', 'persona_tramite.per_id')
        /* ->join('prueba_medica','prueba_medica.pt_id','=','persona_tramite.pt_id')
         ->where('prueba_medica.estado','OK')
@@ -278,6 +279,46 @@ class Persona_tramiteController extends Controller
        }
        return response()->json(['status'=>'ok','pt_id'=>$pertramite->pt_id],200);
 
+    }
+
+
+
+    public function editar(Request $request, $pt_id)
+    {
+        $persona_tramite=Persona_tramite::find($pt_id);
+
+         if (!$persona_tramite)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una tramite de carnet sanitario con ese código.'])],404);
+        }
+        $persona_tramite->pt_estado_tramite=$request->pt_estado_tramite;
+        $persona_tramite->save();
+
+        $per_id=$persona_tramite->per_id;
+
+       /* $carnet=Carnet_sanitario::crear_carnet($pt_id);
+
+        $pe_hist_clinico=$request->pe_hist_clinico;
+        $pac_id=$referencia->pac_id;
+        $es_id=$request->es_id;
+
+       
+        if($pe_hist_clinico!=null)
+
+        {  $paciente_establecimiento=\awebss\Models\Paciente_establecimiento::crear_paciente($es_id,$pac_id,$pe_hist_clinico); 
+        
+
+        $resultado=compact('referencia','paciente_establecimiento');
+
+        return response()->json(['status'=>'ok','mensaje'=>'exito','referencia'=>$resultado],200);
+        }
+    $paciente_es= \awebss\Models\Paciente_establecimiento::activar_paciente($pac_id,$es_id);
+
+        $resultado=compact('referencia','paciente_es');
+
+        return response()->json(['status'=>'ok','mensaje'=>'exito','referencia'=>$resultado],200);
+      */  
+        return response()->json(['status'=>'ok','mensaje'=>'exito','persona_tramite'=>$persona_tramite],200);
     }
 
 
