@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 
 use App\Http\Requests;
 use App\Models\EstablecimientoSolicitante;
+use App\Models\EmpresaPropietario;
 use App\Models\Zona;
 use App\Models\Municipio;
 use App\Models\Provincia;
@@ -40,6 +41,10 @@ class EstablecimientoSolicitanteController extends Controller
         $est_sol->ess_longitud=$request->ess_longitud;//guarda vacio si no se envia nada
         $est_sol->ess_altitud=$request->ess_altitud;//guarda vacio si no se envia nada
         $est_sol->save();
+
+
+
+
         return response()->json(["msg" => "exito", "est_sol" => $est_sol], 200);
 
     }
