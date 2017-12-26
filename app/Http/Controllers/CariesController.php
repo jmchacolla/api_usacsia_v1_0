@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use App\Http\Requests;
+use App\Models\Caries;
 
 class CariesController extends Controller
 {
     public function index()
     {
-    	$caries=\App\Models\Caries::all();
+    	$caries=Caries::all();
         return response()->json(['status'=>'ok','mensaje'=>'exito','caries'=>$caries],200); 
     }
 

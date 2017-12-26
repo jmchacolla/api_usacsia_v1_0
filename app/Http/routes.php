@@ -148,8 +148,11 @@ Route::group(['middleware' => 'cors'], function ()
 
 
     //operaciones con firma para crear debe corresponder al cargo
-    Route::resource('funcionario/firma','FirmaController',['only' => ['index', 'store', 'update', 'show']]);
-
+   /* Route::resource('funcionario/firma','FirmaController',['only' => ['index', 'store', 'update', 'show']]);*/
+    Route::resource('func_firma','FirmaController',['only' => ['index', 'store', 'update', 'show']]);
+//ver la firma de un funcionario
+    Route::get('firma/{fun_id}','FirmaController@ver_firma_funcionario');
+   //   Route::post('firmac','FirmaController@store');
     // Route::get('fecha', 'HorarioController@index');
     // index input(fun_id)
     // store input(ser_id, amb_id, fun_id, hor_fecha_inicio, hor_fecha_final)
@@ -173,5 +176,23 @@ Route::group(['middleware' => 'cors'], function ()
 
       // listar usuaios funcionarios ya creados
      Route::get('usuarios_fun','UserController@usuarios_funcionarios');
+
+      /*jhon 201217*/
+      /*SEGUIMIENTO TRAMITE CaS*/
+     Route::get('seguimiento', 'Persona_tramiteController@seguimiento');
+
+
+     //wendy carnet 23-12-2017
+    Route::resource('carnet', 'Carnet_sanitarioController',['only' =>['index', 'store', 'update', 'show']]);
+    // edita el campo estado de tramite de una persona tramite
+    Route::put('tramite_estado/{pt_id}','Persona_tramiteController@editar');
+    //wendy ficha de inspeccion 1 26-12-2017
+    Route::resource('ficha1', 'Ficha1Controller',['only' =>['index', 'store', 'update', 'show']]);
+    //wendy ficha de inspeccion 26-12-2017
+    Route::resource('ficha_inspeccion', 'Ficha_inspeccionController',['only' =>['index', 'store', 'update', 'show']]);
+
+
+     /*jhon----operacines con receta*/
+     Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
 
 });

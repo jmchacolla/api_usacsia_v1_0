@@ -15,6 +15,7 @@ use App\Models\Municipio;
 use App\Models\Provincia;
 use App\Models\Departamento;
 use App\Models\Ficha;
+use App\Models\Receta;
 use App\Models\Prueba_medica;
 use App\Models\Prueba_laboratorio;
 
@@ -28,6 +29,7 @@ class Persona_tramiteController extends Controller
             1: lista de tramites de carnet sanitario
             2: lista de tramites de certificado sanitario
         */
+
         $pers_tramite=Persona_tramite::select('pt_id','tramite.tra_nombre', 'persona.per_id','persona.per_ci','persona.per_nombres','persona.per_apellido_primero','persona.per_apellido_segundo','persona.per_fecha_nacimiento', 'persona.per_genero','persona.per_ocupacion','pt_tipo_tramite')
         ->join('tramite','tramite.tra_id','=','persona_tramite.tra_id')
         ->join('persona', 'persona.per_id', '=', 'persona_tramite.per_id')
@@ -110,7 +112,7 @@ class Persona_tramiteController extends Controller
         }
         $tramite=Tramite::find($persona_tramite->tra_id);
         $persona=Persona::find($persona_tramite->per_id);
-        $imagen=Imagen::where('per_id', $persona->per_id)->get();
+        $imagen=Imagen::where('per_id', $persona->per_id)->first();
         $zon_id=$persona->zon_id;
         $zona=Zona::find($zon_id);
         $municipio=Municipio::find($zona->mun_id);
@@ -144,7 +146,7 @@ class Persona_tramiteController extends Controller
         ->where('persona_tramite.pt_estado_tramite','!=',$vencido)
         ->join('persona', 'persona.per_id','=', 'persona_tramite.per_id')
         ->where('persona.per_ci', $per_ci)
-        ->orderBy('persona_tramite.created_at')
+        ->orderBy('persona_tramite.created_at', 'desc')
         ->first();
 
         if ($persona_tramite)
@@ -173,14 +175,14 @@ class Persona_tramiteController extends Controller
         $vencido="VENCIDO";*/
         $persona_tramite = Persona_tramite::select('persona_tramite.pt_id','persona_tramite.pt_estado_tramite','persona.per_id','per_nombres','per_apellido_primero', 'per_apellido_segundo', 'per_ci', 'per_ocupacion','per_ci_expedido')
         ->where('pt_estado_tramite','CONCLUIDO')
+        ->orWhere('pt_estado_tramite','APROBADO')
         ->join('persona', 'persona.per_id','=', 'persona_tramite.per_id')
        /* ->join('prueba_medica','prueba_medica.pt_id','=','persona_tramite.pt_id')
         ->where('prueba_medica.estado','OK')
         ->join('prueba_laboratorio','prueba_laboratorio.pt_id','=','persona_tramite.pt_id')
         ->where('prueba_laboratorio.estado','OK')*/
-        ->orderBy('persona_tramite.created_at')
+        ->orderBy('persona_tramite.created_at', 'desc')
         ->get();
-
         return response()->json(['status'=>'ok','msg'=>'exito',"persona_tramite"=>$persona_tramite], 200);
     }
      
@@ -199,7 +201,7 @@ class Persona_tramiteController extends Controller
         ->where('persona_tramite.pt_estado_tramite','!=',$vencido)
         ->join('persona', 'persona.per_id','=', 'persona_tramite.per_id')
         ->where('persona.per_ci', $per_ci)
-        ->orderBy('persona_tramite.created_at')
+        ->orderBy('persona_tramite.created_at','desc')
         ->first();
 
         if ($persona_tramite)
@@ -247,15 +249,84 @@ class Persona_tramiteController extends Controller
         return response()->json(['status'=>'ok','pertramite'=>$resultado],200);
        
     }
-
+    /*Retorna la ultima pm y la ultima ficha atendidos del y'tramite*/
     public function ultimafichaatendida($pt_id)
     {
-        $ficha=Ficha::where('ficha.pt_id', $pt_id)/*->where('fic_estado','=','ATENDIDO')*/->orderBy('ficha.created_at')->first();
+        $ficha=Ficha::where('ficha.pt_id', $pt_id)/*->where('fic_estado','=','ATENDIDO')*/->orderBy('ficha.created_at','desc')->first();
         if (!$ficha) {
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra la registro con ese código.'])],404);
         }
-        return response()->json(['status'=>'ok','ficha'=>$ficha],200);
+        $prueba_medica=Prueba_medica::where('fic_id',$ficha->fic_id)
+        ->first();
+        if ($prueba_medica) {
+            $receta=Receta::where('pm_id',$prueba_medica->pm_id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        }
+        return response()->json(['status'=>'ok','ficha'=>$ficha, 'prueba_medica'=>$prueba_medica, 'receta'=>$receta],200);
     }
+    /*Buscardor para realizar seguimiento, input per_ci & pt_numero_tramite; ouput pt_id*/
+    public function seguimiento(Request $request)
+    {
+       $per_ci=$request->per_ci;
+       $pt_numero_tramite=$request->pt_numero_tramite;
+
+       $persona=Persona::where('per_ci', $per_ci)->first();
+       if (!$persona) {
+           // return response()->json(['errors'=>array(['code'=>404,'message'=>'Cedula de identidad o número de trámite incorrecto.'])],404);
+           return response()->json(['status'=>'ok','message'=>'Cedula de identidad o número de trámite incorrecto.'],200);
+       }
+       $pertramite=Persona_tramite::where('pt_numero_tramite', $pt_numero_tramite)
+       ->orderBy('created_at', 'desc')
+       ->first();
+       if (!$pertramite){
+           // return response()->json(['errors'=>array(['code'=>404,'message'=>'Cedula de identidad o número de trámite incorrecto.'])],404);
+           return response()->json(['status'=>'ok','message'=>'Cedula de identidad o número de trámite incorrecto.'],200);
+       }
+       return response()->json(['status'=>'ok','pt_id'=>$pertramite->pt_id],200);
+
+    }
+
+
+
+    public function editar(Request $request, $pt_id)
+    {
+        $persona_tramite=Persona_tramite::find($pt_id);
+
+         if (!$persona_tramite)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una tramite de carnet sanitario con ese código.'])],404);
+        }
+        $persona_tramite->pt_estado_tramite=$request->pt_estado_tramite;
+        $persona_tramite->save();
+
+        $per_id=$persona_tramite->per_id;
+
+       /* $carnet=Carnet_sanitario::crear_carnet($pt_id);
+
+        $pe_hist_clinico=$request->pe_hist_clinico;
+        $pac_id=$referencia->pac_id;
+        $es_id=$request->es_id;
+
+       
+        if($pe_hist_clinico!=null)
+
+        {  $paciente_establecimiento=\awebss\Models\Paciente_establecimiento::crear_paciente($es_id,$pac_id,$pe_hist_clinico); 
+        
+
+        $resultado=compact('referencia','paciente_establecimiento');
+
+        return response()->json(['status'=>'ok','mensaje'=>'exito','referencia'=>$resultado],200);
+        }
+    $paciente_es= \awebss\Models\Paciente_establecimiento::activar_paciente($pac_id,$es_id);
+
+        $resultado=compact('referencia','paciente_es');
+
+        return response()->json(['status'=>'ok','mensaje'=>'exito','referencia'=>$resultado],200);
+      */  
+        return response()->json(['status'=>'ok','mensaje'=>'exito','persona_tramite'=>$persona_tramite],200);
+    }
+
 
 
 

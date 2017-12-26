@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
+
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Models\Tratamiento;
@@ -23,18 +25,18 @@ class TratamientoController extends Controller
 
 	public function store(Request $request){
 		$tratamiento = new Tratamiento();
-		$tratamiento->trat_nombre=$request->trat_nombre;
-		$tratamiento->trat_dosis=$request->trat_dosis;
-		$tratamiento->trat_descripcion=$request->trat_descripcion;
+		$tratamiento->trat_nombre=Str::upper($request->trat_nombre);
+		$tratamiento->trat_dosis=Str::upper($request->trat_dosis);
+		$tratamiento->trat_descripcion=Str::upper($request->trat_descripcion);
 	    $tratamiento->save();
 	    return response()->json(['status'=>'ok', 'tratamiento'=> $tratamiento], 200);
 	}
 
 	public function update(Request $request, $trat_id){
 		$tratamiento = Tratamiento::find($trat_id);
-		$tratamiento->trat_nombre=$request->trat_nombre;
-		$tratamiento->trat_dosis=$request->trat_dosis;
-		$tratamiento->trat_descripcion=$request->trat_descripcion;
+		$tratamiento->trat_nombre=Str::upper($request->trat_nombre);
+		$tratamiento->trat_dosis=Str::upper($request->trat_dosis);
+		$tratamiento->trat_descripcion=Str::upper($request->trat_descripcion);
 	    $tratamiento->save();
 	    return response()->json(['status'=>'ok', 'tratamiento'=> $tratamiento], 200);
 	}
