@@ -1,22 +1,26 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property DocumentoTramite[] $documentoTramites
- * @property CertificadoSanitario[] $certificadoSanitarios
- * @property PagoPendiente[] $pagoPendientes
+ * @property Tramite $tramite
+ * @property EstablecimientoSolicitante $establecimientoSolicitante
+ * @property Funcionario $funcionario
  * @property int $et_id
  * @property int $tra_id
  * @property int $ess_id
+ * @property int $fun_id
  * @property int $et_numero_tramite
- * @property float $et_estado_pago
+ * @property string $et_vigencia_pago
  * @property string $et_fecha_ini
  * @property string $et_fecha_fin
- * @property string $et_estado
+ * @property string $et_estado_pago
+ * @property string $et_estado_tramite
  * @property float $et_monto
+ * @property string $et_tipo_tramite
+ * @property string $et_vigencia_documento
  * @property string $created_at
  * @property string $updated_at
  * @property string $deleted_at
@@ -41,29 +45,31 @@ class EmpresaTramite extends Model
     /**
      * @var array
      */
-    protected $fillable = ['tra_id', 'ess_id', 'et_numero_tramite', 'et_estado_pago', 'et_fecha_ini', 'et_fecha_fin', 'et_estado', 'et_monto', 'created_at', 'updated_at', 'deleted_at', 'userid_at'];
 
+    protected $fillable = ['tra_id', 'ess_id', 'fun_id', 'et_numero_tramite', 'et_vigencia_pago', 'et_fecha_ini', 'et_fecha_fin', 'et_estado_pago', 'et_estado_tramite', 'et_monto', 'et_tipo_tramite', 'et_vigencia_documento'];
+    protected $hidden = ['created_at', 'updated_at', 'userid_at'];
+    protected $dates=['deleted_at'];
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function documentoTramites()
+    public function tramite()
     {
-        return $this->hasMany('App\DocumentoTramite', 'et_id', 'et_id');
+        return $this->belongsTo('App\Tramite', 'tra_id', 'tra_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function certificadoSanitarios()
+    public function establecimientoSolicitante()
     {
-        return $this->hasMany('App\CertificadoSanitario', 'et_id', 'et_id');
+        return $this->belongsTo('App\EstablecimientoSolicitante', 'ess_id', 'ess_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function pagoPendientes()
+    public function funcionario()
     {
-        return $this->hasMany('App\PagoPendiente', 'et_id', 'et_id');
+        return $this->belongsTo('App\Funcionario', 'fun_id', 'fun_id');
     }
 }

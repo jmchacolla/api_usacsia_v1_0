@@ -7,7 +7,9 @@ use Illuminate\Support\Str;
 
 use App\Http\Requests;
 use App\Models\EstablecimientoSolicitante;
+use App\Models\Propietario;
 use App\Models\EmpresaPropietario;
+use App\Models\RubroEmpresa;
 use App\Models\EmpresaTramite;
 use App\Models\Zona;
 use App\Models\Municipio;
@@ -29,7 +31,6 @@ class EstablecimientoSolicitanteController extends Controller
     {
 
         $est_sol = new EstablecimientoSolicitante();
-        $est_sol->coo_per_id=$request->coo_per_id;
         $est_sol->zon_id=$request->zon_id;
         $est_sol->ess_razon_social=Str::upper($request->ess_razon_social);
         $est_sol->ess_telefono=$request->ess_telefono;
@@ -43,22 +44,39 @@ class EstablecimientoSolicitanteController extends Controller
         $est_sol->ess_altitud=$request->ess_altitud;//guarda vacio si no se envia nada
         $est_sol->save();
 
-        $est_sol = new Empresa();
-        $est_sol->emp_rubro=$request->emp_rubro;
-        $est_sol->emp_nit=$request->emp_nit;
-        emp_url_nit
-        emp_url_licencia
-        $est_sol->ess_razon_social=Str::upper($request->ess_razon_social);
-        $est_sol->ess_telefono=$request->ess_telefono;
-        $est_sol->save();
+        $empresa = new Empresa();
+        $empresa->emp_kardex=$request->emp_kardex;
+        $empresa->emp_nit=$request->emp_nit;
+        $empresa->emp_url_nit=$request->emp_url_nit;
+        $empresa->emp_url_licencia=$request->emp_url_licencia;
+        $empresa->save();
+
+        $rubroempresa = new RubroEmpresa();
+        $rubroempresa->emp_id=$empresa->emp_id;
+        $rubroempresa->re_nombre=$request->re_nombre;
+        $rubroempresa->save();
+
+        $propietario = new Propietario();
+        $propietario->pro_tipo=$request->pro_tipo;
+        $propietario->save();
 
         $empresapropietario = new EmpresaPropietario();
-        $empresapropietario->emp_id=->emp_id;
-        $empresapropietario->pro_id=->pro_id;
+        $empresapropietario->emp_id=$empresa->emp_id;
+        $empresapropietario->pro_id=-$propietario->pro_id;
         $empresapropietario->save();
 
-        return response()->json(["msg" => "exito", "est_sol" => $est_sol], 200);
+        $empresatramite = new EmpresaTramite();
+        $empresatramite->tra_id=$request->tra_id;
+        $empresatramite->ess_id=$est_sol->ess_id;
+        $empresatramite->save();
 
+        /*
+        enviar
+        empresa
+        */
+        
+
+        return response()->json(["msg" => "exito", "est_sol" => $est_sol], 200);
     }
     //actualizar
     public function update(Request $request)
