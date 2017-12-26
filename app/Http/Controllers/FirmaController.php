@@ -32,6 +32,7 @@ class FirmaController extends Controller
                     $firma->fir_fecha_inicio=$request->fir_fecha_inicio;
                     $firma->fir_fecha_fin = $request->fir_fecha_fin;
                     $firma->fir_url = $request->fir_url;
+                    $firma->fir_name = $request->fir_name;
                     $firma->save();
                     return response()->json(['satatus'=>'ok', 'firma'=> $firma], 200);
                 }
@@ -39,10 +40,21 @@ class FirmaController extends Controller
         return response()->json(['errors'=>array(['code'=>404,'message'=>'No corresponde al funcionario generar una firma'])],404);
     }
     //mostrar la firma de un funcionario
-    public function show($fun_id)
+    public function show($fir_id)
     {   
-            $firma=Firma::where('firma.fun_id', $fun_id)->get()->first();
+            $firma=Firma::find($fir_id);
             return response()->json(['status'=>'ok', 'firma'=>$firma], 200);
+    }
+    //ver firma
+     public function ver_firma_funcionario($fun_id)
+    {   
+            /*$firma=Firma::where('firma.fun_id', $fun_id)->get()->first();*/
+            $funcionario=Funcionario::find($fun_id);
+        /*    $firma=Firma::select('firma.fir_id','fun_id',)*/
+            $firma=Firma::where('firma.fun_id', $fun_id)->get()->first();
+            $result=compact('funcionario','firma');
+            /*$firma=Firma::find($fun_id);*/
+            return response()->json(['status'=>'ok', 'firma'=>$result], 200);
     }
     //actualizar firma 
     public function update($fir_id,Request $request)
@@ -68,5 +80,12 @@ class FirmaController extends Controller
             }
         }
         return response()->json(['errors'=>array(['code'=>404,'message'=>'No corresponde al funcionario generar una firma'])],404);
+    }
+
+    public function index()
+    {
+        $firmas=Firma::all();
+        return response()->json(['status'=>'ok', 'firma'=>$firmas], 200);
+
     }
 }
