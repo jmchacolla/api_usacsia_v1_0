@@ -190,9 +190,22 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('ficha1', 'Ficha1Controller',['only' =>['index', 'store', 'update', 'show']]);
     //wendy ficha de inspeccion 26-12-2017
     Route::resource('ficha_inspeccion', 'Ficha_inspeccionController',['only' =>['index', 'store', 'update', 'show']]);
+    // crea la ficha narrativa 1
+    Route::post('ficha1','Ficha_inspeccionController@crear_ficha1');
+    // crea la ficha narrativa 2
+    Route::post('ficha2','Ficha_inspeccionController@crear_ficha2');
+    // crea la ficha narrativa 3
+    Route::post('ficha3','Ficha_inspeccionController@crear_ficha3');
+    // crea la ficha narrativa 4
+    Route::post('ficha4','Ficha_inspeccionController@crear_ficha4');
+    // crea la ficha narrativa 4
+    Route::post('ficha5','Ficha_inspeccionController@crear_ficha5');
+    // crea la ficha narrativa 4
+    Route::post('ficha6','Ficha_inspeccionController@crear_ficha6');
 
 
      /*jhon----operacines con receta*/
      Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+     
 
 });

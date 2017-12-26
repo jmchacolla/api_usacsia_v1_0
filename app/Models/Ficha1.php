@@ -57,7 +57,7 @@ class Ficha1 extends Model
     /**
      * @var array
      */
-    protected $fillable = ['fi_id', 'fi1_fecha_realizacion', 'fi1_observacion', 'fi1_estado', 'fi1_foco_insalubridad', 'fi1_exibe_certificado', 'fi1_exibe_carnes', 'fi1_infraestructura', 'fi1_servicios_higienicos', 'fi1_otros_servicios', 'fi1_inodoro', 'fi1_jaboncillo', 'fi1_lavamanos_porcelana', 'fi1_toallas', 'fi1_duchas', 'fi1_detalle_equipo', 'fi1_detalle_utencilios', 'fi1_otros', 'fi1_recomendaciones', 'fi1_aseo_personal', 'fi1_residuos_solidos', 'fi1_abastecimiento_agua', 'fi1_control_insectos_roedores', 'fi1_residuos_liquidos', 'fi1_distribucion_dependencias', 'fi1_conservacion_productos_materia_prima', 'created_at', 'updated_at', 'deleted_at', 'userid_at'];
+    protected $fillable = ['fi_id', 'fi1_fecha_realizacion', 'fi1_observacion', 'fi1_estado', 'fi1_foco_insalubridad', 'fi1_exibe_certificado', 'fi1_exibe_carnes', 'fi1_infraestructura', 'fi1_servicios_higienicos', 'fi1_otros_servicios', 'fi1_inodoro', 'fi1_jaboncillo', 'fi1_lavamanos_porcelana', 'fi1_toallas', 'fi1_duchas', 'fi1_detalle_equipo', 'fi1_detalle_utencilios', 'fi1_otros', 'fi1_recomendaciones', 'fi1_aseo_personal', 'fi1_residuos_solidos', 'fi1_abastecimiento_agua', 'fi1_control_insectos_roedores', 'fi1_residuos_liquidos', 'fi1_distribucion_dependencias', 'fi1_conservacion_productos_materia_prima'];
     protected $hidden = ['created_at', 'updated_at', 'userid_at'];
     protected $dates=['deleted_at'];
 
