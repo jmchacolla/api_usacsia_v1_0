@@ -181,6 +181,7 @@ Route::group(['middleware' => 'cors'], function ()
       /*SEGUIMIENTO TRAMITE CaS*/
      Route::get('seguimiento', 'Persona_tramiteController@seguimiento');
 
+
      //wendy carnet 23-12-2017
     Route::resource('carnet', 'Carnet_sanitarioController',['only' =>['index', 'store', 'update', 'show']]);
     // edita el campo estado de tramite de una persona tramite
@@ -189,4 +190,9 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('ficha1', 'Ficha1Controller',['only' =>['index', 'store', 'update', 'show']]);
     //wendy ficha de inspeccion 26-12-2017
     Route::resource('ficha_inspeccion', 'Ficha_inspeccionController',['only' =>['index', 'store', 'update', 'show']]);
+
+
+     /*jhon----operacines con receta*/
+     Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+
 });
