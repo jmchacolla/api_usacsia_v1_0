@@ -45,6 +45,7 @@ class EmpresaTramite extends Model
     /**
      * @var array
      */
+
     protected $fillable = ['tra_id', 'ess_id', 'fun_id', 'et_numero_tramite', 'et_vigencia_pago', 'et_fecha_ini', 'et_fecha_fin', 'et_estado_pago', 'et_estado_tramite', 'et_monto', 'et_tipo_tramite', 'et_vigencia_documento'];
     protected $hidden = ['created_at', 'updated_at', 'userid_at'];
     protected $dates=['deleted_at'];

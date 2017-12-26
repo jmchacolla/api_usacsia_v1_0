@@ -6,50 +6,40 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property Empresa $empresa
- * @property Propietario $propietario
- * @property int $ep_id
+ * @property int $re_id
  * @property int $emp_id
- * @property int $pro_id
+ * @property string $re_nombre
  * @property string $created_at
  * @property string $updated_at
  * @property string $deleted_at
  * @property int $userid_at
  */
-class EmpresaPropietario extends Model
+class RubroEmpresa extends Model
 {
     /**
      * The table associated with the model.
      * 
      * @var string
      */
-    protected $table = 'empresa_propietario';
+    protected $table = 'rubro_empresa';
 
     /**
      * The primary key for the model.
      * 
      * @var string
      */
-    protected $primaryKey = 'ep_id';
+    protected $primaryKey = 're_id';
 
     /**
      * @var array
      */
-    protected $fillable = ['emp_id', 'pro_id'];
+    protected $fillable = ['emp_id', 're_nombre'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'userid_at'];
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function empresa()
     {
         return $this->belongsTo('App\Empresa', 'emp_id', 'emp_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function propietario()
-    {
-        return $this->belongsTo('App\Propietario', 'pro_id', 'pro_id');
     }
 }

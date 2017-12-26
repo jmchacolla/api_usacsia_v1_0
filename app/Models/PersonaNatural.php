@@ -5,45 +5,37 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property Empresa $empresa
  * @property Propietario $propietario
- * @property int $ep_id
- * @property int $emp_id
+ * @property Persona $persona
+ * @property int $pnat_id
  * @property int $pro_id
+ * @property int $per_id
  * @property string $created_at
  * @property string $updated_at
  * @property string $deleted_at
  * @property int $userid_at
  */
-class EmpresaPropietario extends Model
+class PersonaNatural extends Model
 {
     /**
      * The table associated with the model.
      * 
      * @var string
      */
-    protected $table = 'empresa_propietario';
+    protected $table = 'p_natural';
 
     /**
      * The primary key for the model.
      * 
      * @var string
      */
-    protected $primaryKey = 'ep_id';
+    protected $primaryKey = 'pnat_id';
 
     /**
      * @var array
      */
-    protected $fillable = ['emp_id', 'pro_id'];
+    protected $fillable = ['pro_id', 'per_id'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'userid_at'];
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function empresa()
-    {
-        return $this->belongsTo('App\Empresa', 'emp_id', 'emp_id');
-    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -51,5 +43,13 @@ class EmpresaPropietario extends Model
     public function propietario()
     {
         return $this->belongsTo('App\Propietario', 'pro_id', 'pro_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function persona()
+    {
+        return $this->belongsTo('App\Persona', 'per_id', 'per_id');
     }
 }
