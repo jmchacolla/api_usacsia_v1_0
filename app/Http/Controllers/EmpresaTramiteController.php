@@ -62,9 +62,9 @@ class EmpresaTramiteController extends Controller
             ->first();
         
         }
-        else{
+/*        else{
              $establecimiento_persona=Establecimiento_persona::where('ess_id',$ess_id)->first();
-        }
+        }*/
 
         $result=compact('empresa_tramite','establecimiento_sol','empresa','establecimiento_persona','empresa_persona','empresa_juridica');
 
