@@ -190,6 +190,8 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('ficha1', 'Ficha1Controller',['only' =>['index', 'store', 'update', 'show']]);
     //wendy ficha de inspeccion 26-12-2017
     Route::resource('ficha_inspeccion', 'Ficha_inspeccionController',['only' =>['index', 'store', 'update', 'show']]);
+    //para ver la ficha 1
+    Route::resource('fichas1', 'Ficha1Controller',['only' =>['index', 'store', 'update', 'show']]);
     // crea la ficha narrativa 1
     Route::post('ficha1','Ficha_inspeccionController@crear_ficha1');
     // crea la ficha narrativa 2

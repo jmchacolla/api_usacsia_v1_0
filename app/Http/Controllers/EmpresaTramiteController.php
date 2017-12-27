@@ -10,12 +10,14 @@ use App\Models\EmpresaTramite;
 use App\Models\EstablecimientoSolicitante;
 use App\Models\Empresa;
 use App\Models\Tramite;
+use App\Models\Establecimiento_persona;
+use App\Models\EmpresaPropietario;
 
 class EmpresaTramiteController extends Controller
 {
     public function index()
     {
-        $empt=EmpresaTramite::select('empresa_tramite.et_id', 'empresa_tramite.et_numero_tramite','establecimieto_solicitante.ess_id', 'establecimieto_solicitante.ess_razon_social');
+        $empt=EmpresaTramite::all()/*select('empresa_tramite.et_id', 'empresa_tramite.et_numero_tramite','establecimieto_solicitante.ess_id', 'establecimieto_solicitante.ess_razon_social')*/;
         return response()->json(['status'=>'ok',"mensaje"=>"listado tramites CeS","empt"=>$empt], 200);
     }
     public function store(Request $request)
@@ -40,12 +42,33 @@ class EmpresaTramiteController extends Controller
     }
     public function show($et_id)
     {
-        $empt=EmpresaTramite::find($et_id);
-        if (!$empt) {
+        $empresa_tramite=EmpresaTramite::find($et_id);
+        if (!$empresa_tramite) {
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
         }
-        $est=EstablecimientoSolicitante::where('ess_id', $empt->ess_id)->first();
-        $empresa=Empresa::where('ess_id', $est->ess_id);
-        return response()->json(['status'=>'ok',"mensaje"=>"creado exitosamente","empt"=>$empt,"est"=>$est,"empresa"=>$empresa], 200);
+        $ess_id=$empresa_tramite->ess_id;
+        $establecimiento_sol=EstablecimientoSolicitante::where('ess_id', $ess_id)->first();
+        if ($establecimiento_sol->ess_tipo=='EMPRESA') {
+            $empresa=Empresa::where('ess_id', $ess_id)->first();
+
+            $empresa_persona=EmpresaPropietario::where('emp_id',$empresa->emp_id)
+            ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
+            ->join('p_natural','p_natural.pro_id','=','propietario.pro_id')
+            ->join('persona','persona.per_id','=','p_natural.per_id')->first();
+            
+            $empresa_juridica=EmpresaPropietario::where('emp_id',$empresa->emp_id)
+            ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
+            ->join('p_juridica','p_juridica.pro_id','=','propietario.pro_id')
+            ->first();
+        
+        }
+        else{
+             $establecimiento_persona=Establecimiento_persona::where('ess_id',$ess_id)->first();
+        }
+
+        $result=compact('empresa_tramite','establecimiento_sol','empresa','establecimiento_persona','empresa_persona','empresa_juridica');
+
+        return response()->json(['status'=>'ok',"mensaje"=>"creado exitosamente",/*"empt"=>$empt,"est"=>$est,"empresa"=>$empresa,"est_pers"=>$est_per*/'establecimiento'=>$result], 200);
+
     }
 }
