@@ -127,13 +127,13 @@ class Ficha_inspeccionController extends Controller
         $ficha2->fi2_ropero =$request->fi2_ropero;
         $ficha2->fi2_lavanderia =$request->fi2_lavanderia;
         $ficha2->fi2_cortina =$request->fi2_cortina;
-        $ficha2->fi2_pisos_baño =$request->fi2_pisos_baño;
+        $ficha2->fi2_pisos_bano =$request->fi2_pisos_bano;
         $ficha2->fi2_azulejos =$request->fi2_azulejos;
         $ficha2->fi2_depiso =$request->fi2_depiso;
         $ficha2->fi2_inodoro =$request->fi2_inodoro;
         $ficha2->fi2_lavamanos =$request->fi2_lavamanos;
         $ficha2->fi2_porta_papel =$request->fi2_porta_papel;
-        $ficha2->fi2_basura_baño =$request->fi2_basura_baño;
+        $ficha2->fi2_basura_bano =$request->fi2_basura_bano;
         $ficha2->fi2_ducha =$request->fi2_ducha;
         $ficha2->fi2_pieducha =$request->fi2_pieducha;
         $ficha2->fi2_colgador =$request->fi2_colgador;

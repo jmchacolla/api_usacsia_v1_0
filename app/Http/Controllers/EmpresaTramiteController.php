@@ -56,25 +56,22 @@ class EmpresaTramiteController extends Controller
         }
         $ess_id=$empresa_tramite->ess_id;
         $establecimiento_sol=EstablecimientoSolicitante::where('ess_id', $ess_id)->first();
-        if ($establecimiento_sol->ess_tipo=='EMPRESA') {
-            $empresa=Empresa::where('ess_id', $ess_id)->first();
 
-            $empresa_persona=EmpresaPropietario::where('emp_id',$empresa->emp_id)
-            ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
-            ->join('p_natural','p_natural.pro_id','=','propietario.pro_id')
-            ->join('persona','persona.per_id','=','p_natural.per_id')->first();
-            
-            $empresa_juridica=EmpresaPropietario::where('emp_id',$empresa->emp_id)
+        $empresa=Empresa::where('ess_id', $ess_id)->first();
+
+        $propietario=EmpresaPropietario::where('emp_id',$empresa->emp_id)
+        ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
+        ->join('p_natural','p_natural.pro_id','=','propietario.pro_id')
+        ->join('persona','persona.per_id','=','p_natural.per_id')->first();
+        if ($propietario==null) {
+            $propietario=EmpresaPropietario::where('emp_id',$empresa->emp_id)
             ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
             ->join('p_juridica','p_juridica.pro_id','=','propietario.pro_id')
             ->first();
-        
         }
-/*        else{
-             $establecimiento_persona=Establecimiento_persona::where('ess_id',$ess_id)->first();
-        }*/
-
-        $result=compact('empresa_tramite','establecimiento_sol','empresa','establecimiento_persona','empresa_persona','empresa_juridica');
+        
+    
+        $result=compact('empresa_tramite','establecimiento_sol','empresa','propietario');
 
         return response()->json(['status'=>'ok',"mensaje"=>"creado exitosamente",/*"empt"=>$empt,"est"=>$est,"empresa"=>$empresa,"est_pers"=>$est_per*/'establecimiento'=>$result], 200);
 
