@@ -13,7 +13,7 @@ class MunicipioController extends Controller
     // lista las provincias por departamento
     public function index()
         {
-            $municipio = Municipio::all();
+            $municipio = Municipio::orderBy('mun_nombre')->get();
             return response()->json(['status'=>'ok',"msg" => "exito",'municipio'=>$municipio],200); 
         }
     // lista las municipios por departamento

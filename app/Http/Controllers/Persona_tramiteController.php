@@ -70,14 +70,11 @@ class Persona_tramiteController extends Controller
 		$persona_tramite->save();
 
    		return response()->json(['status'=>'ok',"mensaje"=>"creado exitosamente","persona_tramite"=>$persona_tramite], 200);
-
     }
 
     public function update(Request $request, $pt_id)
     {
        $persona_tramite= Persona_tramite::find($pt_id);
-
-       
        if (!$persona_tramite)
         {
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un ambiente con ese código.'])],404);
@@ -94,13 +91,9 @@ class Persona_tramiteController extends Controller
 		if ($request->pt_tipo_tramite) {$persona_tramite->pt_tipo_tramite=$request->pt_tipo_tramite;}
        /* $ambientes->userid_at='2';*/
         $persona_tramite->save();
-
-      
-     
         return response()->json(['status'=>'ok',"mensaje"=>"editado exitosamente","persona_tramite"=>$persona_tramite], 200);
          
     }
-
      public function show($pt_id)
     {
         $persona_tramite= Persona_tramite::find($pt_id);
@@ -148,7 +141,6 @@ class Persona_tramiteController extends Controller
         ->where('persona.per_ci', $per_ci)
         ->orderBy('persona_tramite.created_at', 'desc')
         ->first();
-
         if ($persona_tramite)
         {    
             $idepersonatramite=$persona_tramite->pt_id;
@@ -162,11 +154,8 @@ class Persona_tramiteController extends Controller
                 return response()->json(['status'=>'ok','msg'=>"con numero de muestra",'muestra'=>$existe],200); 
             }
         }
-        
          return response()->json(['status'=>'ok','msg'=>'sin numero de muestra',"persona_tramite"=>$persona_tramite], 200);
         }
-
-
     /*lista de personas que concluyeron el tramite*/
      public function lista_pers_tra()
     {
@@ -217,13 +206,11 @@ class Persona_tramiteController extends Controller
                 return response()->json(['status'=>'ok','msg'=>"con numero de ficha",'ficha'=>$existe],200); 
             }
         }
-        
          return response()->json(['status'=>'ok','msg'=>'sin numero de ficha',"persona_tramite"=>$persona_tramite], 200);
     }
 
      public function ver($pt_id)
     {
-
         $persona_tramite= Persona_tramite::find($pt_id);
         if (!$persona_tramite)
         {
@@ -247,7 +234,6 @@ class Persona_tramiteController extends Controller
 
         $resultado=compact('persona_tramite', 'persona','tramite','muestra','prueba_laboratorio','ficha','prueba_medica');
         return response()->json(['status'=>'ok','pertramite'=>$resultado],200);
-       
     }
     /*Retorna la ultima pm y la ultima ficha atendidos del y'tramite*/
     public function ultimafichaatendida($pt_id)
@@ -270,7 +256,6 @@ class Persona_tramiteController extends Controller
     {
        $per_ci=$request->per_ci;
        $pt_numero_tramite=$request->pt_numero_tramite;
-
        $persona=Persona::where('per_ci', $per_ci)->first();
        if (!$persona) {
            // return response()->json(['errors'=>array(['code'=>404,'message'=>'Cedula de identidad o número de trámite incorrecto.'])],404);
@@ -284,10 +269,7 @@ class Persona_tramiteController extends Controller
            return response()->json(['status'=>'ok','message'=>'Cedula de identidad o número de trámite incorrecto.'],200);
        }
        return response()->json(['status'=>'ok','pt_id'=>$pertramite->pt_id],200);
-
     }
-
-
 
     public function editar(Request $request, $pt_id)
     {
