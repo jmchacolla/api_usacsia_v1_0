@@ -30,40 +30,53 @@ class EstablecimientoSolicitanteController extends Controller
         # crea un establecimiento solicitante
     public function store(Request $request)
     {
+        /*convirtiendo $request establecimiento a object*/
+        $requeste_array=$request->establecimiento;
+        $requeste_string=json_encode($requeste_array);
+        $requeste_object=json_decode($requeste_string);
+
 
         $est_sol = new EstablecimientoSolicitante();
-        $est_sol->zon_id=$request->zon_id;
-        $est_sol->ess_razon_social=Str::upper($request->ess_razon_social);
-        $est_sol->ess_telefono=$request->ess_telefono;
-        $est_sol->ess_correo_electronico=$request->ess_correo_electronico;
-        $est_sol->ess_tipo=Str::upper($request->ess_tipo);//--publico o privado
-        $est_sol->ess_avenida_calle=Str::upper($request->ess_avenida_calle);
-        $est_sol->ess_numero=$request->ess_numero;
-        $est_sol->ess_stand=Str::upper($request->ess_stand);
-        $est_sol->ess_latitud=$request->ess_latitud;//guarda vacio si no se envia nada
-        $est_sol->ess_longitud=$request->ess_longitud;//guarda vacio si no se envia nada
-        $est_sol->ess_altitud=$request->ess_altitud;//guarda vacio si no se envia nada
+        $est_sol->zon_id=$requeste_object->zon_id;
+        $est_sol->ess_razon_social=Str::upper($requeste_object->ess_razon_social);
+        $est_sol->ess_telefono=$requeste_object->ess_telefono;
+        $est_sol->ess_correo_electronico=$requeste_object->ess_correo_electronico;
+        $est_sol->ess_tipo=Str::upper($requeste_object->ess_tipo);//--publico o privado
+        $est_sol->ess_avenida_calle=Str::upper($requeste_object->ess_avenida_calle);
+        $est_sol->ess_numero=$requeste_object->ess_numero;
+        $est_sol->ess_stand=Str::upper($requeste_object->ess_stand);
+        $est_sol->ess_latitud=$requeste_object->ess_latitud;//guarda vacio si no se envia nada
+        $est_sol->ess_longitud=$requeste_object->ess_longitud;//guarda vacio si no se envia nada
+        $est_sol->ess_altitud=$requeste_object->ess_altitud;//guarda vacio si no se envia nada
         $est_sol->save();
 
         $empresa = new Empresa();
         $empresa->ess_id=$est_sol->ess_id;
-        $empresa->emp_nit=$request->emp_nit;
-        $empresa->emp_url_nit=$request->emp_url_nit;
-        $empresa->emp_url_licencia=$request->emp_url_licencia;
+        $empresa->emp_nit=$requeste_object->emp_nit;
+        $empresa->emp_url_nit=$requeste_object->emp_url_nit;
+        $empresa->emp_url_licencia=$requeste_object->emp_url_licencia;
         $empresa->save();
 
-        $rubroempresa = new RubroEmpresa();
-        $rubroempresa->emp_id=$empresa->emp_id;
-        $rubroempresa->re_nombre=$request->re_nombre;
-        $rubroempresa->save();
+        /*convirtiendo $request vector a object*/
+        $aux;
+        $requestv_array=$request->vector;
+        for ($i=0; $i < count($requestv_array); $i++) { 
+            $velement_string=json_encode($requestv_array[$i]);
+            $velement_object=json_decode($velement_string);
+            $aux=$velement_object;
 
+            $rubroempresa = new RubroEmpresa();
+            $rubroempresa->emp_id=$empresa->emp_id;
+            $rubroempresa->re_nombre=$velement_object->sub_nombre;
+            $rubroempresa->save();
+        }
         $propietario = new Propietario();
-        $propietario->pro_tipo=$request->pro_tipo;
+        $propietario->pro_tipo=$requeste_object->pro_tipo;
         $propietario->save();
 
         $personatural = new PersonaNatural();
         $personatural->pro_id=$propietario->pro_id;
-        $personatural->per_id=$request->per_id;
+        $personatural->per_id=$requeste_object->per_id;
         $personatural->save();
 
         $empresapropietario = new EmpresaPropietario();
@@ -72,7 +85,7 @@ class EstablecimientoSolicitanteController extends Controller
         $empresapropietario->save();
 
         $empresatramite = new EmpresaTramite();
-        $empresatramite->tra_id=$request->tra_id;
+        $empresatramite->tra_id=$requeste_object->tra_id;
         $empresatramite->ess_id=$est_sol->ess_id;
         $empresatramite->save();
 
@@ -81,8 +94,7 @@ class EstablecimientoSolicitanteController extends Controller
         empresa
         */
         $result=compact('est_sol','empresa','rubroempresa');
-
-        return response()->json(["msg" => "exito", "est_sol" => $result], 200);
+        return response()->json(['status'=>'ok',"msg" => "exito", "establecimiento" => $result], 200);
     }
     //actualizar
     public function update(Request $request)
@@ -115,6 +127,7 @@ class EstablecimientoSolicitanteController extends Controller
         if(!$est_sol){
             return response()->json(["mensaje"=>"No se encuentra el establecimiento"]);
         }
+
         $empresa=Empresa::where('ess_id', $ess_id)->get();
         $zon_id=$est_sol->zon_id;
         $zona=Zona::find($zon_id);
@@ -130,7 +143,6 @@ class EstablecimientoSolicitanteController extends Controller
 
         $resultado=compact('est_sol', 'empresa', 'zona', 'municipio', 'provincia', 'departamento');
         return response()->json(['status'=>'ok',"msg" => "exito",'establecimiento'=>$resultado],200);
-
     }
 }
 

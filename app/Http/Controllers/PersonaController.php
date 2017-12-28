@@ -141,7 +141,7 @@ class PersonaController extends Controller
             return response()->json(['status'=>'ok','persona'=>$persona],200); 
         }
         $result = compact('persona','imagen','zona','municipio' ,'provincia','departamento');
-
+            
         return response()->json(['mensaje'=>'exito','persona'=>$result],200); 
     }
 
