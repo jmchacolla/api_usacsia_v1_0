@@ -26,13 +26,13 @@ class EmpresaTramiteController extends Controller
 {
     public function index()
     {
+
         $empt=EmpresaTramite::all()/*select('empresa_tramite.et_id', 'empresa_tramite.et_numero_tramite','establecimieto_solicitante.ess_id', 'establecimieto_solicitante.ess_razon_social')*/;
         return response()->json(['status'=>'ok',"mensaje"=>"listado tramites CeS","empt"=>$empt], 200);
     }
     public function store(Request $request)
     {
         $empt=new EmpresaTramite();
-        $empt->et_id=$request->et_id;
         $empt->tra_id=$request->tra_id;
         $empt->ess_id=$request->ess_id;
         $empt->fun_id=$request->fun_id;
@@ -54,6 +54,7 @@ class EmpresaTramiteController extends Controller
         if (!$empresa_tramite) {
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
         }
+
         $ess_id=$empresa_tramite->ess_id;
         $establecimiento_sol=EstablecimientoSolicitante::where('ess_id', $ess_id)->first();
 
@@ -118,33 +119,30 @@ class EmpresaTramiteController extends Controller
     }
     public function buscarpropietario($parametro)
     {   
-        $persona=Persona::select('persona', 'establecimiento_solicitante', 'empresa')
+
+        $persona=Persona::select('persona.per_id','persona.zon_id','persona.per_ci','persona.per_tipo_documento','persona.per_pais','persona.per_ci_expedido','persona.per_nombres','persona.per_apellido_primero','persona.per_apellido_segundo','persona.per_fecha_nacimiento','persona.per_genero','persona.per_email','persona.per_numero_celular','persona.per_clave_publica','persona.per_avenida_calle','persona.per_numero','persona.per_ocupacion', 'establecimiento_solicitante.zon_id','establecimiento_solicitante.ess_razon_social','establecimiento_solicitante.ess_telefono','establecimiento_solicitante.ess_correo_electronico','establecimiento_solicitante.ess_tipo','establecimiento_solicitante.ess_avenida_calle','establecimiento_solicitante.ess_numero','establecimiento_solicitante.ess_stand','establecimiento_solicitante.ess_latitud','establecimiento_solicitante.ess_longitud','establecimiento_solicitante.ess_altitud', 'empresa.emp_id','empresa.ess_id','empresa.emp_kardex','empresa.emp_nit','empresa.emp_url_nit','empresa.emp_licencia', 'empresa.emp_url_licencia', 'empresa_tramite.et_id','empresa_tramite.tra_id','empresa_tramite.ess_id','empresa_tramite.fun_id','empresa_tramite.et_numero_tramite','empresa_tramite.et_vigencia_pago','empresa_tramite.et_fecha_ini','empresa_tramite.et_fecha_fin','empresa_tramite.et_estado_pago','empresa_tramite.et_estado_tramite','empresa_tramite.et_monto','empresa_tramite.et_tipo_tramite','empresa_tramite.et_vigencia_documento')
         ->join('p_natural', 'p_natural.per_id','=', 'persona.per_id')
         ->join('propietario', 'propietario.pro_id', '=', 'p_natural.pro_id')
         ->join('empresa_propietario', 'empresa_propietario.pro_id', '=', 'propietario.pro_id')
         ->join('empresa', 'empresa.emp_id', '=', 'empresa_propietario.emp_id')
         ->join('establecimiento_solicitante', 'establecimiento_solicitante.ess_id', '=', 'empresa.ess_id')
+        ->join('empresa_tramite', 'empresa_tramite.ess_id', '=', 'establecimiento_solicitante.ess_id')
         ->where('per_ci', $parametro)
         ->get();
         if (sizeof($persona)<=0){
-            $ess=EstablecimientoSolicitante::where('ess_razon_social', $parametro)->first();
-            if (!$ess) {
+            $persona=PersonaJuridica::select('p_juridica.pjur_id','p_juridica.pro_id','p_juridica.pjur_razon_social','p_juridica.pjur_nit','establecimiento_solicitante.zon_id','establecimiento_solicitante.ess_razon_social','establecimiento_solicitante.ess_telefono','establecimiento_solicitante.ess_correo_electronico','establecimiento_solicitante.ess_tipo','establecimiento_solicitante.ess_avenida_calle','establecimiento_solicitante.ess_numero','establecimiento_solicitante.ess_stand','establecimiento_solicitante.ess_latitud','establecimiento_solicitante.ess_longitud','establecimiento_solicitante.ess_altitud', 'empresa.emp_id','empresa.ess_id','empresa.emp_kardex','empresa.emp_nit','empresa.emp_url_nit','empresa.emp_licencia', 'empresa.emp_url_licencia', 'empresa_tramite.et_id','empresa_tramite.tra_id','empresa_tramite.ess_id','empresa_tramite.fun_id','empresa_tramite.et_numero_tramite','empresa_tramite.et_vigencia_pago','empresa_tramite.et_fecha_ini','empresa_tramite.et_fecha_fin','empresa_tramite.et_estado_pago','empresa_tramite.et_estado_tramite','empresa_tramite.et_monto','empresa_tramite.et_tipo_tramite','empresa_tramite.et_vigencia_documento')
+            ->join('propietario', 'propietario.pro_id', '=', 'p_juridica.pro_id')
+            ->join('empresa_propietario', 'empresa_propietario.pro_id', '=', 'propietario.pro_id')
+            ->join('empresa', 'empresa.emp_id', '=', 'empresa_propietario.emp_id')
+            ->join('establecimiento_solicitante', 'establecimiento_solicitante.ess_id', '=', 'empresa.ess_id')
+            ->join('empresa_tramite', 'empresa_tramite.ess_id', '=', 'establecimiento_solicitante.ess_id')
+            ->where('p_juridica.pjur_nit', $parametro)
+            ->get();
+            if (!$persona) {
                 return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
             }
-            $empresa=Empresa::where('ess_id', $ess->ess_id)->first();
-            $empresa_propietario=EmpresaPropietario::where('emp_id', $empresa->emp_id)->first();
-            $propietario=Propietario::where('pro_id', $empresa_propietario->pro_id)->first();
-            $tipo=$propietario->pro_tipo;
-            if($tipo=='J') {
-                $pjuridica=PersonaJuridica::where('pro_id', $propietario->pro_id)->first();
-                return response()->json(['status'=>'ok',"mensaje"=>"Encontrado","ess"=>$ess, "empresa"=>$empresa, "empresa_propietario"=>$empresa_propietario,"propietario"=>$propietario, "pjuridica"=>$pjuridica], 200);
-            }
-            $pnat=PersonaNatural::where('pro_id', $propietario->pro_id)->first();
-            $per=Persona::where('per_id', $pnat->per_id)->first();
-
-            return response()->json(['status'=>'ok',"mensaje"=>"Encontrado","ess"=>$ess, "empresa"=>$empresa,"empresa_propietario"=>$empresa_propietario,"propietario"=>$propietario, "pnat"=>$pnat, "per"=>$per], 200);
         }
-        return response()->json(['status'=>'ok',"mensaje"=>"Encontrado empresa 2","persona"=>$persona], 200);
+        return response()->json(['status'=>'ok',"mensaje"=>"PERSONA-NATURAL","persona"=>$persona], 200);
     }
     public function listar_cer()
     {

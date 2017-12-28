@@ -235,6 +235,13 @@ Route::group(['middleware' => 'cors'], function ()
     /*jhon   busca por per_ci o ess_razon_social*/
     Route::get('buscarpropietario/{parametro}', 'EmpresaTramiteController@buscarpropietario');
 
-    /*wendy   verifica si tiene carnet por ci 27-12 2017*/
+
+    
+
+    Route::resource('pago_pendiente','PagoPendienteController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+
+    /*wendy   verifica si tiene carnet por ci*/
+/*wendy   verifica si tiene carnet por ci 27-12 2017*/
     Route::get('verifica/{per_ci}', 'Carnet_sanitarioController@verifica');
+
 });
