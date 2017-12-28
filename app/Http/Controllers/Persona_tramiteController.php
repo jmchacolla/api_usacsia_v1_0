@@ -248,8 +248,9 @@ class Persona_tramiteController extends Controller
             $receta=Receta::where('pm_id',$prueba_medica->pm_id)
             ->orderBy('created_at', 'desc')
             ->first();
+            return response()->json(['status'=>'ok','ficha'=>$ficha, 'prueba_medica'=>$prueba_medica, 'receta'=>$receta],200);
         }
-        return response()->json(['status'=>'ok','ficha'=>$ficha, 'prueba_medica'=>$prueba_medica, 'receta'=>$receta],200);
+        return response()->json(['status'=>'ok','ficha'=>$ficha, 'prueba_medica'=>$prueba_medica],200);
     }
     /*Buscardor para realizar seguimiento, input per_ci & pt_numero_tramite; ouput pt_id*/
     public function seguimiento(Request $request)

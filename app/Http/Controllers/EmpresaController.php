@@ -30,9 +30,9 @@ class EmpresaController extends Controller
 
         $empresa->save();
         $rubro=new Rubro_empresa();
-        // $rubro->emp_id= $empresa->emp_id;
-        // $rubro->re_nombre= $request->re_nombre;
-        // $rubro->save();
+        $rubro->emp_id= $empresa->emp_id;
+        $rubro->re_nombre= $request->re_nombre;
+        $rubro->save();
         $resultado =compact('empresa', 'rubro');
 
         return response()->json(["msg" => "exito", "empresa" => $resultado], 200);
