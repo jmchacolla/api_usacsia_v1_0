@@ -14,6 +14,16 @@ class Ficha1Controller extends Controller
     	return response()->json(['status'=>'ok','mensaje'=>'exito','ficha_inspeccion'=>$ficha1],200);
     }
 
+    public function show($fi1_id){
+        $ficha = Ficha1::find($fi1_id);          
+        if (!$ficha)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una ficha con ese código.'])],404);
+        }
+        return response()->json(['status'=>'ok','mensaje'=>'exito','ficha'=>$ficha],200);
+    }
+
+
     public function store(Request $request){
 
     	$ficha1 = new Ficha1();
