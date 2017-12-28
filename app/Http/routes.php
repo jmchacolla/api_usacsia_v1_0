@@ -190,10 +190,25 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('ficha1', 'Ficha1Controller',['only' =>['index', 'store', 'update', 'show']]);
     //wendy ficha de inspeccion 26-12-2017
     Route::resource('ficha_inspeccion', 'Ficha_inspeccionController',['only' =>['index', 'store', 'update', 'show']]);
+    //para ver la ficha 1
+    Route::resource('fichas1', 'Ficha1Controller',['only' =>['index', 'store', 'update', 'show']]);
+    // crea la ficha narrativa 1
+    Route::post('ficha1','Ficha_inspeccionController@crear_ficha1');
+    // crea la ficha narrativa 2
+    Route::post('ficha2','Ficha_inspeccionController@crear_ficha2');
+    // crea la ficha narrativa 3
+    Route::post('ficha3','Ficha_inspeccionController@crear_ficha3');
+    // crea la ficha narrativa 4
+    Route::post('ficha4','Ficha_inspeccionController@crear_ficha4');
+    // crea la ficha narrativa 4
+    Route::post('ficha5','Ficha_inspeccionController@crear_ficha5');
+    // crea la ficha narrativa 4
+    Route::post('ficha6','Ficha_inspeccionController@crear_ficha6');
 
 
      /*jhon----operacines con receta*/
      Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+     
 
 
      /*jhon operaciones arancel categoria*/
@@ -206,5 +221,12 @@ Route::group(['middleware' => 'cors'], function ()
      Route::resource('clasificacion_general', 'ClasificacionGeneralController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
      /*jhon operaciones arancel clasificacion general*/
     Route::resource('empresa_tramite', 'EmpresaTramiteController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
+    /*jhon   busca por per_ci o ess_razon_social*/
+    Route::get('buscarpropietario/{parametro}', 'EmpresaTramiteController@buscarpropietario');
+
+    Route::resource('pago_pendiente','PagoPendienteController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+
+    /*wendy   verifica si tiene carnet por ci*/
+    Route::get('verifica/{per_ci}', 'Carnet_sanitarioController@verifica');
 
 });

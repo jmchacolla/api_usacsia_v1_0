@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-
+use Validator;
 use App\Http\Requests;
 use App\Models\Funcionario;
 use App\Models\Persona;
@@ -95,7 +95,7 @@ class FuncionarioController extends Controller
          return response()->json(["msg" => "exito", "funcionario" => $resultado], 200);
     }
 
-    //crear funcionario desde persona existente
+    //crear funcionario cuando persona existente
      public function store(Request $request)
 
     {

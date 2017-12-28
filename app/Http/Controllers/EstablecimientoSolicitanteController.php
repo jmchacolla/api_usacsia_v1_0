@@ -128,7 +128,7 @@ class EstablecimientoSolicitanteController extends Controller
             return response()->json(["mensaje"=>"No se encuentra el establecimiento"]);
         }
 
-        $empresa=Empresa::where('ess_id', $ess_id)->get();
+        $empresa=Empresa::where('ess_id', $ess_id)->first();
         $zon_id=$est_sol->zon_id;
         $zona=Zona::find($zon_id);
         $municipio=Municipio::find($zona->mun_id);
