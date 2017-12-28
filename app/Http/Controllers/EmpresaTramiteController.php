@@ -145,4 +145,21 @@ class EmpresaTramiteController extends Controller
         return response()->json(['status'=>'ok',"mensaje"=>"PERSONA-NATURAL","persona"=>$persona], 200);
     }
 
+
+    public function buscarpjuridica($pjur_nit)
+    {   
+            $pjuridica=PersonaJuridica::select('p_juridica.pjur_id','p_juridica.pro_id','p_juridica.pjur_razon_social','p_juridica.pjur_nit','establecimiento_solicitante.zon_id','establecimiento_solicitante.ess_razon_social','establecimiento_solicitante.ess_telefono','establecimiento_solicitante.ess_correo_electronico','establecimiento_solicitante.ess_tipo','establecimiento_solicitante.ess_avenida_calle','establecimiento_solicitante.ess_numero','establecimiento_solicitante.ess_stand','establecimiento_solicitante.ess_latitud','establecimiento_solicitante.ess_longitud','establecimiento_solicitante.ess_altitud', 'empresa.emp_id','empresa.ess_id','empresa.emp_kardex','empresa.emp_nit','empresa.emp_url_nit','empresa.emp_licencia', 'empresa.emp_url_licencia', 'empresa_tramite.et_id','empresa_tramite.tra_id','empresa_tramite.ess_id','empresa_tramite.fun_id','empresa_tramite.et_numero_tramite','empresa_tramite.et_vigencia_pago','empresa_tramite.et_fecha_ini','empresa_tramite.et_fecha_fin','empresa_tramite.et_estado_pago','empresa_tramite.et_estado_tramite','empresa_tramite.et_monto','empresa_tramite.et_tipo_tramite','empresa_tramite.et_vigencia_documento')
+            ->join('propietario', 'propietario.pro_id', '=', 'p_juridica.pro_id')
+            ->join('empresa_propietario', 'empresa_propietario.pro_id', '=', 'propietario.pro_id')
+            ->join('empresa', 'empresa.emp_id', '=', 'empresa_propietario.emp_id')
+            ->join('establecimiento_solicitante', 'establecimiento_solicitante.ess_id', '=', 'empresa.ess_id')
+            ->join('empresa_tramite', 'empresa_tramite.ess_id', '=', 'establecimiento_solicitante.ess_id')
+            ->where('p_juridica.pjur_nit', $pjur_nit)
+            ->first();
+            if (!$pjuridica) {
+                return response()->json(['status'=>'ok',"mensaje"=>"no existe","pjuridica"=>$pjuridica],200);
+            }
+        return response()->json(['status'=>'ok',"mensaje"=>"éxito","pjuridica"=>$pjuridica], 200);
+    }
+
 }
