@@ -146,5 +146,39 @@ class EmpresaTramiteController extends Controller
         }
         return response()->json(['status'=>'ok',"mensaje"=>"Encontrado empresa 2","persona"=>$persona], 200);
     }
+    public function listar_cer()
+    {
+       
+        $empresa_tramite=EmpresaTramite::where('tra_id',2)
+        ->join('establecimiento_solicitante','establecimiento_solicitante.ess_id','=','empresa_tramite.ess_id')
+        ->join('empresa','empresa.ess_id','=','empresa_tramite.ess_id')
+        ->join('empresa_propietario','empresa_propietario.emp_id','=','empresa.emp_id')
+        ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
+        ->where('propietario.pro_tipo','NATURAL')
+        ->join('p_natural','p_natural.pro_id','=','propietario.pro_id')
+        /*->join('p_juridica','p_juridica.pro_id','=','propietario.pro_id')*/
+        /*    ->where('p_natural.pro_id','propietario.pro_id')*/
+       /* ->orWhere('p_juridica.pro_id','propietario.pro_id')*/
+        ->select('empresa_tramite.et_id','et_monto','establecimiento_solicitante.ess_id','ess_razon_social','p_natural.pro_id')
+        ->get();
+   
+        
+
+      /*  $propietario=EmpresaPropietario::where('emp_id',$empresa->emp_id)
+        ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
+        ->join('p_natural','p_natural.pro_id','=','propietario.pro_id')
+        ->join('persona','persona.per_id','=','p_natural.per_id')->first();
+        if ($propietario==null) {
+            $propietario=EmpresaPropietario::where('emp_id',$empresa->emp_id)
+            ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
+            ->join('p_juridica','p_juridica.pro_id','=','propietario.pro_id')
+            ->first();
+        }*/
+        
+    
+        $result=compact('empresa_tramite'/*,'propietario'*/);
+
+        return response()->json(['status'=>'ok',"mensaje"=>"lista",'empresa_tramite'=>$empresa_tramite], 200);
+    }
 
 }
