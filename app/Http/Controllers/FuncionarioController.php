@@ -23,7 +23,7 @@ class FuncionarioController extends Controller
         $funcionario=Funcionario::select('funcionario.fun_id','fun_profesion','fun_cargo','fun_estado','persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci','per_fecha_nacimiento')
         ->join('persona','persona.per_id','=','funcionario.per_id')
         ->where('fun_estado','ACTIVO')
-        ->orderBy('per_nombres')
+        ->orderBy('per_apellido_primero')
         ->get();
         return response()->json(['status'=>'ok', 'funcionario'=>$funcionario], 200);
     }
@@ -238,6 +238,18 @@ class FuncionarioController extends Controller
        
 
         return response()->json(['status'=>'ok',"msg" => "exito",'funcionario'=>$funcionario],200); 
+    }
+     //listar todos los inspectores
+    public function listIns()
+    {
+        // $funcionario=Funcionario::all();
+        $funcionario=Funcionario::select('funcionario.fun_id','fun_profesion','fun_cargo','fun_estado','persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci','per_fecha_nacimiento')
+        ->join('persona','persona.per_id','=','funcionario.per_id')
+        ->where('fun_estado','ACTIVO')
+        ->where('fun_cargo','INSPECTOR')
+        ->orderBy('per_apellido_primero')
+        ->get();
+        return response()->json(['status'=>'ok', 'funcionario'=>$funcionario], 200);
     }
 
 

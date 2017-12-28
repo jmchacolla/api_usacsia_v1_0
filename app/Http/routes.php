@@ -190,7 +190,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('ficha1', 'Ficha1Controller',['only' =>['index', 'store', 'update', 'show']]);
     //wendy ficha de inspeccion 26-12-2017
     Route::resource('ficha_inspeccion', 'Ficha_inspeccionController',['only' =>['index', 'store', 'update', 'show']]);
-    //para ver la ficha 1
+    //para ver la ficha 1 -- 26-12-2017
     Route::resource('fichas1', 'Ficha1Controller',['only' =>['index', 'store', 'update', 'show']]);
     // crea la ficha narrativa 1
     Route::post('ficha1','Ficha_inspeccionController@crear_ficha1');
@@ -204,6 +204,17 @@ Route::group(['middleware' => 'cors'], function ()
     Route::post('ficha5','Ficha_inspeccionController@crear_ficha5');
     // crea la ficha narrativa 4
     Route::post('ficha6','Ficha_inspeccionController@crear_ficha6');
+
+    /*wen   lista certificados 28-12-2017*/
+    Route::get('list_cert', 'EmpresaTramiteController@listar_cer');
+     /*wen   lista certificados 28-12-2017*/
+    Route::resource('zon_ins','Zona_inspeccionController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+    /*wen   lista zonas por distrito 28-12-2017*/
+    Route::get('zonas', 'ZonaController@zon_dist');
+    /*wen   lista  distrito 28-12-2017*/
+    Route::get('distritos', 'ZonaController@distritos');
+    /*wen   lista  distrito 28-12-2017*/
+    Route::get('inspectores', 'FuncionarioController@listIns');
 
 
      /*jhon----operacines con receta*/
@@ -223,10 +234,17 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('empresa_tramite', 'EmpresaTramiteController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
     /*jhon   busca por per_ci o ess_razon_social*/
     Route::get('buscarpropietario/{parametro}', 'EmpresaTramiteController@buscarpropietario');
+    /*vero*/
+    Route::get('buscarpjuridica/{pjur_nit}', 'EmpresaTramiteController@buscarpjuridica');
+    Route::resource('propietario', 'PropietarioController',['only'=>['store']]);
+
+
+    
 
     Route::resource('pago_pendiente','PagoPendienteController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::get('ppportramite/{et_id}', 'PagoPendienteController@ppportramite');
     /*wendy   verifica si tiene carnet por ci*/
+/*wendy   verifica si tiene carnet por ci 27-12 2017*/
     Route::get('verifica/{per_ci}', 'Carnet_sanitarioController@verifica');
 
 });

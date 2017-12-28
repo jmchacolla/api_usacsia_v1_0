@@ -14,4 +14,16 @@ class ZonaController extends Controller
         $zona = Zona::where('mun_id', $mun_id)->orderBy('zon_nombre')->get();
         return response()->json(['status'=>'ok','mensaje'=>'exito','zona'=>$zona],200);
     }
+    public function zon_dist(Request $request)
+    {
+    	$dist=$request->distrito;
+        $zona = Zona::where('zon_distrito', $dist)->orderBy('zon_nombre')->get();
+        return response()->json(['status'=>'ok','mensaje'=>'exito','zona'=>$zona],200);
+    }
+    public function distritos()
+    {
+        $zona = Zona::select('zon_distrito')
+        ->distinct()->get();
+        return response()->json(['status'=>'ok','mensaje'=>'exito','distrito'=>$zona],200);
+    }
 }
