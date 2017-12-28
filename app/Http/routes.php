@@ -225,7 +225,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('buscarpropietario/{parametro}', 'EmpresaTramiteController@buscarpropietario');
 
     Route::resource('pago_pendiente','PagoPendienteController',['only'=>['store','update', 'destroy', 'show', 'index']]);
-
+    Route::get('ppportramite/{et_id}', 'PagoPendienteController@ppportramite');
     /*wendy   verifica si tiene carnet por ci*/
     Route::get('verifica/{per_ci}', 'Carnet_sanitarioController@verifica');
 

@@ -12,11 +12,7 @@ class PagoPendienteController extends Controller
     /*muestra todos los pagos pendientes por et_id*/
     public function index($et_id)
     {
-        $pagop=PagoPendiente::where('et_id', $et_id)->orderBy('created_at', 'desc')-get();
-        if (!$pagop) {
-            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
-        }
-        printf($pagop);
+        $pagop=PagoPendiente::all();
         return response()->json(['status'=>'ok',"mensaje"=>"Pago pendientes por trámite","pagop"=>$pagop], 200);
     }
     public function store(Request $request)
@@ -60,5 +56,15 @@ class PagoPendienteController extends Controller
             $pagop->pp_fecha_pagado=$request->pp_fecha_pagado;}/*--fecha cuando se paga */
         $pagop->save();
         return response()->json(['status'=>'ok',"mensaje"=>"Creado exitosamente","pagop"=>$pagop], 200);
+    }
+    public function ppportramite($et_id)
+    {
+        $pagop=PagoPendiente::where('et_id', $et_id)
+        ->where('pp_estado_pago', '=', 'PENDIENTE')
+        ->orderBy('created_at', 'desc')->get();
+                if (!$pagop) {
+                    return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
+                }
+                return response()->json(['status'=>'ok',"mensaje"=>"Pago pendientes por trámite","pagop"=>$pagop], 200);
     }
 }
