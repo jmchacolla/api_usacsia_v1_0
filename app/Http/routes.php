@@ -236,12 +236,15 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('empresa_tramite', 'EmpresaTramiteController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
     /*jhon   busca por per_ci o ess_razon_social*/
     Route::get('buscarpropietario/{parametro}', 'EmpresaTramiteController@buscarpropietario');
+    /*vero*/
+    Route::get('buscarpjuridica/{pjur_nit}', 'EmpresaTramiteController@buscarpjuridica');
+    Route::resource('propietario', 'PropietarioController',['only'=>['store']]);
 
 
     
 
     Route::resource('pago_pendiente','PagoPendienteController',['only'=>['store','update', 'destroy', 'show', 'index']]);
-
+    Route::get('ppportramite/{et_id}', 'PagoPendienteController@ppportramite');
     /*wendy   verifica si tiene carnet por ci*/
 /*wendy   verifica si tiene carnet por ci 27-12 2017*/
     Route::get('verifica/{per_ci}', 'Carnet_sanitarioController@verifica');

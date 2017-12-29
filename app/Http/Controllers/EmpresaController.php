@@ -15,10 +15,10 @@ class EmpresaController extends Controller
 
     public function index()
     {
-        $empresa=\App\Models\Empresa::all();
+        $empresa=Empresa::all();
 
         return response()->json(['status'=>'ok','mensaje'=>'exito','empresa'=>$empresa],200); 
-
+    }
     public function store(Request $request)
     {
         $empresa = new Empresa();
@@ -31,7 +31,7 @@ class EmpresaController extends Controller
         $empresa->save();
         $rubro=new Rubro_empresa();
         $rubro->emp_id= $empresa->emp_id;
-        $rubro->ru_nombre= $request->ru_nombre;
+        $rubro->re_nombre= $request->re_nombre;
         $rubro->save();
         $resultado =compact('empresa', 'rubro');
 
