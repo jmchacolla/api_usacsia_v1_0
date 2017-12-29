@@ -59,9 +59,9 @@ class FuncionarioController extends Controller
         $persona = new Persona();
         $persona->zon_id=$request->zon_id;
         $persona->per_ci=$request->per_ci;
-        $persona->per_tipo_documento= $request->per_tipo_documento;
+        $persona->per_tipo_documento= Str::upper($request->per_tipo_documento);
         $persona->per_pais= $request->per_pais;
-        $persona->per_ci_expedido = $request->per_ci_expedido;
+        $persona->per_ci_expedido = Str::upper($request->per_ci_expedido);
         $persona->per_nombres= Str::upper($request->per_nombres);
         $persona->per_apellido_primero= Str::upper($request->per_apellido_primero);
         $persona->per_apellido_segundo= Str::upper($request->per_apellido_segundo);
@@ -72,7 +72,7 @@ class FuncionarioController extends Controller
         $persona->per_clave_publica= $request->per_clave_publica;
         $persona->per_avenida_calle=$request->per_avenida_calle;
         $persona->per_numero=$request->per_numero;
-        $persona->per_ocupacion=$request->per_ocupacion;
+        $persona->per_ocupacion=Str::upper($request->per_ocupacion);
         $persona->userid_at='2';
         $persona->save();
 
@@ -110,8 +110,8 @@ class FuncionarioController extends Controller
         // crear al funcionario si existe la persona
         $funcionarios= new Funcionario();
         $funcionarios->per_id=$request->per_id;
-        $funcionarios->fun_profesion=$request->fun_profesion;
-        $funcionarios->fun_cargo=$request->fun_cargo;
+        $funcionarios->fun_profesion=Str::upper($request->fun_profesion);
+        $funcionarios->fun_cargo=Str::upper($request->fun_cargo);
         $funcionarios->userid_at='2';
         $funcionarios->save();
         $resultado=compact('funcionarios','funcionario_establecimiento','medico','enfermera');

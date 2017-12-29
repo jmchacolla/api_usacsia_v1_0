@@ -206,7 +206,9 @@ Route::group(['middleware' => 'cors'], function ()
     Route::post('ficha6','Ficha_inspeccionController@crear_ficha6');
 
     /*wen   lista certificados 28-12-2017*/
-    Route::get('list_cert', 'EmpresaTramiteController@listar_cer');
+    Route::get('list_cert_nat', 'EmpresaTramiteController@listar_cer_nat');
+    /*wen   lista certificados 28-12-2017*/
+    Route::get('list_cert_ju', 'EmpresaTramiteController@listar_cer_ju');
      /*wen   lista certificados 28-12-2017*/
     Route::resource('zon_ins','Zona_inspeccionController',['only' => ['store', 'update', 'destroy', 'show','index']]);
     /*wen   lista zonas por distrito 28-12-2017*/
