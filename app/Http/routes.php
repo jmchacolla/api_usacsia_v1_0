@@ -204,6 +204,8 @@ Route::group(['middleware' => 'cors'], function ()
     Route::post('ficha5','Ficha_inspeccionController@crear_ficha5');
     // crea la ficha narrativa 4
     Route::post('ficha6','Ficha_inspeccionController@crear_ficha6');
+    //wendy ficha categoria 29-12-2017
+    Route::resource('ficha_categoria', 'Ficha_categoriaController',['only' =>['index', 'store', 'update', 'show']]);
 
     /*wen   lista certificados 28-12-2017*/
     Route::get('list_cert_nat', 'EmpresaTramiteController@listar_cer_nat');
@@ -217,6 +219,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('distritos', 'ZonaController@distritos');
     /*wen   lista  distrito 28-12-2017*/
     Route::get('inspectores', 'FuncionarioController@listIns');
+   
 
 
      /*jhon----operacines con receta*/
