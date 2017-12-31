@@ -17,6 +17,7 @@ use App\Models\Municipio;
 use App\Models\Provincia;
 use App\Models\Departamento;
 use App\Models\Empresa;
+use App\Models\PagoPendiente;
 
 class EstablecimientoSolicitanteController extends Controller
 {
@@ -70,24 +71,20 @@ class EstablecimientoSolicitanteController extends Controller
             $rubroempresa->re_nombre=$velement_object->sub_nombre;
             $rubroempresa->save();
         }
-        $propietario = new Propietario();
-        $propietario->pro_tipo=$requeste_object->pro_tipo;
-        $propietario->save();
-
-        $personatural = new PersonaNatural();
-        $personatural->pro_id=$propietario->pro_id;
-        $personatural->per_id=$requeste_object->per_id;
-        $personatural->save();
 
         $empresapropietario = new EmpresaPropietario();
         $empresapropietario->emp_id=$empresa->emp_id;
-        $empresapropietario->pro_id=$propietario->pro_id;
+        $empresapropietario->pro_id=$requeste_object->pro_id;
         $empresapropietario->save();
 
         $empresatramite = new EmpresaTramite();
         $empresatramite->tra_id=$requeste_object->tra_id;
         $empresatramite->ess_id=$est_sol->ess_id;
         $empresatramite->save();
+
+        
+
+
 
         /*
         enviar
