@@ -219,6 +219,12 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('distritos', 'ZonaController@distritos');
     /*wen   lista  distrito 28-12-2017*/
     Route::get('inspectores', 'FuncionarioController@listIns');
+    /*wen   asignar zona a inspector 29-12-2017*/
+    Route::get('asignar/{zon_id}', 'Zona_inspeccionController@asignar');
+     /*wen   listar por inspector inspector 29-12-2017*/
+    Route::get('list_insN/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorN');
+    Route::get('list_insJ/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorJ');
+    
    
 
 

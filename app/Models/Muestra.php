@@ -34,7 +34,8 @@ class Muestra extends Model
      * @var array
      */
     protected $fillable = ['pt_id', 'mue_num_muestra','mue_tipo','mue_fecha'];
-    protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'userid_at'];
+    protected $dates = ['created_at','deleted_at'];
+    protected $hidden = [ 'updated_at', 'userid_at'];
 
 
     /**
