@@ -24,7 +24,6 @@ class MuestraController extends Controller
         {
             $numero_muestra=1;
         }
-
         $muestra =new Muestra();
         $muestra->pt_id=$request->pt_id;
         $muestra->mue_num_muestra=$numero_muestra;
@@ -50,7 +49,7 @@ class MuestraController extends Controller
 
         $muestra->save();
 
-        return response()->json(['status'=>'ok',"msg" => "exito",'muestra'=>$muestra],200); 
+        return response()->json(['status'=>'ok',"msg" => "exito",'muestra'=>$muestra, 'hoy'=>$hoy],200); 
     }
     public function index()
     {

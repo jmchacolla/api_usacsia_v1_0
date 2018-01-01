@@ -247,7 +247,9 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('buscarpropietario/{parametro}', 'EmpresaTramiteController@buscarpropietario');
     /*vero*/
     Route::get('buscarpjuridica/{pjur_nit}', 'EmpresaTramiteController@buscarpjuridica');
-    Route::resource('propietario', 'PropietarioController',['only'=>['store']]);
+    Route::resource('pjuridica', 'PersonaJuridicaController',['only'=>['store','show']]);
+    Route::resource('pnatural', 'PersonaNaturalController',['only'=>['store','show']]);
+    Route::get('pro_id_pjuridica_pnatural/{pro_id}', 'PersonaNaturalController@pro_id_pjuridica_pnatural');
 
 
     

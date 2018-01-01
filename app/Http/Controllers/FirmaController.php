@@ -34,10 +34,10 @@ class FirmaController extends Controller
                     $firma->fir_url = $request->fir_url;
                     $firma->fir_name = $request->fir_name;
                     $firma->save();
-                    return response()->json(['satatus'=>'ok', 'firma'=> $firma], 200);
+                    return response()->json(['status'=>'ok', 'firma'=> $firma], 200);
                 }
         }
-        return response()->json(['errors'=>array(['code'=>404,'message'=>'No corresponde al funcionario generar una firma'])],404);
+        return response()->json(['errors'=>array(['code'=>404,'message'=>'No corresponde al funcionario generar una firma','funcionario'=>$funcionario,'idfun'=>$request->fun_id])],404);
     }
     //mostrar la firma de un funcionario
     public function show($fir_id)
