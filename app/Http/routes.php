@@ -224,10 +224,21 @@ Route::group(['middleware' => 'cors'], function ()
      /*wen   listar por inspector inspector 29-12-2017*/
     Route::get('list_insN/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorN');
     Route::get('list_insJ/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorJ');
+    //wen 1-1-2018 aprobacion1
+    Route::put('aprobacion1/{et_id}', 'EmpresaTramiteController@editar1');
+    //wen 1-1-2018 aprobacion2
+    Route::put('aprobacion2/{et_id}', 'EmpresaTramiteController@editar2');
+    //wen 1-1-2018 aprobacion3
+    Route::put('aprobacion3/{et_id}', 'EmpresaTramiteController@editar3');
+    //wen 1-1-2018 listar crear certificado sanitario
+    Route::resource('certificado_sanitario','Certificado_sanitarioController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+    //wen 2-1-2018 aprobacion2
+    Route::put('aprob2/{ces_id}', 'Certificado_sanitarioController@aprob2');
+    //wen 2-1-2018 aprobacion3
+    Route::put('aprob3/{ces_id}', 'Certificado_sanitarioController@aprob3');
+    Route::get('busca_cert/{et_id}', 'EmpresaTramiteController@buscar_certificado');
     
-   
-
-
+    
      /*jhon----operacines con receta*/
      Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
      

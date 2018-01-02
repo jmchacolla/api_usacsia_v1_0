@@ -22,6 +22,7 @@ use App\Models\PersonaJuridica;
 use App\Models\Zona;
 use App\Models\Municipio;
 use App\Models\Zona_inspeccion;
+use App\Models\Certificado_sanitario;
 
 
 
@@ -145,7 +146,7 @@ class EmpresaTramiteController extends Controller
         ->where('propietario.pro_tipo','N')
         ->join('p_natural','p_natural.pro_id','=','propietario.pro_id')
         ->join('persona','persona.per_id','=','p_natural.per_id')
-        ->select('empresa_tramite.et_id','et_monto','et_numero_tramite','establecimiento_solicitante.ess_id','ess_razon_social','p_natural.pnat_id','persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci')
+        ->select('empresa_tramite.et_id','et_monto','et_numero_tramite','et_aprobacion1','et_aprobacion2','et_aprobacion3','establecimiento_solicitante.ess_id','ess_razon_social','p_natural.pnat_id','persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci')
         ->get();
    
         return response()->json(['status'=>'ok',"mensaje"=>"lista",'empresa_tramite'=>$empresa_tramite], 200);
@@ -162,7 +163,7 @@ class EmpresaTramiteController extends Controller
         ->where('propietario.pro_tipo','J')
         ->join('p_juridica','p_juridica.pro_id','=','propietario.pro_id')
         
-        ->select('empresa_tramite.et_id','et_monto','et_numero_tramite','establecimiento_solicitante.ess_id','ess_razon_social','p_juridica.pjur_id','pjur_razon_social')
+        ->select('empresa_tramite.et_id','et_monto','et_numero_tramite','et_aprobacion1','et_aprobacion2','et_aprobacion3','establecimiento_solicitante.ess_id','ess_razon_social','p_juridica.pjur_id','pjur_razon_social')
         ->get();
    
         return response()->json(['status'=>'ok',"mensaje"=>"lista",'empresa_tramite'=>$empresa_tramite], 200);
@@ -224,5 +225,61 @@ class EmpresaTramiteController extends Controller
         }*/
         return response()->json(['status'=>'ok',"mensaje"=>"lista",'empresa_tramite'=>$empresa_tramite], 200);
     }
+
+    public function editar1(Request $request, $et_id)
+    {
+        $empresa_tramite=EmpresaTramite::find($et_id);
+
+         if (!$empresa_tramite)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una tramite de carnet sanitario con ese código.'])],404);
+        }
+        $empresa_tramite->et_aprobacion1=$request->et_aprobacion1;
+        $empresa_tramite->save();
+
+ 
+        return response()->json(['status'=>'ok','mensaje'=>'exito','empresa_tramite'=>$empresa_tramite],200);
+    }
+    public function editar2(Request $request, $et_id)
+    {
+        $empresa_tramite=EmpresaTramite::find($et_id);
+
+         if (!$empresa_tramite)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una tramite de carnet sanitario con ese código.'])],404);
+        }
+
+        $empresa_tramite->et_aprobacion2=$request->et_aprobacion2;
+        $empresa_tramite->save();
+
+
+
+ 
+        return response()->json(['status'=>'ok','mensaje'=>'exito','empresa_tramite'=>$empresa_tramite],200);
+    }
+    public function editar3(Request $request, $et_id)
+    {
+        $empresa_tramite=EmpresaTramite::find($et_id);
+
+         if (!$empresa_tramite)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una tramite de carnet sanitario con ese código.'])],404);
+        }
+        $empresa_tramite->et_aprobacion3=$request->et_aprobacion3;
+        $empresa_tramite->save();
+        return response()->json(['status'=>'ok','mensaje'=>'exito','empresa_tramite'=>$empresa_tramite],200);
+    }
+
+    public function buscar_certificado($et_id)
+    {
+        $certificado=Certificado_sanitario::where('et_id',$et_id)->first();
+        if (!$certificado)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una tramite de carnet sanitario con ese código.'])],404);
+        }
+       
+        return response()->json(['status'=>'ok','mensaje'=>'exito','certificado'=>$certificado],200);
+    }
+
 
 }
