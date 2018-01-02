@@ -96,7 +96,6 @@ class MuestraController extends Controller
                 return response()->json(['status'=>'ok','msg'=>"con prueba",'pruebalabo'=>$existe],200); 
             }
         }
-
         return response()->json(['status'=>'ok',"msg" => "sin prueba",'muestra'=>$muestra,'hoy'=>$hoy],200); 
     }
 }

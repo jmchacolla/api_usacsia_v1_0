@@ -162,13 +162,13 @@ Route::group(['middleware' => 'cors'], function ()
     //JHON empresa
     Route::resource('establecimiento_solicitante','EstablecimientoSolicitanteController', ['only' =>['index', 'store', 'update', 'show']]);
     //jhon empresa operaciones
-    Route::resource('empresa', 'EmpresaController', ['only' =>['index', 'store', 'update', 'show']]);
+    Route::resource('empresa', 'EmpresaController', ['only' => ['index', 'store', 'update', 'show']]);
 
     //jhon fichas
     Route::resource('ficha', 'FichaController',['only' =>['index', 'store', 'update', 'show']]);
 
     /*EMPRESA wendy -- 13-12-17*/
-    Route::resource('empresa','EmpresaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+    Route::resource('empresa', 'EmpresaController', ['only' => ['store', 'update', 'destroy', 'show','index']]);
 // permite listar a personas que ya concluyeron su tramite
      Route::get('lista_final','Persona_tramiteController@lista_pers_tra');
      // permite listar a personas que ya concluyeron su tramite
@@ -270,5 +270,6 @@ Route::group(['middleware' => 'cors'], function ()
     /*wendy   verifica si tiene carnet por ci*/
 /*wendy   verifica si tiene carnet por ci 27-12 2017*/
     Route::get('verifica/{per_ci}', 'Carnet_sanitarioController@verifica');
+    Route::get('ins_fecha_est_fun', 'Ficha_inspeccionController@list_inspec_fechas_estado_fun');
 
 });

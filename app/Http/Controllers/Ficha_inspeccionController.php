@@ -12,6 +12,14 @@ use App\Models\Ficha3;
 use App\Models\Ficha4;
 use App\Models\Ficha5;
 use App\Models\Ficha6;
+use App\Models\EmpresaTramite;
+use App\Models\Empresa;
+use App\Models\EstablecimientoSolicitante;
+use App\Models\EmpresaPropietario;
+use App\Models\Propietario;
+use App\Models\PersonaJuridica;
+use App\Models\PersonaNatural;
+use App\Models\Persona;
 
 class Ficha_inspeccionController extends Controller
 {
@@ -463,5 +471,64 @@ class Ficha_inspeccionController extends Controller
 
         return response()->json(['status'=>'ok',"msg"=>"creado exitosamente","ficha6_inspeccion"=>$resultado], 200);
 
+    }
+
+    public function list_inspec_fechas_estado_fun(Request $request)
+    {
+        $fecha1=$request->fecha1;
+        $fecha2=$request->fecha2;
+        $estado=$request->estado;
+        $fun=$request->fun_id;
+        if ($fun) {
+            if ($estado) {
+                $fichains=Ficha_inspeccion::select('ficha_inspeccion.fi_id','ficha_inspeccion.fi_estado', 'ficha_inspeccion.fi_fecha_asignacion', 'ficha_inspeccion.fi_fecha_realizacion', 'establecimiento_solicitante.ess_id', 'establecimiento_solicitante.ess_razon_social', 'empresa_tramite.et_id', 'empresa_tramite.et_numero_tramite')
+                ->where('ficha_inspeccion.fi_fecha_asignacion', '>=', $fecha1)
+                ->join('empresa_tramite', 'empresa_tramite.et_id', '=', 'ficha_inspeccion.et_id')
+                ->join('establecimiento_solicitante', 'establecimiento_solicitante.ess_id', '=', 'empresa_tramite.ess_id')
+                ->join('empresa', 'empresa.ess_id', '=', 'empresa_tramite.ess_id')
+                ->where('fi_fecha_asignacion', '<=', $fecha2)
+                ->where('funcionario', 'funcionario.fun_id','ficha_inspeccion.fun_id')
+                ->where('fi_estado', $estado)
+                ->orderBy('fi_fecha_asignacion')
+                ->get();
+                return response()->json(['status'=>'ok',"msg"=>"Listado de fichas de inspección","fichainspeccion"=>$fichains], 200);
+            }else{
+                $fichains=Ficha_inspeccion::select('ficha_inspeccion.fi_id','ficha_inspeccion.fi_estado', 'ficha_inspeccion.fi_fecha_asignacion', 'ficha_inspeccion.fi_fecha_realizacion', 'establecimiento_solicitante.ess_id', 'establecimiento_solicitante.ess_razon_social', 'empresa_tramite.et_id', 'empresa_tramite.et_numero_tramite')
+                ->where('ficha_inspeccion.fi_fecha_asignacion', '>=', $fecha1)
+                ->join('empresa_tramite', 'empresa_tramite.et_id', '=', 'ficha_inspeccion.et_id')
+                ->join('establecimiento_solicitante', 'establecimiento_solicitante.ess_id', '=', 'empresa_tramite.ess_id')
+                ->join('empresa', 'empresa.ess_id', '=', 'empresa_tramite.ess_id')
+                ->where('fi_fecha_asignacion', '<=', $fecha2)
+                ->where('funcionario', 'funcionario.fun_id','ficha_inspeccion.fun_id')
+                ->orderBy('fi_fecha_asignacion')
+                ->get();
+                return response()->json(['status'=>'ok',"msg"=>"Listado de fichas de inspección","fichainspeccion"=>$fichains], 200);
+            }
+        }
+        else{
+            if ($estado) {
+                $fichains=Ficha_inspeccion::select('ficha_inspeccion.fi_id','ficha_inspeccion.fi_estado', 'ficha_inspeccion.fi_fecha_asignacion', 'ficha_inspeccion.fi_fecha_realizacion', 'establecimiento_solicitante.ess_id', 'establecimiento_solicitante.ess_razon_social', 'empresa_tramite.et_id', 'empresa_tramite.et_numero_tramite')
+                ->where('ficha_inspeccion.fi_fecha_asignacion', '>=', $fecha1)
+                ->join('empresa_tramite', 'empresa_tramite.et_id', '=', 'ficha_inspeccion.et_id')
+                ->join('establecimiento_solicitante', 'establecimiento_solicitante.ess_id', '=', 'empresa_tramite.ess_id')
+                ->join('empresa', 'empresa.ess_id', '=', 'empresa_tramite.ess_id')
+                ->where('fi_fecha_asignacion', '<=', $fecha2)
+                ->where('fi_estado', $estado)
+                ->orderBy('fi_fecha_asignacion')
+                ->get();
+                return response()->json(['status'=>'ok',"msg"=>"Listado de fichas de inspección","fichainspeccion"=>$fichains], 200);
+            }
+            else{
+                $fichains=Ficha_inspeccion::select('ficha_inspeccion.fi_id','ficha_inspeccion.fi_estado', 'ficha_inspeccion.fi_fecha_asignacion', 'ficha_inspeccion.fi_fecha_realizacion', 'establecimiento_solicitante.ess_id', 'establecimiento_solicitante.ess_razon_social', 'empresa_tramite.et_id', 'empresa_tramite.et_numero_tramite')
+                ->where('ficha_inspeccion.fi_fecha_asignacion', '>=', $fecha1)
+                ->join('empresa_tramite', 'empresa_tramite.et_id', '=', 'ficha_inspeccion.et_id')
+                ->join('establecimiento_solicitante', 'establecimiento_solicitante.ess_id', '=', 'empresa_tramite.ess_id')
+                ->join('empresa', 'empresa.ess_id', '=', 'empresa_tramite.ess_id')
+                ->where('fi_fecha_asignacion', '<=', $fecha2)
+                ->orderBy('fi_fecha_asignacion')
+                ->get();
+                return response()->json(['status'=>'ok',"msg"=>"Listado de fichas de inspección","fichainspeccion"=>$fichains], 200);
+            }
+        }
     }
 }
