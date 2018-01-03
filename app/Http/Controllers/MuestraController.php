@@ -76,7 +76,7 @@ class MuestraController extends Controller
     public function buscar_numero_muestra($mue_num_muestra)
     {
 
-        $hoy= date('y-m-d');
+        $hoy= date('Y-m-d');
         $muestra =Muestra::select('per_ci','per_ci_expedido','persona_tramite.pt_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_fecha_nacimiento','mue_id','mue_num_muestra','mue_tipo','mue_fecha') 
         ->join('persona_tramite','persona_tramite.pt_id','=','muestra.pt_id')
         ->join('persona','persona.per_id','=','persona_tramite.per_id')
@@ -97,7 +97,6 @@ class MuestraController extends Controller
                 return response()->json(['status'=>'ok','msg'=>"con prueba",'pruebalabo'=>$existe],200); 
             }
         }
-
         return response()->json(['status'=>'ok',"msg" => "sin prueba",'muestra'=>$muestra,'hoy'=>$hoy],200); 
     }
 }
