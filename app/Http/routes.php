@@ -204,6 +204,8 @@ Route::group(['middleware' => 'cors'], function ()
     Route::post('ficha5','Ficha_inspeccionController@crear_ficha5');
     // crea la ficha narrativa 4
     Route::post('ficha6','Ficha_inspeccionController@crear_ficha6');
+    //wendy ficha categoria 29-12-2017
+    Route::resource('ficha_categoria', 'Ficha_categoriaController',['only' =>['index', 'store', 'update', 'show']]);
 
     /*wen   lista certificados 28-12-2017*/
     Route::get('list_cert_nat', 'EmpresaTramiteController@listar_cer_nat');
@@ -217,6 +219,13 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('distritos', 'ZonaController@distritos');
     /*wen   lista  distrito 28-12-2017*/
     Route::get('inspectores', 'FuncionarioController@listIns');
+    /*wen   asignar zona a inspector 29-12-2017*/
+    Route::get('asignar/{zon_id}', 'Zona_inspeccionController@asignar');
+     /*wen   listar por inspector inspector 29-12-2017*/
+    Route::get('list_insN/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorN');
+    Route::get('list_insJ/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorJ');
+    
+   
 
 
      /*jhon----operacines con receta*/
@@ -238,7 +247,9 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('buscarpropietario/{parametro}', 'EmpresaTramiteController@buscarpropietario');
     /*vero*/
     Route::get('buscarpjuridica/{pjur_nit}', 'EmpresaTramiteController@buscarpjuridica');
-    Route::resource('propietario', 'PropietarioController',['only'=>['store']]);
+    Route::resource('pjuridica', 'PersonaJuridicaController',['only'=>['store','show']]);
+    Route::resource('pnatural', 'PersonaNaturalController',['only'=>['store','show']]);
+    Route::get('pro_id_pjuridica_pnatural/{pro_id}', 'PersonaNaturalController@pro_id_pjuridica_pnatural');
 
 
     

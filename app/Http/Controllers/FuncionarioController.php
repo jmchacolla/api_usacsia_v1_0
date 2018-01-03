@@ -212,13 +212,11 @@ class FuncionarioController extends Controller
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un funcionario con ese código.'])],404);
         }
 
-        /*$input = $request->all();
-        
-        $funcionario->update($input);*/
         
         $funcionario->fun_profesion=Str::upper($request->fun_profesion);
         $funcionario->fun_cargo=Str::upper($request->fun_cargo);
         $funcionario->fun_estado=Str::upper($request->fun_estado);
+        $funcionario->userid_at='2';
         $funcionario->save();
 
         return response()->json(['status'=>'ok',"msg" => "editado exitosamente","funcionario" => $funcionario], 200);

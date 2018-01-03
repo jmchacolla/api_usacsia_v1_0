@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Validator;
 use App\Http\Requests;
 use App\Models\Zona_inspeccion;
+use App\Models\Persona;
+use App\Models\Zona;
 
 class Zona_inspeccionController extends Controller
 {
@@ -41,5 +43,24 @@ class Zona_inspeccionController extends Controller
         $zona_inspeccion->save();
 
         return response()->json(['status'=>'ok',"msg" => "exito", "zona_inspeccion" => $zona_inspeccion ], 200);
+    }
+    //asignar inspector segun zona de empresa
+    public function asignar($zon_id)
+    {
+        $funci=Persona::where('zon_id',$zon_id)
+        ->join('funcionario','funcionario.per_id','=','persona.per_id')
+        ->where('funcionario.fun_cargo','INSPECTOR')
+        ->get()
+        ->first();
+        $zona=Zona::find($zon_id);
+      
+        // crear al funcionario si existe la persona
+        /*$zona_inspeccion = new Zona_inspeccion();
+        $zona_inspeccion->fun_id=$fun_id->fun_id;
+        $zona_inspeccion->zon_id=$zon_id;
+        $zona_inspeccion->userid_at='2';
+        $zona_inspeccion->save();*/
+
+        return response()->json(['status'=>'ok',"msg" => "exito", "zona_inspeccion" => $funci->fun_id, "zona" => $zona->zon_id ], 200);
     }
 }

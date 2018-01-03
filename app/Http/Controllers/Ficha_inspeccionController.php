@@ -27,12 +27,37 @@ class Ficha_inspeccionController extends Controller
     	$ficha_inspeccion = Ficha_inspeccion::all();
     	return response()->json(['status'=>'ok','mensaje'=>'exito','ficha_inspeccion'=>$ficha_inspeccion],200);
     }
+     public function store(Request $request){
+
+        $ficha_inspeccion = new Ficha_inspeccion();
+        $ficha_inspeccion->et_id = $request->et_id;
+        $ficha_inspeccion->fun_id = $request->fun_id;
+      
+        $ficha_inspeccion->fi_fecha_asignacion =$request->fi_fecha_asignacion;
+        $ficha_inspeccion->fi_fecha_realizacion =$request->fi_fecha_realizacion;
+        $ficha_inspeccion->fi_observacion =$request->fi_observacion;
+        $ficha_inspeccion->fi_estado =$request->fi_estado;
+        $ficha_inspeccion->fi_foco_insalubridad =$request->fi_foco_insalubridad;
+        $ficha_inspeccion->fi_exibe_certificado =$request->fi_exibe_certificado;
+        $ficha_inspeccion->fi_exibe_carne =$request->fi_exibe_carne;
+        $ficha_inspeccion->fi_extinguidor =$request->fi_extinguidor;
+        $ficha_inspeccion->fi_botiquin =$request->fi_botiquin;
+        $ficha_inspeccion->userid_at='2';
+        $ficha_inspeccion->save();
+
+        $resultado=compact('ficha_inspeccion','ficha1');
+
+        return response()->json(['status'=>'ok',"msg"=>"creado exitosamente","ficha_inspeccion"=>$ficha_inspeccion], 200);
+
+    }
+
+
     public function crear_ficha1(Request $request){
 
     	$ficha_inspeccion = new Ficha_inspeccion();
 		$ficha_inspeccion->et_id = $request->et_id;
 		$ficha_inspeccion->fun_id = $request->fun_id;
-		$ficha_inspeccion->cat_id = $request->cat_id;
+	
         $ficha_inspeccion->fi_fecha_asignacion =$request->fi_fecha_asignacion;
         $ficha_inspeccion->fi_fecha_realizacion =$request->fi_fecha_realizacion;
         $ficha_inspeccion->fi_observacion =$request->fi_observacion;
@@ -87,7 +112,7 @@ class Ficha_inspeccionController extends Controller
     	$ficha_inspeccion = new Ficha_inspeccion();
 		$ficha_inspeccion->et_id = $request->et_id;
 		$ficha_inspeccion->fun_id = $request->fun_id;
-		$ficha_inspeccion->cat_id = $request->cat_id;
+
         $ficha_inspeccion->fi_fecha_asignacion =$request->fi_fecha_asignacion;
         $ficha_inspeccion->fi_fecha_realizacion =$request->fi_fecha_realizacion;
         $ficha_inspeccion->fi_observacion =$request->fi_observacion;
@@ -171,7 +196,7 @@ class Ficha_inspeccionController extends Controller
     	$ficha_inspeccion = new Ficha_inspeccion();
 		$ficha_inspeccion->et_id = $request->et_id;
 		$ficha_inspeccion->fun_id = $request->fun_id;
-		$ficha_inspeccion->cat_id = $request->cat_id;
+
         $ficha_inspeccion->fi_fecha_asignacion =$request->fi_fecha_asignacion;
         $ficha_inspeccion->fi_fecha_realizacion =$request->fi_fecha_realizacion;
         $ficha_inspeccion->fi_observacion =$request->fi_observacion;
@@ -249,7 +274,7 @@ class Ficha_inspeccionController extends Controller
     	$ficha_inspeccion = new Ficha_inspeccion();
 		$ficha_inspeccion->et_id = $request->et_id;
 		$ficha_inspeccion->fun_id = $request->fun_id;
-		$ficha_inspeccion->cat_id = $request->cat_id;
+
         $ficha_inspeccion->fi_fecha_asignacion =$request->fi_fecha_asignacion;
         $ficha_inspeccion->fi_fecha_realizacion =$request->fi_fecha_realizacion;
         $ficha_inspeccion->fi_observacion =$request->fi_observacion;
@@ -312,7 +337,7 @@ class Ficha_inspeccionController extends Controller
     	$ficha_inspeccion = new Ficha_inspeccion();
 		$ficha_inspeccion->et_id = $request->et_id;
 		$ficha_inspeccion->fun_id = $request->fun_id;
-		$ficha_inspeccion->cat_id = $request->cat_id;
+
         $ficha_inspeccion->fi_fecha_asignacion =$request->fi_fecha_asignacion;
         $ficha_inspeccion->fi_fecha_realizacion =$request->fi_fecha_realizacion;
         $ficha_inspeccion->fi_observacion =$request->fi_observacion;
@@ -388,7 +413,7 @@ class Ficha_inspeccionController extends Controller
     	$ficha_inspeccion = new Ficha_inspeccion();
 		$ficha_inspeccion->et_id = $request->et_id;
 		$ficha_inspeccion->fun_id = $request->fun_id;
-		$ficha_inspeccion->cat_id = $request->cat_id;
+
         $ficha_inspeccion->fi_fecha_asignacion =$request->fi_fecha_asignacion;
         $ficha_inspeccion->fi_fecha_realizacion =$request->fi_fecha_realizacion;
         $ficha_inspeccion->fi_observacion =$request->fi_observacion;
