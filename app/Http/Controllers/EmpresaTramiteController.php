@@ -200,16 +200,42 @@ class EmpresaTramiteController extends Controller
         ->join('persona','persona.per_id','=','p_natural.per_id')
         ->select('empresa_tramite.et_id','et_monto','et_numero_tramite','establecimiento_solicitante.ess_id','ess_razon_social','p_natural.pnat_id','persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci')
         ->get();
-       /* if ($empresa_tramite) {
-                return response()->json(['status'=>'ok',"mensaje"=>"no existe"],200);
-        }*/
+        return response()->json(['status'=>'ok',"mensaje"=>"lista",'empresa_tramite'=>$empresa_tramite], 200);
+    }
+    //aumente 2 para hacer pruebas
+    public function lista_x_inspectorN2(/*Request $request,*/$fun_id)
+    {
+        /*$estado=$request->te_estado;
+        $etapa=$request->eta_id;*/
+
+        $empresa_tramite=Zona_inspeccion::where('zona_inspeccion.fun_id',$fun_id)
+        ->join('establecimiento_solicitante','establecimiento_solicitante.zon_id','=','zona_inspeccion.zon_id')
+        ->join('empresa_tramite','empresa_tramite.ess_id','=','establecimiento_solicitante.ess_id')
+        ->join('empresa','empresa.ess_id','=','empresa_tramite.ess_id')
+
+        
+        ->join('tramitecer_estado', 'tramitecer_estado.et_id', '=', 'empresa_tramite.et_id')
+        ->join('etapa', 'etapa.eta_id', '=', 'tramitecer_estado.eta_id')
+        ->where('tramitecer_estado.eta_id', '=', 1)
+        ->where('tramitecer_estado.te_estado', '=', 'APROBADO')
+        ->orderBy('tramitecer_estado.te_fecha')
+
+        ->join('empresa_propietario','empresa_propietario.emp_id','=','empresa.emp_id')
+        ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
+        ->where('propietario.pro_tipo','N')
+        ->join('p_natural','p_natural.pro_id','=','propietario.pro_id')
+        ->join('persona','persona.per_id','=','p_natural.per_id')
+        ->select('empresa_tramite.et_id','et_monto','et_numero_tramite','establecimiento_solicitante.ess_id','ess_razon_social','p_natural.pnat_id','persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci')
+        ->get();
         return response()->json(['status'=>'ok',"mensaje"=>"lista",'empresa_tramite'=>$empresa_tramite], 200);
     }
 
 
     public function lista_x_inspectorJ($fun_id)
     {
-       $empresa_tramite=Zona_inspeccion::where('zona_inspeccion.fun_id',$fun_id)
+        
+
+        $empresa_tramite=Zona_inspeccion::where('zona_inspeccion.fun_id',$fun_id)
         ->join('establecimiento_solicitante','establecimiento_solicitante.zon_id','=','zona_inspeccion.zon_id')
         ->join('empresa_tramite','empresa_tramite.ess_id','=','establecimiento_solicitante.ess_id')/**/
         ->join('empresa','empresa.ess_id','=','empresa_tramite.ess_id')
@@ -219,9 +245,6 @@ class EmpresaTramiteController extends Controller
         ->join('p_juridica','p_juridica.pro_id','=','propietario.pro_id')
         ->select('empresa_tramite.et_id','et_monto','et_numero_tramite','establecimiento_solicitante.ess_id','ess_razon_social','propietario.pro_id','p_juridica.pjur_id','pjur_razon_social')
         ->get();
-        /*if ($empresa_tramite) {
-                return response()->json(['status'=>'ok',"mensaje"=>"no existe"],200);
-        }*/
         return response()->json(['status'=>'ok',"mensaje"=>"lista",'empresa_tramite'=>$empresa_tramite], 200);
     }
     public function listpor_etapa_estado(Request $request)

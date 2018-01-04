@@ -222,6 +222,9 @@ Route::group(['middleware' => 'cors'], function ()
      /*wen   listar por inspector inspector 29-12-2017*/
     Route::get('list_insN/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorN');
     Route::get('list_insJ/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorJ');
+
+    /*wen   listar por inspector inspector 4-1-2018*/
+    Route::get('inspN/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorN2');
    /* //wen 1-1-2018 aprobacion1
     Route::put('aprobacion1/{et_id}', 'EmpresaTramiteController@editar1');
     //wen 1-1-2018 aprobacion2
