@@ -15,7 +15,7 @@ class ConsultorioController extends Controller
     {
         /*$consultorios=\App\Models\Consultorio::all();
         return response()->json(['status'=>'ok','mensaje'=>'exito','consultorio'=>$consultorios],200); */
-        $consultorios= Ambiente::select('ambiente.amb_id','usa_id','amb_nombre','amb_descripcion','consultorio.con_id','con_cod')
+        $consultorios= Ambiente::select('ambiente.amb_id','usa_id','amb_nombre','amb_descripcion','consultorio.con_id','con_cod','con_estado')
         ->join('consultorio','consultorio.amb_id','=','ambiente.amb_id')
         ->where('amb_tipo',"CONSULTORIO")
         ->get();
@@ -95,26 +95,27 @@ class ConsultorioController extends Controller
         {
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un ambiente con ese código.'])],404);
         }
-    
-        
-        $ambientes->amb_nombre= $request->amb_nombre;
-        $ambientes->amb_tipo= $request->amb_tipo;
-        $ambientes->amb_descripcion= $request->amb_descripcion;
-       /* $ambientes->userid_at='2';*/
-        $ambientes->save();
+        if($request->con_habilitar){
+            $ambientes->amb_nombre= $request->amb_nombre;
+            $ambientes->amb_tipo= $request->amb_tipo;
+            $ambientes->amb_descripcion= $request->amb_descripcion;
+           /* $ambientes->userid_at='2';*/
+            $ambientes->save();
 
-         //creando consultorio
+            $consultorio = Consultorio::where('amb_id', $amb_id)->get()->first();
+            $con_id=$consultorio->con_id;
+            $consultorios= Consultorio::find($con_id);
 
-       //$consultorios= \App\Models\Consultorio::find($con_id);
-
-
-        $consultorio = Consultorio::where('amb_id', $amb_id)->get()->first();
-        $con_id=$consultorio->con_id;
-        $consultorios= Consultorio::find($con_id);
-
+            $consultorios->con_cod=$request->con_cod;
+        }
        
-        $consultorios->con_cod=$request->con_cod;
-       /* $consultorios->userid_at='2';*/
+       if($request->con_estado && $request->con_habilitar){
+            $consultorio = Consultorio::where('amb_id', $amb_id)->get()->first();
+            $con_id=$consultorio->con_id;
+            $consultorios= Consultorio::find($con_id);
+            $consultorios->con_estado=$request->con_estado;
+            
+        }
         $consultorios->save();
 
        
@@ -123,6 +124,28 @@ class ConsultorioController extends Controller
         
     
     }
+
+    public function update_lista_consultorios(Request $request)
+    {
+        /*convirtiendo $request vector a object*/
+        if(count($request->ids)){
+            $requeste_array=$request->estados;
+            $requesti_array=$request->ids;
+            for ($i=0; $i < count($requesti_array); $i++) {
+                $con_id=$requesti_array[$i];
+                $consultorio = Consultorio::where('con_id',$con_id)->first();
+                if($consultorio){
+                    $consultorio->con_estado=$requeste_array[$i];
+                    $consultorio->save();
+                }
+            }
+
+        return response()->json(['status'=>'ok',"mensaje"=>"editado exitosamente","requesti_array"=>$requesti_array,"requeste_array"=>$requeste_array,"tipo"=>gettype($requeste_array)], 200);
+        }else{
+            return response()->json(['status'=>'ok',"mensaje"=>"sin editar"], 200);
+        }
+    }
+
 
     public function show($amb_id)
     {

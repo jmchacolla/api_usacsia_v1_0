@@ -9,6 +9,7 @@ use App\Http\Requests;
 use App\Models\Ficha;
 use App\Models\Persona_tramite;
 use App\Models\Persona;
+use \App\Models\Consultorio;
 
 
 class FichaController extends Controller
@@ -22,18 +23,62 @@ class FichaController extends Controller
     public function store(Request $request){
     	
         $hoy=date('Y-m-d');
-        $ultima_ficha=Ficha::select('fic_numero')
-        ->where('ficha.fic_fecha', $hoy)
-        ->max('ficha.fic_numero');
+        
 
-        $numero_ficha=$ultima_ficha+1;
-        if(!$ultima_ficha)
-        {
-            $numero_ficha=1;
+        $ultima_ficha_asignada=Ficha::select('fic_id')
+        ->where('ficha.fic_fecha', $hoy)
+        ->max('ficha.fic_id');
+
+        if($ultima_ficha_asignada){
+            
+            $ultima_asignacion=Ficha::select('ficha.con_id','ficha.fic_numero')
+            ->where('ficha.fic_id',$ultima_ficha_asignada)
+            ->first();
+
+            
+            $consultorio_asignado=Consultorio::select('con_id','con_cod')
+            ->where('con_estado',true)
+            ->where('con_id','>',$ultima_asignacion->con_id)
+            ->first();
+
+            if($consultorio_asignado){
+                $ultima_ficha=Ficha::select('fic_numero')
+                ->where('ficha.fic_fecha', $hoy)
+                ->where('ficha.con_id', $consultorio_asignado->con_id)
+                ->max('ficha.fic_numero');
+                $numero_ficha=$ultima_ficha+1;
+                if(!$ultima_ficha)
+                {   
+                    $numero_ficha=1;
+                }
+            }else{
+                $consultorio_asignado=Consultorio::select('con_id','con_cod')
+                ->where('con_estado',true)
+                ->orderby('con_id','asc')
+                ->first();
+
+                $ultima_ficha=Ficha::select('fic_numero')
+                ->where('ficha.fic_fecha', $hoy)
+                ->where('ficha.con_id', $consultorio_asignado->con_id)
+                ->max('ficha.fic_numero');
+                $numero_ficha=$ultima_ficha+1;
+                if(!$ultima_ficha)
+                {   
+                    $numero_ficha=1;
+                }
+            }
+        }else{
+            $consultorio_asignado=Consultorio::select('con_id','con_id')
+                ->where('con_estado',true)
+                ->orderby('con_id','asc')
+                ->first();
+                $numero_ficha=1;
         }
+        
         $ficha = new Ficha();
 		$ficha->pt_id = $request->pt_id;
         $ficha->fic_numero = $numero_ficha;
+        $ficha->con_id =$consultorio_asignado->con_id;
         /*vero---verifica si un tramite ya tuvo una consulta, para ver si esta ficha es consulta o reconsulta---*/
         $pt_id=$ficha->pt_id;
         $tramitenovencido=Persona_tramite::find($pt_id)
@@ -53,7 +98,12 @@ class FichaController extends Controller
         }
         /*vero fin*/
         $ficha->save();
+
+
+        // $result=compact('ultima_ficha_asignada','ultima_asignacion','consultorio_asignado','numero_ficha');
+        // return response()->json(['status'=>'ok',"msg" => "exito",'resultado'=>$result],200); 
         return response()->json(['status'=>'ok',"msg" => "exito",'ficha'=>$ficha],200); 
+        
     }
     
     public function show($fic_id){
