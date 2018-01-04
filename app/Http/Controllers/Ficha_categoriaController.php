@@ -21,7 +21,7 @@ class Ficha_categoriaController extends Controller
     	
     	
     }*/
-         # crea un establecimiento solicitante
+         # crea una ficha_categoria
     public function store(Request $request)
     {
         /*convirtiendo $request establecimiento a object*/

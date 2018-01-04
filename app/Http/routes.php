@@ -162,13 +162,13 @@ Route::group(['middleware' => 'cors'], function ()
     //JHON empresa
     Route::resource('establecimiento_solicitante','EstablecimientoSolicitanteController', ['only' =>['index', 'store', 'update', 'show']]);
     //jhon empresa operaciones
-    Route::resource('empresa', 'EmpresaController', ['only' =>['index', 'store', 'update', 'show']]);
+    Route::resource('empresa', 'EmpresaController', ['only' => ['index', 'store', 'update', 'show']]);
 
     //jhon fichas
     Route::resource('ficha', 'FichaController',['only' =>['index', 'store', 'update', 'show']]);
 
     /*EMPRESA wendy -- 13-12-17*/
-    Route::resource('empresa','EmpresaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+    Route::resource('empresa', 'EmpresaController', ['only' => ['store', 'update', 'destroy', 'show','index']]);
 // permite listar a personas que ya concluyeron su tramite
      Route::get('lista_final','Persona_tramiteController@lista_pers_tra');
      // permite listar a personas que ya concluyeron su tramite
@@ -219,9 +219,26 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('distritos', 'ZonaController@distritos');
     /*wen   lista  distrito 28-12-2017*/
     Route::get('inspectores', 'FuncionarioController@listIns');
-   
-
-
+    /*wen   asignar zona a inspector 29-12-2017*/
+    Route::get('asignar/{zon_id}', 'Zona_inspeccionController@asignar');
+     /*wen   listar por inspector inspector 29-12-2017*/
+    Route::get('list_insN/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorN');
+    Route::get('list_insJ/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorJ');
+    //wen 1-1-2018 aprobacion1
+    Route::put('aprobacion1/{et_id}', 'EmpresaTramiteController@editar1');
+    //wen 1-1-2018 aprobacion2
+    Route::put('aprobacion2/{et_id}', 'EmpresaTramiteController@editar2');
+    //wen 1-1-2018 aprobacion3
+    Route::put('aprobacion3/{et_id}', 'EmpresaTramiteController@editar3');
+    //wen 1-1-2018 listar crear certificado sanitario
+    Route::resource('certificado_sanitario','Certificado_sanitarioController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+    //wen 2-1-2018 aprobacion2
+    Route::put('aprob2/{ces_id}', 'Certificado_sanitarioController@aprob2');
+    //wen 2-1-2018 aprobacion3
+    Route::put('aprob3/{ces_id}', 'Certificado_sanitarioController@aprob3');
+    Route::get('busca_cert/{et_id}', 'EmpresaTramiteController@buscar_certificado');
+    
+    
      /*jhon----operacines con receta*/
      Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
      
@@ -253,5 +270,6 @@ Route::group(['middleware' => 'cors'], function ()
     /*wendy   verifica si tiene carnet por ci*/
 /*wendy   verifica si tiene carnet por ci 27-12 2017*/
     Route::get('verifica/{per_ci}', 'Carnet_sanitarioController@verifica');
+    Route::get('ins_fecha_est_fun', 'Ficha_inspeccionController@list_inspec_fechas_estado_fun');
 
 });

@@ -53,6 +53,7 @@ class Persona_tramiteController extends Controller
 		$persona_tramite= new Persona_tramite();
 		$persona_tramite->tra_id=$request->tra_id;
 		$persona_tramite->per_id=$request->per_id;
+        $persona_tramite->fun_id=$request->fun_id;
 		// $persona_tramite->pt_numero_tramite = $request->pt_numero_tramite;
 		$persona_tramite->pt_vigencia_pago=$request->pt_vigencia_pago;
 		// $persona_tramite->pt_fecha_ini=$request->pt_fecha_ini;
@@ -136,6 +137,7 @@ class Persona_tramiteController extends Controller
         $persona_tramite = Persona_tramite::select('persona_tramite.pt_id','persona_tramite.pt_estado_tramite','per_nombres','per_apellido_primero', 'per_apellido_segundo', 'per_ci', 'per_ci_expedido')
         ->where('persona_tramite.tra_id',1)
         ->where('persona_tramite.pt_estado_tramite','!=',$concluido)
+        ->where('persona_tramite.pt_estado_tramite','!=','APROBADO')
         ->where('persona_tramite.pt_estado_tramite','!=',$vencido)
         ->join('persona', 'persona.per_id','=', 'persona_tramite.per_id')
         ->where('persona.per_ci', $per_ci)
@@ -187,6 +189,7 @@ class Persona_tramiteController extends Controller
         $persona_tramite = Persona_tramite::select('persona_tramite.pt_id','persona_tramite.pt_estado_tramite','per_nombres','per_apellido_primero', 'per_apellido_segundo', 'per_ci', 'per_ci_expedido')
         ->where('persona_tramite.tra_id',1)
         ->where('persona_tramite.pt_estado_tramite','!=',$concluido)
+        ->where('persona_tramite.pt_estado_tramite','!=','APROBADO')
         ->where('persona_tramite.pt_estado_tramite','!=',$vencido)
         ->join('persona', 'persona.per_id','=', 'persona_tramite.per_id')
         ->where('persona.per_ci', $per_ci)
@@ -221,16 +224,16 @@ class Persona_tramiteController extends Controller
 
          $ficha = Ficha::select('ficha.fic_id','pt_id')
         ->where('pt_id',$pt_id)
-        ->get()->first();
+        ->orderBy('created_at','desc')->first();
         $prueba_medica=Prueba_medica::select('prueba_medica.pm_id','pm_estado','pm_diagnostico')
         ->where('fic_id',($ficha->fic_id))
-        ->get()->first();
+        ->orderBy('created_at','desc')->first();
         $muestra = Muestra::select('muestra.mue_id','pt_id')
         ->where('pt_id',$pt_id)
-        ->get()->first();
+        ->orderBy('created_at','desc')->first();
         $prueba_laboratorio=Prueba_laboratorio::select('prueba_laboratorio.pl_id','pl_estado')
         ->where('mue_id',($muestra->mue_id))
-        ->get()->first();
+        ->orderBy('created_at','desc')->first();
 
         $resultado=compact('persona_tramite', 'persona','tramite','muestra','prueba_laboratorio','ficha','prueba_medica');
         return response()->json(['status'=>'ok','pertramite'=>$resultado],200);
@@ -285,28 +288,7 @@ class Persona_tramiteController extends Controller
 
         $per_id=$persona_tramite->per_id;
 
-       /* $carnet=Carnet_sanitario::crear_carnet($pt_id);
-
-        $pe_hist_clinico=$request->pe_hist_clinico;
-        $pac_id=$referencia->pac_id;
-        $es_id=$request->es_id;
-
-       
-        if($pe_hist_clinico!=null)
-
-        {  $paciente_establecimiento=\awebss\Models\Paciente_establecimiento::crear_paciente($es_id,$pac_id,$pe_hist_clinico); 
-        
-
-        $resultado=compact('referencia','paciente_establecimiento');
-
-        return response()->json(['status'=>'ok','mensaje'=>'exito','referencia'=>$resultado],200);
-        }
-    $paciente_es= \awebss\Models\Paciente_establecimiento::activar_paciente($pac_id,$es_id);
-
-        $resultado=compact('referencia','paciente_es');
-
-        return response()->json(['status'=>'ok','mensaje'=>'exito','referencia'=>$resultado],200);
-      */  
+      
         return response()->json(['status'=>'ok','mensaje'=>'exito','persona_tramite'=>$persona_tramite],200);
     }
 
