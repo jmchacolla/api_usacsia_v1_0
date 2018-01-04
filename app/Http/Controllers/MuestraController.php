@@ -32,8 +32,10 @@ class MuestraController extends Controller
         $pt_id=$muestra->pt_id;
         $tramitenovencido=Persona_tramite::find($pt_id)
         ->where('pt_estado_pago','!=','VENCIDO')
+        ->where('pt_estado_tramite','!=','APROBADO')
+        ->where('pt_estado_tramite','!=','CONCLUIDO')
         ->get();
-        if($tramitenovencido){
+        if(sizeof($tramitenovencido) >0){
             $tramitepruebalaboratorio = Muestra::where('muestra.pt_id',$pt_id)
             ->join('prueba_laboratorio','prueba_laboratorio.mue_id','=','muestra.mue_id')->first();
             if($tramitepruebalaboratorio){

@@ -137,6 +137,7 @@ class Persona_tramiteController extends Controller
         $persona_tramite = Persona_tramite::select('persona_tramite.pt_id','persona_tramite.pt_estado_tramite','per_nombres','per_apellido_primero', 'per_apellido_segundo', 'per_ci', 'per_ci_expedido')
         ->where('persona_tramite.tra_id',1)
         ->where('persona_tramite.pt_estado_tramite','!=',$concluido)
+        ->where('persona_tramite.pt_estado_tramite','!=','APROBADO')
         ->where('persona_tramite.pt_estado_tramite','!=',$vencido)
         ->join('persona', 'persona.per_id','=', 'persona_tramite.per_id')
         ->where('persona.per_ci', $per_ci)
@@ -188,6 +189,7 @@ class Persona_tramiteController extends Controller
         $persona_tramite = Persona_tramite::select('persona_tramite.pt_id','persona_tramite.pt_estado_tramite','per_nombres','per_apellido_primero', 'per_apellido_segundo', 'per_ci', 'per_ci_expedido')
         ->where('persona_tramite.tra_id',1)
         ->where('persona_tramite.pt_estado_tramite','!=',$concluido)
+        ->where('persona_tramite.pt_estado_tramite','!=','APROBADO')
         ->where('persona_tramite.pt_estado_tramite','!=',$vencido)
         ->join('persona', 'persona.per_id','=', 'persona_tramite.per_id')
         ->where('persona.per_ci', $per_ci)
@@ -222,16 +224,16 @@ class Persona_tramiteController extends Controller
 
          $ficha = Ficha::select('ficha.fic_id','pt_id')
         ->where('pt_id',$pt_id)
-        ->get()->first();
+        ->orderBy('created_at','desc')->first();
         $prueba_medica=Prueba_medica::select('prueba_medica.pm_id','pm_estado','pm_diagnostico')
         ->where('fic_id',($ficha->fic_id))
-        ->get()->first();
+        ->orderBy('created_at','desc')->first();
         $muestra = Muestra::select('muestra.mue_id','pt_id')
         ->where('pt_id',$pt_id)
-        ->get()->first();
+        ->orderBy('created_at','desc')->first();
         $prueba_laboratorio=Prueba_laboratorio::select('prueba_laboratorio.pl_id','pl_estado')
         ->where('mue_id',($muestra->mue_id))
-        ->get()->first();
+        ->orderBy('created_at','desc')->first();
 
         $resultado=compact('persona_tramite', 'persona','tramite','muestra','prueba_laboratorio','ficha','prueba_medica');
         return response()->json(['status'=>'ok','pertramite'=>$resultado],200);
