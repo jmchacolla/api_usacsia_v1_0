@@ -106,8 +106,8 @@ Route::group(['middleware' => 'cors'], function ()
     /*/PERSONA_TRAMITE*///============================================================
 /*PRUEBA MEDICA*/
     Route::resource('prueba_medica','Prueba_medicaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
-    /* jhon  historial clinico perci de persona*/
-    Route::get('pruebamedicapersona/{per_ci}', 'Prueba_medicaController@pruebamedicapersona');
+    /* jhon  historial clinico por per_id de persona*/
+    Route::get('pruebamedicapersona/{per_id}', 'Prueba_medicaController@pruebamedicapersona');
     /*jhon ----estado de prueba enfermedad desde si al menos 1 es positivo=>false pruebas enfermedades*/
     Route::get('estadopruebamedica/{pm_id}', 'Prueba_medicaController@estadopruebamedica');
 /*PRUEBA ENFERMEDAD*/
@@ -260,5 +260,8 @@ Route::group(['middleware' => 'cors'], function ()
 /*wendy   verifica si tiene carnet por ci 27-12 2017*/
     Route::get('verifica/{per_ci}', 'Carnet_sanitarioController@verifica');
     Route::get('ins_fecha_est_fun', 'Ficha_inspeccionController@list_inspec_fechas_estado_fun');
+    Route::resource('etapa', 'EtapaController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+    Route::resource('tramitecerestado', 'TramitecerEstadoController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+    Route::get('lista_etapa_estado', 'EmpresaTramiteController@listpor_etapa_estado');
 
 });
