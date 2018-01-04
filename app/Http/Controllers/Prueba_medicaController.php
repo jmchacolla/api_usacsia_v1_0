@@ -176,19 +176,21 @@ class Prueba_medicaController extends Controller
         $estado=false;
     }
     //retorna todas la pruebas medicas de una persona 
-    public function pruebamedicapersona($per_ci)
+    public function pruebamedicapersona($per_id)
     {
-        $listapruebas=Prueba_medica::select('prueba_medica.pm_id', 'prueba_medica.pm_fecha','prueba_medica.pm_diagnostico')
+        $listapruebas=Prueba_medica::select('prueba_medica.pm_id', 'prueba_medica.pm_fecha','prueba_medica.pm_diagnostico', 'prueba_medica.pm_estado')
         ->join('persona_tramite','prueba_medica.pt_id','=', 'persona_tramite.pt_id')
         ->join('persona', 'persona_tramite.per_id', '=', 'persona.per_id')
-        ->where( 'persona.per_ci','=', $per_ci)
+        ->where('prueba_medica.pm_estado', '!=', 'PENDIENTE')
+        ->where( 'persona.per_id','=', $per_id)
         ->orderby('pm_fecha', 'desc')
         ->get();
+        $persona=Persona::find($per_id);
         
         if (!$listapruebas) {
-            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra pruebas con ese CI.'])],404);
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra pruebas con ese codigo.'])],404);
         }
-        return response()->json(['status'=>'ok','mensaje'=>'exito','pruebas'=>$listapruebas],200); 
+        return response()->json(['status'=>'ok','mensaje'=>'exito','pruebas'=>$listapruebas, 'persona'=>$persona],200); 
     }
     
     // revisa si exite al menos una prueba enfermedad con resultado positivo, retorna false

@@ -99,7 +99,7 @@ class Prueba_laboratorioController extends Controller
 
         return response()->json(['status'=>'ok','mensaje'=>'exito','prueba_laboratorio'=>$prueba_laboratorio,'prueba_par'=>$pruebapar],200);
     }
-    // debuelve la ultima prueba_laboratoriodel tramite
+    // devuelve la ultima prueba_laboratorio del tramite
     public function ultima_pl_tramite($pt_id)
     {
         $pl=Prueba_laboratorio:: select('prueba_laboratorio.pl_id', 'prueba_laboratorio.pl_color', 'prueba_laboratorio.pl_aspecto', 'prueba_laboratorio.pl_fecha_recepcion','prueba_laboratorio.pl_estado', 'prueba_laboratorio.fun_id','muestra.mue_id', 'muestra.mue_num_muestra')

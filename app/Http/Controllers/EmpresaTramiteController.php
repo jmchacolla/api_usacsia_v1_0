@@ -225,6 +225,26 @@ class EmpresaTramiteController extends Controller
         }*/
         return response()->json(['status'=>'ok',"mensaje"=>"lista",'empresa_tramite'=>$empresa_tramite], 200);
     }
+    public function listpor_etapa_estado(Request $request)
+    {
+        $estado=$request->te_estado;
+        $etapa=$request->eta_id;
+
+        $empresa_tramite=EmpresaTramite::select('establecimiento_solicitante.ess_razon_social', 'establecimiento_solicitante.ess_telefono', 'establecimiento_solicitante.ess_correo_electronico', 'establecimiento_solicitante.ess_tipo', 'empresa.emp_id','empresa.ess_id', 'empresa.emp_kardex', 'empresa_tramite.et_id', 'empresa_tramite.tra_id', 'empresa_tramite.ess_id', 'empresa_tramite.et_numero_tramite', 'empresa_tramite.et_vigencia_pago', 'empresa_tramite.et_fecha_ini', 'empresa_tramite.et_estado_pago', 'empresa_tramite.et_estado_tramite', 'empresa_tramite.et_monto', 'empresa_tramite.et_tipo_tramite', 'tramitecer_estado.te_id', 'tramitecer_estado.te_estado', 'tramitecer_estado.te_fecha', 'etapa.eta_id', 'etapa.eta_nombre')
+        ->join('establecimiento_solicitante', 'establecimiento_solicitante.ess_id', '=', 'empresa_tramite.ess_id')
+        ->join('empresa', 'empresa.ess_id', '=', 'establecimiento_solicitante.ess_id')
+        ->join('tramitecer_estado', 'tramitecer_estado.et_id', '=', 'empresa_tramite.et_id')
+        ->join('etapa', 'etapa.eta_id', '=', 'tramitecer_estado.eta_id')
+        ->where('tramitecer_estado.eta_id', '=', $etapa)
+        ->where('tramitecer_estado.te_estado', '=', $estado)
+        ->orderBy('tramitecer_estado.te_fecha')
+        ->get();
+        if (!$empresa_tramite) {
+            return response()->json(['errors'=>array(['code'=>404, 'message'=>'No se encuentra un registro con ese código.'])],404);
+        }
+        return response()->json(['status'=>'ok',"mensaje"=>"Lista estado",'empresa_tramite'=>$empresa_tramite], 200);
+
+    }
 
     public function editar1(Request $request, $et_id)
     {
@@ -283,3 +303,16 @@ class EmpresaTramiteController extends Controller
 
 
 }
+/*
+carne sanitario
+    estado del avance
+certificado sanitario
+    estado del avance
+
+    8:30
+
+estimacion
+    comunicacion con USACSIA
+    aprobacion
+
+ */
