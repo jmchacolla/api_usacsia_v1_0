@@ -136,6 +136,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('municipio/{pro_id}','MunicipioController@municipio_provincia');
     //listar zona por municipio
     Route::get('zona/{mun_id}', 'ZonaController@index');
+    Route::resource('zonass','ZonaController',['only' => ['index', 'store', 'update', 'show','destroy']]);
 
     //listar funcionarios por cargo 
     Route::get('funcionario_cargo/{cargo}', 'FuncionarioController@listaporcargo');
@@ -237,6 +238,8 @@ Route::group(['middleware' => 'cors'], function ()
     //wen 2-1-2018 aprobacion3
     Route::put('aprob3/{ces_id}', 'Certificado_sanitarioController@aprob3');
     Route::get('busca_cert/{et_id}', 'EmpresaTramiteController@buscar_certificado');
+    // permite la busqueda de personas en las tabla persona
+    Route::get('personasb/{per_ci}','PersonaController@buscar');
     
     
      /*jhon----operacines con receta*/
