@@ -86,7 +86,8 @@ class ConsultorioController extends Controller
 
     }
 
-    public function update(Request $request, $amb_id)
+    
+public function update(Request $request, $amb_id)
     {
        $ambientes= Ambiente::find($amb_id);
 
@@ -95,27 +96,26 @@ class ConsultorioController extends Controller
         {
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un ambiente con ese código.'])],404);
         }
-        if($request->con_habilitar){
-            $ambientes->amb_nombre= $request->amb_nombre;
-            $ambientes->amb_tipo= $request->amb_tipo;
-            $ambientes->amb_descripcion= $request->amb_descripcion;
-           /* $ambientes->userid_at='2';*/
-            $ambientes->save();
+    
+        
+        $ambientes->amb_nombre= $request->amb_nombre;
+        $ambientes->amb_tipo= $request->amb_tipo;
+        $ambientes->amb_descripcion= $request->amb_descripcion;
+       /* $ambientes->userid_at='2';*/
+        $ambientes->save();
 
-            $consultorio = Consultorio::where('amb_id', $amb_id)->get()->first();
-            $con_id=$consultorio->con_id;
-            $consultorios= Consultorio::find($con_id);
+         //creando consultorio
 
-            $consultorios->con_cod=$request->con_cod;
-        }
+       //$consultorios= \App\Models\Consultorio::find($con_id);
+
+
+        $consultorio = Consultorio::where('amb_id', $amb_id)->get()->first();
+        $con_id=$consultorio->con_id;
+        $consultorios= Consultorio::find($con_id);
+
        
-       if($request->con_estado && $request->con_habilitar){
-            $consultorio = Consultorio::where('amb_id', $amb_id)->get()->first();
-            $con_id=$consultorio->con_id;
-            $consultorios= Consultorio::find($con_id);
-            $consultorios->con_estado=$request->con_estado;
-            
-        }
+        $consultorios->con_cod=$request->con_cod;
+       /* $consultorios->userid_at='2';*/
         $consultorios->save();
 
        
@@ -124,6 +124,7 @@ class ConsultorioController extends Controller
         
     
     }
+
 
     public function update_lista_consultorios(Request $request)
     {
