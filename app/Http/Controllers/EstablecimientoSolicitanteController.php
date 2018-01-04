@@ -82,8 +82,6 @@ class EstablecimientoSolicitanteController extends Controller
         $empresatramite->ess_id=$est_sol->ess_id;
         $empresatramite->save();
 
-        
-
 
 
         /*

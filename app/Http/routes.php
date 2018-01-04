@@ -244,7 +244,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('pjuridica', 'PersonaJuridicaController',['only'=>['store','show']]);
     Route::resource('pnatural', 'PersonaNaturalController',['only'=>['store','show']]);
     Route::get('pro_id_pjuridica_pnatural/{pro_id}', 'PersonaNaturalController@pro_id_pjuridica_pnatural');
-
+    Route::resource('documento','DocumentoController',['only'=>['index','store','show']]);
 
     
 
