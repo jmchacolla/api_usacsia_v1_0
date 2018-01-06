@@ -53,9 +53,7 @@ class Ficha1Controller extends Controller
         $ficha1->fi1_residuos_liquidos =$request->$fi1_residuos_liquidos;
         $ficha1->fi1_distribucion_dependencias =$request->$fi1_distribucion_dependencias;
         $ficha1->fi1_conservacion_productos_materia_prima =$request->$fi1_conservacion_productos_materia_prima;
-
         $ficha1->save();
         return response()->json(['status'=>'ok',"msg"=>"creado exitosamente","ficha1_inspeccion"=>$ficha1], 200);
-
     }
 }

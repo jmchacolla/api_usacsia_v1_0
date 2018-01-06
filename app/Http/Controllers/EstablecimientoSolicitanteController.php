@@ -77,6 +77,8 @@ class EstablecimientoSolicitanteController extends Controller
         $empresapropietario->pro_id=$requeste_object->pro_id;
         $empresapropietario->save();
 
+        /*crear pendiente en empresa_tramite*/
+        /*crear tramitecer_emp por cada etapa*/
         $empresatramite = new EmpresaTramite();
         $empresatramite->tra_id=$requeste_object->tra_id;
         $empresatramite->ess_id=$est_sol->ess_id;
