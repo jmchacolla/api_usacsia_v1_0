@@ -239,13 +239,12 @@ class FuncionarioController extends Controller
 
         if (!$funcionario)
         {
-             /*return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una persona con ese código.','length'=>0])],404);*/
              return response()->json(['errors'=>404,'message'=>'No se encuentra una persona con ese código.','length'=>0],200);
         }
 
        
 
-        return response()->json(['status'=>'ok',"msg" => "exito",'funcionario'=>$funcionario],200); 
+        return response()->json(['status'=>'ok',"msg" => "exito",'length'=>1,'funcionario'=>$funcionario],200); 
     }
      //listar todos los inspectores
     public function listIns()

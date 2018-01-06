@@ -212,7 +212,8 @@ Route::group(['middleware' => 'cors'], function ()
      /*wen   lista certificados 28-12-2017*/
     Route::resource('zon_ins','Zona_inspeccionController',['only' => ['store', 'update', 'destroy', 'show','index']]);
     /*wen   lista zonas por distrito 28-12-2017*/
-    Route::get('zonas', 'ZonaController@zon_dist');
+    /*Route::get('zonas', 'ZonaController@zon_dist');*/
+    Route::get('zonas', 'ZonaController@zon_Mdist');
     /*wen   lista  distrito 28-12-2017*/
     Route::get('distritos', 'ZonaController@distritos');
     /*wen   lista  distrito 28-12-2017*/
@@ -225,6 +226,8 @@ Route::group(['middleware' => 'cors'], function ()
 
     /*wen   listar por inspector inspector 4-1-2018*/
     Route::get('inspN/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorN2');
+     /*wen   lista  distrito 4-1-2018*/
+    Route::get('mdistritos', 'ZonaController@macro_distritos');
    /* //wen 1-1-2018 aprobacion1
     Route::put('aprobacion1/{et_id}', 'EmpresaTramiteController@editar1');
     //wen 1-1-2018 aprobacion2
@@ -240,6 +243,8 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('busca_cert/{et_id}', 'EmpresaTramiteController@buscar_certificado');
     // permite la busqueda de personas en las tabla persona 4-1-2018
     Route::get('personasb/{per_ci}','PersonaController@buscar');
+    // permite ver el rubro de una empresa 5-1-2018
+    Route::get('rubro/{emp_id}','RubroEmpresaController@ver');
     
     
      /*jhon----operacines con receta*/
