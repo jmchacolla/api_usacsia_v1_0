@@ -136,7 +136,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('zonass','ZonaController',['only' => ['index', 'store', 'update', 'show','destroy']]);
 
     //listar funcionarios por cargo 
-    Route::get('funcionario_cargo/{cargo}', 'FuncionarioController@listaporcargo');
+    Route::get('funcionario_cargo', 'FuncionarioController@listaporcargo');
     //crear persona y funcionario
     Route::post('funcionario_persona', 'FuncionarioController@crear_funcionario');
     // operaciones con funcionario, crear funcionario desde una persona existente 
