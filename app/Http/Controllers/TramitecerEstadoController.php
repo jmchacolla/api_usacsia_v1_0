@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+use App\Http\Requests;
+use App\Models\Etapa;
+use App\Models\TramitecerEstado;
+
+class TramitecerEstadoController extends Controller
+{
+    public function index()
+    {
+       $tramiteceresatdo=TramitecerEstado::all();
+        return response()->json(['status'=>'ok',"msg"=>"Listado tramitecerestadoes","tramitecerestado"=>$tramitecerestado], 200);
+    }
+    public function show($te_id)
+    {
+       $tramiteceresatdo=TramitecerEstado::select('tramitecerestado.te_id', 'tramitecerestado.fun_id', 'tramitecerestado.et_id', 'tramitecerestado.eta_id', 'tramitecerestado.te_estado', 'tramitecerestado.te_observacion', 'etapa.eta_id', 'etapa.eta_nombre' )
+        ->where('te_id', $te_id)
+        ->join('etapa', 'etapa.eta_id', '=', 'tramitecerestado.eta_id')
+        ->get();
+        if (sizeof($tramitecerestado)<=0) {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
+        }
+        return response()->json(['status'=>'ok',"msg"=>"TramitecerEstado","tramitecerestado"=>$tramitecerestado], 200);
+    }
+    public function store(Request $request)
+    {
+     $tramiteceresatdo=new TramitecerEstado();
+     $tramiteceresatdo->fun_id=$request->fun_id;/*de sesion*/
+     $tramiteceresatdo->et_id=$request->et_id;
+     $tramiteceresatdo->eta_id=$request->eta_id;
+      //$tramiteceresatdo->te_estado=$request->te_estado;/*default pendiente*/
+      //$tramiteceresatdo->te_observacion=$request->te_observacion;/*por defecto en null*/
+      return response()->json(['status'=>'ok',"msg"=>"TramitecerEstado","etapa"=>$etapa], 200);
+    }
+    public function update(Request $request, $te_id)
+    {
+       $tramiteceresatdo=TramitecerEstado::find($te_id);
+        if (!$tramitecerestado) {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
+        }
+        if($request->fun_id){$tramitecerestado->fun_id=$request->fun_id;}/*de sesion*/
+        if($request->eta_id){$tramitecerestado->eta_id=$request->eta_id;}
+        if($request->te_estado){$tramitecerestado->te_estado=$request->te_estado;}/*default pendiente*/
+        if($request->te_observacion){$tramitecerestado->te_observacion=$request->te_observacion;}/*por defecto en null*/
+        //$tramiteceresatdo->et_id=$request->et_id;/*no se debe modificar*/
+        return response()->json(['status'=>'ok',"msg"=>"TramitecerEstado","tramitecerestado"=>$tramitecerestado], 200);
+    }
+}

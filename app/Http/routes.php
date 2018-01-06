@@ -14,7 +14,7 @@ Route::group(['middleware' => 'cors'], function ()
 {  
 
 	Route::get('/', function () {
-    return response()->json(['status'=>'ok','aplicacion'=>'welcome API_USACSIAS JAJAJA'], 200);
+    return response()->json(['status'=>'ok','aplicacion'=>'welcome API_USACSIA'], 200);
 	});
 	Route::resource('pais','PaisController');
 	Route::resource('usuarios','UserController',['only' => ['store', 'update', 'show','destroy','index']]);
@@ -70,9 +70,6 @@ Route::group(['middleware' => 'cors'], function ()
 
     // Route::get('personatramite/{pt_id}', 'Persona_tramiteController@personadetramite');
 
-
-
-
     /*wen*/
     Route::get('ambiente','AmbienteController@index');
     Route::post('ambiente','AmbienteController@store');
@@ -106,8 +103,8 @@ Route::group(['middleware' => 'cors'], function ()
     /*/PERSONA_TRAMITE*///============================================================
 /*PRUEBA MEDICA*/
     Route::resource('prueba_medica','Prueba_medicaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
-    /* jhon  historial clinico perci de persona*/
-    Route::get('pruebamedicapersona/{per_ci}', 'Prueba_medicaController@pruebamedicapersona');
+    /* jhon  historial clinico por per_id de persona*/
+    Route::get('pruebamedicapersona/{per_id}', 'Prueba_medicaController@pruebamedicapersona');
     /*jhon ----estado de prueba enfermedad desde si al menos 1 es positivo=>false pruebas enfermedades*/
     Route::get('estadopruebamedica/{pm_id}', 'Prueba_medicaController@estadopruebamedica');
 /*PRUEBA ENFERMEDAD*/
@@ -136,6 +133,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('municipio/{pro_id}','MunicipioController@municipio_provincia');
     //listar zona por municipio
     Route::get('zona/{mun_id}', 'ZonaController@index');
+    Route::resource('zonass','ZonaController',['only' => ['index', 'store', 'update', 'show','destroy']]);
 
     //listar funcionarios por cargo 
     Route::get('funcionario_cargo/{cargo}', 'FuncionarioController@listaporcargo');
@@ -224,12 +222,12 @@ Route::group(['middleware' => 'cors'], function ()
      /*wen   listar por inspector inspector 29-12-2017*/
     Route::get('list_insN/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorN');
     Route::get('list_insJ/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorJ');
-    //wen 1-1-2018 aprobacion1
+   /* //wen 1-1-2018 aprobacion1
     Route::put('aprobacion1/{et_id}', 'EmpresaTramiteController@editar1');
     //wen 1-1-2018 aprobacion2
     Route::put('aprobacion2/{et_id}', 'EmpresaTramiteController@editar2');
     //wen 1-1-2018 aprobacion3
-    Route::put('aprobacion3/{et_id}', 'EmpresaTramiteController@editar3');
+    Route::put('aprobacion3/{et_id}', 'EmpresaTramiteController@editar3');*//*eliminado*/
     //wen 1-1-2018 listar crear certificado sanitario
     Route::resource('certificado_sanitario','Certificado_sanitarioController',['only' => ['store', 'update', 'destroy', 'show','index']]);
     //wen 2-1-2018 aprobacion2
@@ -237,6 +235,8 @@ Route::group(['middleware' => 'cors'], function ()
     //wen 2-1-2018 aprobacion3
     Route::put('aprob3/{ces_id}', 'Certificado_sanitarioController@aprob3');
     Route::get('busca_cert/{et_id}', 'EmpresaTramiteController@buscar_certificado');
+    // permite la busqueda de personas en las tabla persona 4-1-2018
+    Route::get('personasb/{per_ci}','PersonaController@buscar');
     
     
      /*jhon----operacines con receta*/
@@ -272,5 +272,8 @@ Route::group(['middleware' => 'cors'], function ()
 /*wendy   verifica si tiene carnet por ci 27-12 2017*/
     Route::get('verifica/{per_ci}', 'Carnet_sanitarioController@verifica');
     Route::get('ins_fecha_est_fun', 'Ficha_inspeccionController@list_inspec_fechas_estado_fun');
+    Route::resource('etapa', 'EtapaController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+    Route::resource('tramitecerestado', 'TramitecerEstadoController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+    Route::get('lista_etapa_estado', 'EmpresaTramiteController@listpor_etapa_estado');
 
 });

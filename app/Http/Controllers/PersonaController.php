@@ -144,6 +144,31 @@ class PersonaController extends Controller
             
         return response()->json(['mensaje'=>'exito','persona'=>$result],200); 
     }
+    //para el preregistro
+    public function buscar($per_ci)
+    {
+        $personas=Persona::where('per_ci',$per_ci)->get();
+        $count= count($personas);
+        if($count>0)
+        {
+            $c=1;
+            $resultado=compact('c','personas');
+            return response()->json($resultado,200);
+        }
+       /* $personas=\awebss\Models\Persona2::where('per_ci',$per_ci)->get();
+        $count= count($personas);
+        if($count>0)
+        {   
+            $c=0;
+            $resultado=compact('c','personas');
+            return response()->json($resultado,200);
+        }*/
+        return response()->json([
+                "msg" => "exito",
+                "personas" => $personas
+            ],200);
+    }
+
 
 
 
