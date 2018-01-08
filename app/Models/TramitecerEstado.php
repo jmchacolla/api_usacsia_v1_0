@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -38,7 +38,7 @@ class TramitecerEstado extends Model
     /**
      * @var array
      */
-    protected $fillable = ['fun_id', 'et_id', 'eta_id', 'te_estado', 'te_observacion'];
+    protected $fillable = ['te_id','te_fecha','fun_id', 'et_id', 'eta_id', 'te_estado', 'te_observacion'];
     protected $hidden = ['created_at','updated_at','userid_at','deleted_at'];
     protected $dates=['deleted_at'];
 

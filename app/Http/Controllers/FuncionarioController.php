@@ -28,9 +28,19 @@ class FuncionarioController extends Controller
         return response()->json(['status'=>'ok', 'funcionario'=>$funcionario], 200);
     }
     //listar funcionarios por cargo input (MEDICO - ENFERMERA - LABORATORISTA- ADMINISTRATIVO) LOS CARGOS DESCRITOS
-    public function listaporcargo($cargo)
-    {
-        $funcionario=Funcionario::select('funcionario.fun_id','fun_profesion','fun_cargo','fun_estado','persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci','per_fecha_nacimiento')->join('persona','persona.per_id','=','funcionario.per_id')->where('fun_estado','ACTIVO')->where('fun_cargo','ilike',$cargo)->orderBy('per_nombres')->get();
+    public function listaporcargo(Request $request)
+    {   if (!$request->cargo) {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'Selecione un cargo.'])],404);
+        }
+        $cargo=$request->cargo;
+        $funcionario=Funcionario::select('funcionario.fun_id','fun_profesion','fun_cargo','fun_estado','persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci','per_fecha_nacimiento')
+        ->join('persona','persona.per_id','=','funcionario.per_id')
+        ->where('fun_estado','ACTIVO')
+        ->where('fun_cargo','ilike',$cargo)
+        ->orderBy('per_nombres')->get();
+        if (sizeof($funcionario)<=0) {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra resultados.'])],404);
+        }
 
         return response()->json(['status'=>'ok', 'funcionario'=>$funcionario], 200);
     }
@@ -229,13 +239,12 @@ class FuncionarioController extends Controller
 
         if (!$funcionario)
         {
-             /*return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una persona con ese código.','length'=>0])],404);*/
              return response()->json(['errors'=>404,'message'=>'No se encuentra una persona con ese código.','length'=>0],200);
         }
 
        
 
-        return response()->json(['status'=>'ok',"msg" => "exito",'funcionario'=>$funcionario],200); 
+        return response()->json(['status'=>'ok',"msg" => "exito",'length'=>1,'funcionario'=>$funcionario],200); 
     }
      //listar todos los inspectores
     public function listIns()
