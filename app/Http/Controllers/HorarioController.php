@@ -55,8 +55,8 @@ class HorarioController extends Controller
            $horario->ser_id=$request->ser_id;
            $horario->amb_id=$request->amb_id;
            $horario->fun_id=$request->fun_id;
-           $horario->hor_fecha_inicio=$request->hor_fecha_inicio;
-           $horario->hor_fecha_final=$request->hor_fecha_final;
+           // $horario->hor_fecha_in=$request->hor_fecha_in;
+           // $horario->hor_fecha_fin=$request->hor_fecha_fin;
            $horario->userid_at='2';
            $horario->save();
 
@@ -65,6 +65,20 @@ class HorarioController extends Controller
 
            $configuracionturno=new ConfiguracionTurno();
            
+       }
+
+
+       public function show($fun_id)
+       {
+         $funcionario=Funcionario::find($fun_id);
+         $persona=Persona::find($funcionario->per_id);
+         $horario=Horario::where('fun_id',$funcionario->fun_id)
+         ->orderBy('created_at', 'desc')
+         ->first();
+         $ambiente=Ambiente::find($horario->amb_id);
+         $consultorio=Consultorio::where('amb_id', $ambiente->amb_id)
+         ->first();
+         return response()->json(['status'=>'ok','mensaje'=>'exito','horario'=>$horario, 'funcionario'=>$funcionario, 'persona'=>$persona, 'ambiente'=>$ambiente, 'consultorio'=>$consultorio],200); 
        }
 }
  

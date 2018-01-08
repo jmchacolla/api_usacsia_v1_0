@@ -54,7 +54,7 @@ class FichaController extends Controller
             }else{
                 $consultorio_asignado=Consultorio::select('con_id','con_cod')
                 ->where('con_estado',true)
-                ->orderby('con_id','asc')
+                ->orderBy('con_id','asc')
                 ->first();
 
                 $ultima_ficha=Ficha::select('fic_numero')
@@ -70,7 +70,7 @@ class FichaController extends Controller
         }else{
             $consultorio_asignado=Consultorio::select('con_id','con_id')
                 ->where('con_estado',true)
-                ->orderby('con_id','asc')
+                ->orderBy('con_id','asc')
                 ->first();
                 $numero_ficha=1;
         }
@@ -115,29 +115,62 @@ class FichaController extends Controller
 	    return response()->json(['status'=>'ok','mensaje'=>'exito','ficha'=>$ficha],200);
     }
 
-    public function update( $fic_id){
+    public function update(Request $request, $fic_id){
     	$ficha = Ficha::find($fic_id);
     	// $ficha->fic_numero = $request->fic_numero;
-    	$ficha->fic_estado = 'ATENDIDO';
+    	$ficha->fic_estado = $request->fic_estado;
 	    $ficha->save();
 
 	    return response()->json(['status'=>'ok','mensaje'=>'exito','ficha'=>$ficha],200);
     }
+    /*---lista fichas entre dos fechas, por estado, consultorio y funcionario asignado al consultorio*/
     public function fichasfecha(Request $request)
     {
         # code...
         $fecha1=$request->fecha1;
         $fecha2=$request->fecha2;
         $fic_estado=$request->fic_estado;
-        $fichas=Ficha::select('persona.per_id','persona.per_nombres','persona.per_apellido_primero','persona.per_apellido_segundo','persona.per_genero','persona.per_ocupacion', 'ficha.fic_numero', 'ficha.fic_id','ficha.fic_fecha', 'fic_estado','fic_tipo' , 'persona_tramite.pt_id', 'persona_tramite.pt_numero_tramite')
-        ->join('persona_tramite', 'persona_tramite.pt_id','=', 'ficha.pt_id')
-        ->join('persona','persona.per_id','=','persona_tramite.per_id')
-        ->where('fic_fecha', '>=', $fecha1)
-        ->where('fic_fecha', '<=', $fecha2)
-        ->where('fic_estado','=', $fic_estado)
-        ->orderby('fic_numero','asc')
-        ->get();
-        return response()->json(['status'=>'ok','mensaje'=>'exito','fichas'=>$fichas],200);
+        $fun_id=$request->fun_id;
+        $con_id=$request->con_id;
+
+        if ($fic_estado!='PENDIENTE') {
+            $fichas=Ficha::select('persona.per_id','persona.per_nombres','persona.per_apellido_primero','persona.per_apellido_segundo','persona.per_genero','persona.per_ocupacion', 'ficha.fic_numero', 'ficha.fic_id','ficha.fic_fecha', 'fic_estado','fic_tipo', 'ficha.con_id' , 'persona_tramite.pt_id', 'persona_tramite.pt_numero_tramite', 'prueba_medica.pm_id')
+            ->join('persona_tramite', 'persona_tramite.pt_id','=', 'ficha.pt_id')
+            ->join('persona','persona.per_id','=','persona_tramite.per_id')
+            ->join('consultorio', 'consultorio.con_id', '=', 'ficha.con_id')
+            ->join('ambiente', 'ambiente.amb_id', '=', 'consultorio.amb_id')
+            ->join('horario', 'horario.amb_id', '=', 'ambiente.amb_id')
+            ->join('prueba_medica', 'prueba_medica.fic_id', '=', 'ficha.fic_id')
+            ->where('horario.fun_id', '=', $fun_id)
+            ->where('fic_fecha', '>=', $fecha1)
+            ->where('fic_fecha', '<=', $fecha2)
+            ->where('fic_estado','=', $fic_estado)
+            ->where('ficha.con_id', '=', $con_id)
+            ->distinct()
+            ->orderBy('fic_numero','asc')
+            ->get();
+            return response()->json(['status'=>'ok','mensaje'=>'exito','fichas'=>$fichas],200);
+        }
+        if ($fic_estado=='PENDIENTE') {
+            $fichas=Ficha::select('persona.per_id','persona.per_nombres','persona.per_apellido_primero','persona.per_apellido_segundo','persona.per_genero','persona.per_ocupacion', 'ficha.fic_numero', 'ficha.fic_id','ficha.fic_fecha', 'fic_estado','fic_tipo', 'ficha.con_id' , 'persona_tramite.pt_id', 'persona_tramite.pt_numero_tramite')
+            ->join('persona_tramite', 'persona_tramite.pt_id','=', 'ficha.pt_id')
+            ->join('persona','persona.per_id','=','persona_tramite.per_id')
+            ->join('consultorio', 'consultorio.con_id', '=', 'ficha.con_id')
+            ->join('ambiente', 'ambiente.amb_id', '=', 'consultorio.amb_id')
+            ->join('horario', 'horario.amb_id', '=', 'ambiente.amb_id')
+            ->where('horario.fun_id', '=', $fun_id)
+            ->where('fic_fecha', '>=', $fecha1)
+            ->where('fic_fecha', '<=', $fecha2)
+            ->where('fic_estado','=', $fic_estado)
+            ->where('ficha.con_id', '=', $con_id)
+            ->distinct()
+            ->orderBy('fic_numero','asc')
+            ->get();
+            return response()->json(['status'=>'ok','mensaje'=>'exito','fichas'=>$fichas],200);
+        }
+        
     }
+
+
 }
 
