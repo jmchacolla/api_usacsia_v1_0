@@ -143,6 +143,9 @@ class EmpresaTramiteController extends Controller
         $empresa_tramite=EmpresaTramite::where('tra_id',2)
         ->where('et_estado_pago','PAGADO')
         ->join('establecimiento_solicitante','establecimiento_solicitante.ess_id','=','empresa_tramite.ess_id')
+        ->join('tramitecer_estado','tramitecer_estado.et_id','=','empresa_tramite.et_id')
+        ->where('tramitecer_estado.eta_id',3)
+        ->where('tramitecer_estado.te_estado','APROBADO')
         ->join('empresa','empresa.ess_id','=','empresa_tramite.ess_id')
         ->join('empresa_propietario','empresa_propietario.emp_id','=','empresa.emp_id')
         ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
@@ -151,6 +154,10 @@ class EmpresaTramiteController extends Controller
         ->join('persona','persona.per_id','=','p_natural.per_id')
         ->select('empresa_tramite.et_id','et_monto','et_numero_tramite','establecimiento_solicitante.ess_id','ess_razon_social','p_natural.pnat_id','persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci')
         ->get();
+
+        if (!$empresa_tramite) {
+                return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
+            }
         return response()->json(['status'=>'ok',"mensaje"=>"lista",'empresa_tramite'=>$empresa_tramite], 200);
     }
 

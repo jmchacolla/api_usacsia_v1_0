@@ -61,4 +61,12 @@ class CategoriaController extends Controller
         $cg=ClasificacionGeneral::where('cg_id', $cle->cg_id)->first();
         return response()->json(['status'=>'ok',"mensaje"=>"Guardao exitosamente","categoria"=>$categoria, "subc"=>$subc, "cle"=>$cle, "cg"=>$cg], 200);
     }
+    public function buscarCat($sub_id)
+    {
+        $categoria=Categoria::where('sub_id',$sub_id)->get();
+        if (!$categoria) {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
+        }
+        return response()->json(['status'=>'ok',"mensaje"=>"exito","categoria"=>$categoria], 200);
+    }
 }

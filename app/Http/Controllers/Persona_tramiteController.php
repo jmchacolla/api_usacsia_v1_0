@@ -291,7 +291,21 @@ class Persona_tramiteController extends Controller
       
         return response()->json(['status'=>'ok','mensaje'=>'exito','persona_tramite'=>$persona_tramite],200);
     }
+    public function ver_estado_cs($per_ci)
+    {
+        $persona_tramite= Persona::select('persona.per_nombres','per_apellido_primero','per_apellido_segundo','persona_tramite.pt_id','pt_estado_tramite')
+        ->where('per_ci',$per_ci)
+        ->join('persona_tramite','persona_tramite.per_id','=','persona.per_id')
+        ->first();
+        if (!$persona_tramite)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra la persona_tramite con ese código.'])],404);
+        }
+       
 
+        $resultado=compact('persona_tramite', 'persona','tramite','muestra','prueba_laboratorio','ficha','prueba_medica');
+        return response()->json(['status'=>'ok','pertramite'=>$resultado],200);
+    }
 
 
 

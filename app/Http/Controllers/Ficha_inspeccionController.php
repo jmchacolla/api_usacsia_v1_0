@@ -20,12 +20,35 @@ use App\Models\Propietario;
 use App\Models\PersonaJuridica;
 use App\Models\PersonaNatural;
 use App\Models\Persona;
+use App\Models\Ficha_categoria;
 
 class Ficha_inspeccionController extends Controller
 {
     public function index(){
     	$ficha_inspeccion = Ficha_inspeccion::all();
     	return response()->json(['status'=>'ok','mensaje'=>'exito','ficha_inspeccion'=>$ficha_inspeccion],200);
+    }
+    public function show($fi_id){
+        $ficha_inspeccion = Ficha_inspeccion::find($fi_id);
+        $empresa_tramite =EmpresaTramite::find($ficha_inspeccion->et_id);
+        $establecimiento_solicitante=EstablecimientoSolicitante::find($empresa_tramite->ess_id);
+        $ficha_categoria = Ficha_categoria::where('fi_id',$fi_id)
+        ->join('categoria','categoria.cat_id','=','ficha_categoria.cat_id')
+        ->get();
+
+        $result=compact('ficha_inspeccion','empresa_tramite','establecimiento_solicitante','ficha_categoria');
+        return response()->json(['status'=>'ok','mensaje'=>'exito','ficha_inspeccion'=>$result],200);
+    }
+    public function ver($et_id){
+        $ficha_inspeccion = Ficha_inspeccion::where('et_id',$et_id)->orderBy('created_at','desc')->first();
+        /*$empresa_tramite =EmpresaTramite::find($ficha_inspeccion->et_id);
+        $establecimiento_solicitante=EstablecimientoSolicitante::find($empresa_tramite->ess_id);
+        $ficha_categoria = Ficha_categoria::where('fi_id',$fi_id)
+        ->join('categoria','categoria.cat_id','=','ficha_categoria.cat_id')
+        ->get();*/
+
+        $result=compact('ficha_inspeccion','empresa_tramite','establecimiento_solicitante','ficha_categoria');
+        return response()->json(['status'=>'ok','mensaje'=>'exito','ficha_inspeccion'=>$ficha_inspeccion],200);
     }
      public function store(Request $request){
 

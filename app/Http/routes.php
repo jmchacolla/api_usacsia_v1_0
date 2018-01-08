@@ -204,12 +204,14 @@ Route::group(['middleware' => 'cors'], function ()
     Route::post('ficha6','Ficha_inspeccionController@crear_ficha6');
     //wendy ficha categoria 29-12-2017
     Route::resource('ficha_categoria', 'Ficha_categoriaController',['only' =>['index', 'store', 'update', 'show']]);
+    // ver ficha categoria
+   /* Route::get('ver_fi/{fi_id}','Ficha_categoriaController@verf');*/
 
     /*wen   lista certificados 28-12-2017*/
     Route::get('list_cert_nat', 'EmpresaTramiteController@listar_cer_nat');
     /*wen   lista certificados 28-12-2017*/
     Route::get('list_cert_ju', 'EmpresaTramiteController@listar_cer_ju');
-     /*wen   lista certificados 28-12-2017*/
+    /*wen   lista certificados 28-12-2017*/
     Route::resource('zon_ins','Zona_inspeccionController',['only' => ['store', 'update', 'destroy', 'show','index']]);
     /*wen   lista zonas por distrito 28-12-2017*/
     /*Route::get('zonas', 'ZonaController@zon_dist');*/
@@ -220,10 +222,9 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('inspectores', 'FuncionarioController@listIns');
     /*wen   asignar zona a inspector 29-12-2017*/
     Route::get('asignar/{zon_id}', 'Zona_inspeccionController@asignar');
-     /*wen   listar por inspector inspector 29-12-2017*/
+    /*wen   listar por inspector inspector 29-12-2017*/
     Route::get('list_insN/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorN');
     Route::get('list_insJ/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorJ');
-
     /*wen   listar por inspector inspector 4-1-2018*/
     Route::get('inspN/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorN2');
      /*wen   lista  distrito 4-1-2018*/
@@ -241,11 +242,33 @@ Route::group(['middleware' => 'cors'], function ()
     //wen 2-1-2018 aprobacion3
     Route::put('aprob3/{ces_id}', 'Certificado_sanitarioController@aprob3');
     Route::get('busca_cert/{et_id}', 'EmpresaTramiteController@buscar_certificado');
-    // permite la busqueda de personas en las tabla persona 4-1-2018
+    //w permite la busqueda de personas en las tabla persona 4-1-2018
     Route::get('personasb/{per_ci}','PersonaController@buscar');
-    // permite ver el rubro de una empresa 5-1-2018
+    //w permite ver el rubro de una empresa 5-1-2018
     Route::get('rubro/{emp_id}','RubroEmpresaController@ver');
-    
+    //w permite ver el rubro de una empresa 5-1-2018  //PENDIENTE
+    Route::put('tram/{et_id}','TramitecerEstadoController@editarI');
+    //w permite editar para la aprobacion de jefe certificado eliminar 8-1-2018
+   /* Route::put('aprobacion1/{et_id}','TramitecerEstadoController@editarAp1');*/
+    //w permite editar para la aprobacion de jefe certificado
+    /*Route::put('aprobacion2/{et_id}','TramitecerEstadoController@editarAp2');*/
+    //subclasificacion por cle_id
+    Route::get('buscarsub/{cle_id}', 'SubclasificacionController@buscarSub');
+    //categoria por sub_id
+    Route::get('buscarcat/{sub_id}', 'CategoriaController@buscarCat');
+    //ver ficha ins por et_id
+    Route::get('buscarfi/{et_id}', 'Ficha_inspeccionController@ver');
+    //ver ficha ins por et_id
+/*    Route::get('vera/{et_id}', 'TramitecerEstadoController@ver');*/
+    //w permite cambiar el estado de una etapa seleccionada 5-1-2018  //PENDIENTE
+    Route::put('wen2/{et_id}/{eta_id}','TramitecerEstadoController@prueba');
+    //w permite ver editar la tabla tramitecer_Es //borrar 8-1-2018
+    Route::put('celulr/{et_id}/{eta_id}','TramitecerEstadoController@prueba');
+    //w permite ver el estado de un tramite segun etapa 5-1-2018  //PENDIENTE
+    Route::get('estadosver/{et_id}/{eta_id}','TramitecerEstadoController@verestados');
+    //w permite ver el estado de tramite de carnet sanitario para inspectores
+    Route::get('estado_carnet/{per_ci}','Persona_tramiteController@ver_estado_cs');
+
     
      /*jhon----operacines con receta*/
      Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
