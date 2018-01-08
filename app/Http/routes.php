@@ -33,6 +33,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('telefono','TelefonoController', ['only'=>['index','update']]);
     Route::resource('enfermedad','EnfermedadController', ['only'=>['index','show','store','update','destroy']]);
 
+
     /*desde vero*/
     //Listar tratamientos de una enfermedad enf_id
     Route::get('tratamientos_x_enfermedad/{enfe_id}','EnfermedadController@tratamientos_x_enfermedad');
@@ -65,6 +66,8 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('parasitosprueba/{pl_id}','Prueba_parController@parasitosprueba');
     Route::get('parasitos_no_prueba/{pl_id}','Prueba_parController@parasitos_no_prueba');
     Route::resource('documento_tramite','DocumentoTramiteController',['only'=>['index','store','update']]);
+    Route::get('lista_documentos_x_tramite/{et_id}','DocumentoTramiteController@lista_documentos_x_tramite');
+    Route::get('personas_x_establecimiento/{ess_id}','EstablecimientoPersonaController@index');
     /*vero*/
 
 
@@ -83,15 +86,15 @@ Route::group(['middleware' => 'cors'], function ()
     Route::post('ambiente_laboratorio','LaboratorioController@crear_ambiente_laboratorio');
     Route::get('lis_laboratorio','LaboratorioController@listar_laboratorios');
 /*TRAMITES*/
-    /*tramites--vero  --arreglar las rutas*/
-    Route::get('tramite','TramiteController@index');
-    Route::resource('tramite','TramiteController',['only' => ['store', 'update', 'destroy', 'show']]);
+        
+    Route::resource('tramite','TramiteController',['only' => ['index','store', 'update', 'destroy', 'show']]);
 /*PERSONA_TRAMITE*///============================================================
     Route::resource('pers_tra','Persona_tramiteController',['only' => ['store', 'update', 'destroy', 'show','index']]);
     //buscar persona_tramite --vero
     Route::get('buscar_persona_tramite/{per_ci}','Persona_tramiteController@buscar_persona_tramite');
     //vero -- buscar tramite de la personapara ver si ya tiene una ficha el dia de hoy
     Route::get('buscar_persona_tramite_ficha/{per_ci}','Persona_tramiteController@buscar_persona_tramite_ficha');
+    Route::get('estado_tramite_persona/{per_ci}','Persona_tramiteController@estado_tramite_persona');
 
     //vero -- listar todos los tramites de 1 carnet sanitario o 2 certificado sanitario
     Route::get('tramites_x_tipo_tramite/{tra_id}','Persona_tramiteController@listar_x_tipo_tramite');

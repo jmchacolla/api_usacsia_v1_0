@@ -19,11 +19,13 @@ use App\Models\Departamento;
 use App\Models\Empresa;
 use App\Models\PagoPendiente;
 
+
+
 class EstablecimientoSolicitanteController extends Controller
 {
     //listar todos los establecimientos
     public function index()
-    {
+    {   
         $est_sol=EstablecimientoSolicitante::all();
         return response()->json(['status'=>'ok',"msg" => "exito", "est_sol" => $est_sol], 200);
 
@@ -83,6 +85,8 @@ class EstablecimientoSolicitanteController extends Controller
         $empresatramite->tra_id=$requeste_object->tra_id;
         $empresatramite->ess_id=$est_sol->ess_id;
         $empresatramite->save();
+
+
 
 
 
