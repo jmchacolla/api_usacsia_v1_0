@@ -34,7 +34,7 @@ class Ficha extends Model
     /**
      * @var array
      */
-    protected $fillable = ['pt_id', 'fic_numero', 'fic_estado'];
+    protected $fillable = ['pt_id', 'con_id', 'fic_numero', 'fic_estado', 'fic_fecha', 'fic_tipo'];
     protected $hidden = ['created_at', 'updated_at', 'userid_at'];
     protected $dates=['deleted_at'];
 
@@ -45,5 +45,12 @@ class Ficha extends Model
     public function personaTramite()
     {
         return $this->belongsTo('App\PersonaTramite', 'pt_id', 'pt_id');
+    }
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function consultorio()
+    {
+        return $this->belongsTo('App\Consultorio', 'con_id', 'con_id');
     }
 }

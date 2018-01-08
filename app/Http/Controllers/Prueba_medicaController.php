@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 
 
 use App\Models\Prueba_medica;
+use App\Models\Prueba_laboratorio;
 use App\Models\Persona_tramite;
 use App\Models\Servicio;
 use App\Models\Prueba_enfermedad;
@@ -51,6 +52,8 @@ class Prueba_medicaController extends Controller
 		$prueba_medica->pm_talla=$request->pm_talla;
 		$prueba_medica->pm_imc=$request->pm_imc;
         $prueba_medica->pm_temperatura=$request->pm_temperatura;
+        $prueba_medica->pm_una_larga=$request->pm_una_larga;
+        $prueba_medica->pm_colabora=$request->pm_colabora;
 		// $prueba_medica->pm_diagnostico="";//---se edita al finalizar las pruebas
 		$prueba_medica->pm_estado='PENDIENTE';
 		// $prueba_medica->pm_fecha=$request->pm_fecha;
@@ -185,6 +188,8 @@ class Prueba_medicaController extends Controller
         ->where( 'persona.per_id','=', $per_id)
         ->orderby('pm_fecha', 'desc')
         ->get();
+        
+        
         $persona=Persona::find($per_id);
         
         if (!$listapruebas) {

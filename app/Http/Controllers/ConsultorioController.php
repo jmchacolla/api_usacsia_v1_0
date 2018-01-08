@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Validator;
 use App\Http\Requests;
 use \App\Models\Consultorio;
@@ -18,6 +19,7 @@ class ConsultorioController extends Controller
         $consultorios= Ambiente::select('ambiente.amb_id','usa_id','amb_nombre','amb_descripcion','consultorio.con_id','con_cod','con_estado')
         ->join('consultorio','consultorio.amb_id','=','ambiente.amb_id')
         ->where('amb_tipo',"CONSULTORIO")
+        ->orderBy('con_id', 'asc')
         ->get();
        
         return response()->json(['status'=>'ok','mensaje'=>'exito','consultorios'=>$consultorios],200); 
@@ -36,8 +38,8 @@ class ConsultorioController extends Controller
             return $validator->errors()->all();
         }  
         $consultorios= new \App\Models\Consultorio();
-        $consultorios->amb_id=$request->amb_id;
-        $consultorios->con_cod=$request->con_cod;
+        $consultorios->amb_id=Str::upper($request->amb_id);
+        $consultorios->con_cod=Str::upper($request->con_cod);
         $consultorios->save();
 
         
@@ -58,10 +60,10 @@ class ConsultorioController extends Controller
         }*/
         
         $ambientes = new Ambiente();
-        $ambientes->usa_id = $request->usa_id;
-        $ambientes->amb_nombre= $request->amb_nombre;
-        $ambientes->amb_tipo= $request->amb_tipo;
-        $ambientes->amb_descripcion= $request->amb_descripcion;
+        $ambientes->usa_id =Str::upper( $request->usa_id);
+        $ambientes->amb_nombre=Str::upper( $request->amb_nombre);
+        $ambientes->amb_tipo=Str::upper( $request->amb_tipo);
+        $ambientes->amb_descripcion=Str::upper( $request->amb_descripcion);
         $ambientes->userid_at='2';
         $ambientes->save();
 
@@ -69,8 +71,8 @@ class ConsultorioController extends Controller
 
         $consultorios= new Consultorio();
         
-        $consultorios->amb_id=$ambientes->amb_id;
-        $consultorios->con_cod=$request->con_cod;
+        $consultorios->amb_id=Str::upper($ambientes->amb_id);
+        $consultorios->con_cod=Str::upper($request->con_cod);
         $consultorios->userid_at='2';
         $consultorios->save();
          
@@ -98,9 +100,9 @@ public function update(Request $request, $amb_id)
         }
     
         
-        $ambientes->amb_nombre= $request->amb_nombre;
-        $ambientes->amb_tipo= $request->amb_tipo;
-        $ambientes->amb_descripcion= $request->amb_descripcion;
+        $ambientes->amb_nombre= Str::upper($request->amb_nombre);
+        $ambientes->amb_tipo= Str::upper($request->amb_tipo);
+        $ambientes->amb_descripcion= Str::upper($request->amb_descripcion);
        /* $ambientes->userid_at='2';*/
         $ambientes->save();
 
@@ -114,7 +116,7 @@ public function update(Request $request, $amb_id)
         $consultorios= Consultorio::find($con_id);
 
        
-        $consultorios->con_cod=$request->con_cod;
+        $consultorios->con_cod=Str::upper($request->con_cod);
        /* $consultorios->userid_at='2';*/
         $consultorios->save();
 

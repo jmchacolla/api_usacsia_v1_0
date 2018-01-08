@@ -95,7 +95,7 @@ Route::group(['middleware' => 'cors'], function ()
 
     //vero -- listar todos los tramites de 1 carnet sanitario o 2 certificado sanitario
     Route::get('tramites_x_tipo_tramite/{tra_id}','Persona_tramiteController@listar_x_tipo_tramite');
-    // jhon------------------------------fichas por fecha
+    // jhon-----lista fichas entre dos fechas, por estado, consultorio y funcionario asignado al consultorio
     Route::get('fichasfecha','FichaController@fichasfecha');
     //jhon ultima ficha atendida del tramite
     Route::get('ultimafichaatendida/{pt_id}','Persona_tramiteController@ultimafichaatendida');
