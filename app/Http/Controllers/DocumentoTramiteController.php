@@ -11,6 +11,12 @@ use App\Models\DocumentoTramite;
 class DocumentoTramiteController extends Controller
 {
     //
+    public function index()
+    {
+        $documentotramite= DocumentoTramite::all();
+        return response()->json(['status'=>'ok',"msg" => "exito",'documentotramite'=>$documentotramite],200); 
+    }
+
     public function store(Request $request)
     {
     	$hoy=date('Y-m-d');        
@@ -27,6 +33,15 @@ class DocumentoTramiteController extends Controller
         $documentotramite->dt_fecha_presentado=$request->$hoy;
         $documentotramite->save();
 
+        return response()->json(['status'=>'ok',"msg" => "exito",'documentotramite'=>$documentotramite],200); 
+    }
+
+    public function lista_documentos_x_tramite($et_id)
+    {
+        $documentotramite= DocumentoTramite::select()
+        ->join('documento','documento.doc_id','=','documento_tramite.doc_id')
+        ->where('documento_tramite.et_id',$et_id)
+        ->get();
         return response()->json(['status'=>'ok',"msg" => "exito",'documentotramite'=>$documentotramite],200); 
     }
 }

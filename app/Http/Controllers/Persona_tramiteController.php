@@ -275,6 +275,25 @@ class Persona_tramiteController extends Controller
        return response()->json(['status'=>'ok','pt_id'=>$pertramite->pt_id],200);
     }
 
+
+    public function estado_tramite_persona($per_ci)
+    {
+       $persona=Persona::where('per_ci', $per_ci)->first();
+       if (!$persona) {
+           return response()->json(['errors'=>array(['code'=>404,'message'=>'Cedula de identidad no encontrada'])],404);
+       }
+       $pertramite=Persona_tramite::select('pt_estado_tramite')
+       ->where('persona_tramite.per_id',$persona->per_id)
+       ->orderBy('created_at', 'desc')
+       ->first();
+       if (!$pertramite){
+           return response()->json(['errors'=>array(['code'=>404,'message'=>'La persona con el C.I. ingresado no inició un tramite'])],404);
+       }
+       return response()->json(['status'=>'ok','estado_pt'=>$pertramite],200);
+    }
+
+
+
     public function editar(Request $request, $pt_id)
     {
         $persona_tramite=Persona_tramite::find($pt_id);
@@ -302,11 +321,8 @@ class Persona_tramiteController extends Controller
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra la persona_tramite con ese código.'])],404);
         }
        
-
         $resultado=compact('persona_tramite', 'persona','tramite','muestra','prueba_laboratorio','ficha','prueba_medica');
         return response()->json(['status'=>'ok','pertramite'=>$resultado],200);
     }
-
-
 
 }

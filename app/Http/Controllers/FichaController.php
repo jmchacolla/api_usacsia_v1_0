@@ -68,13 +68,13 @@ class FichaController extends Controller
                 }
             }
         }else{
-            $consultorio_asignado=Consultorio::select('con_id','con_id')
+            $consultorio_asignado=Consultorio::select('con_id','con_cod')
                 ->where('con_estado',true)
                 ->orderBy('con_id','asc')
                 ->first();
                 $numero_ficha=1;
         }
-        
+        $consultorio_cod=$consultorio_asignado->con_cod;
         $ficha = new Ficha();
 		$ficha->pt_id = $request->pt_id;
         $ficha->fic_numero = $numero_ficha;
@@ -100,9 +100,9 @@ class FichaController extends Controller
         $ficha->save();
 
 
-        // $result=compact('ultima_ficha_asignada','ultima_asignacion','consultorio_asignado','numero_ficha');
-        // return response()->json(['status'=>'ok',"msg" => "exito",'resultado'=>$result],200); 
-        return response()->json(['status'=>'ok',"msg" => "exito",'ficha'=>$ficha],200); 
+        $result=compact('ficha','consultorio_cod');
+        return response()->json(['status'=>'ok',"msg" => "exito",'ficha'=>$result],200); 
+        // return response()->json(['status'=>'ok',"msg" => "exitos",'ficha'=>$ficha,'con_cod'=>$consultorio_cod],200); 
         
     }
     
