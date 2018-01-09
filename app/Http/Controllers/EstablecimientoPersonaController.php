@@ -12,20 +12,33 @@ class EstablecimientoPersonaController extends Controller
 {
     public function index($ess_id)
     {
-        $personas_x_establecimiento= Establecimiento_persona::select('persona.per_ci','persona.per_ci_expedido','per_nombres','per_apellido_primero','per_apellido_segundo','ep_inicio_trabajo','ep_fin_trabajo','ep_cargo','ep_estado_laboral')
+        $personas_x_establecimiento= Establecimiento_persona::select('ep_id','persona.per_ci','persona.per_ci_expedido','per_nombres','per_apellido_primero','per_apellido_segundo','ep_inicio_trabajo','ep_fin_trabajo','ep_cargo','ep_estado_laboral')
         ->join('persona','persona.per_id','=','establecimiento_persona.per_id')
         ->where('establecimiento_persona.ess_id',$ess_id)
+        ->orderby('ep_id','asc')
         ->get();
          return response()->json(['status'=>'ok','mensaje'=>'exito','personas_x_establecimiento'=>$personas_x_establecimiento],200); 
     }
 
     public function store(Request $request)
     {
-        $documento= new Documento();
-        $documento->doc_nombre=Str::upper($request->doc_nombre);
-        $documento->doc_importancia=Str::upper($request->doc_importancia);
-        $documento->doc_importancia_e=Str::upper($request->doc_importancia_e);
-        $documento->save();
-         return response()->json(['status'=>'ok','mensaje'=>'exito','documento'=>$documento],200); 
+        $personaestablecimiento= new Establecimiento_persona();
+        $personaestablecimiento->per_id=$request->per_id;
+        $personaestablecimiento->ess_id=$request->ess_id;
+        $personaestablecimiento->ep_cargo=$request->ep_cargo;
+        $personaestablecimiento->ep_estado_laboral=$request->ep_estado_laboral;
+        $personaestablecimiento->save();
+         return response()->json(['status'=>'ok','mensaje'=>'exito','personaestablecimiento'=>$personaestablecimiento],200); 
+    }
+
+    public function destroy($ep)
+    {
+        $personaestablecimiento = Establecimiento_persona::find($ep);
+        if (!$personaestablecimiento)
+        {
+            return response()->json(["mensaje"=>"no se encuentra un registro con ese código"]);
+        }
+        $personaestablecimiento->delete();
+        return response()->json(['status'=>'ok','mensaje'=>'Persona borrada'],200); 
     }
 }
