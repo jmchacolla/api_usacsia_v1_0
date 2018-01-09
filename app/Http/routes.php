@@ -68,6 +68,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('documento_tramite','DocumentoTramiteController',['only'=>['index','store','update']]);
     Route::get('lista_documentos_x_tramite/{et_id}','DocumentoTramiteController@lista_documentos_x_tramite');
     Route::get('personas_x_establecimiento/{ess_id}','EstablecimientoPersonaController@index');
+    Route::resource('personaempresa','EstablecimientoPersonaController',['only'=>['store','destroy']]);
     /*vero*/
 
 
