@@ -134,7 +134,7 @@ class FichaController extends Controller
         $con_id=$request->con_id;
 
         if ($fic_estado!='PENDIENTE') {
-            $fichas=Ficha::select('persona.per_id','persona.per_nombres','persona.per_apellido_primero','persona.per_apellido_segundo','persona.per_genero','persona.per_ocupacion', 'ficha.fic_numero', 'ficha.fic_id','ficha.fic_fecha', 'fic_estado','fic_tipo', 'ficha.con_id' , 'persona_tramite.pt_id', 'persona_tramite.pt_numero_tramite', 'prueba_medica.pm_id')
+            $fichas=Ficha::select('persona.per_id','persona.per_nombres','persona.per_apellido_primero','persona.per_apellido_segundo','persona.per_genero','persona.per_ocupacion', 'ficha.fic_numero', 'ficha.fic_id','ficha.fic_fecha', 'fic_estado','fic_tipo', 'ficha.con_id' , 'persona_tramite.pt_id', 'persona_tramite.pt_numero_tramite', 'prueba_medica.pm_id','per_ci as per_edad')
             ->join('persona_tramite', 'persona_tramite.pt_id','=', 'ficha.pt_id')
             ->join('persona','persona.per_id','=','persona_tramite.per_id')
             ->join('consultorio', 'consultorio.con_id', '=', 'ficha.con_id')
@@ -149,10 +149,27 @@ class FichaController extends Controller
             ->distinct()
             ->orderBy('fic_numero','asc')
             ->get();
-            return response()->json(['status'=>'ok','mensaje'=>'exito','fichas'=>$fichas],200);
+
+             /*para edades*/
+            $fichas_con_edades=[];
+            for ($i=0; $i <count($fichas) ; $i++) {
+                $perid=Persona::find($fichas[$i]->per_id);
+                $edad=Persona::edad($perid->per_fecha_nacimiento);
+                $item=$fichas[$i];
+                $item->per_edad=$edad;
+                if($item->per_genero=='F')
+                {       
+                    $item->per_genero='FEMENINO';
+                }
+                else{
+                    $item->per_genero='MASCULINO';
+                }
+                $fichas_con_edades[$i]=$item;
+            }
+            return response()->json(['status'=>'ok','mensaje'=>'exito','fichas'=>$fichas_con_edades],200);
         }
         if ($fic_estado=='PENDIENTE') {
-            $fichas=Ficha::select('persona.per_id','persona.per_nombres','persona.per_apellido_primero','persona.per_apellido_segundo','persona.per_genero','persona.per_ocupacion', 'ficha.fic_numero', 'ficha.fic_id','ficha.fic_fecha', 'fic_estado','fic_tipo', 'ficha.con_id' , 'persona_tramite.pt_id', 'persona_tramite.pt_numero_tramite')
+            $fichas=Ficha::select('persona.per_id','persona.per_nombres','persona.per_apellido_primero','persona.per_apellido_segundo','persona.per_genero','persona.per_ocupacion', 'ficha.fic_numero', 'ficha.fic_id','ficha.fic_fecha', 'fic_estado','fic_tipo', 'ficha.con_id' , 'persona_tramite.pt_id', 'persona_tramite.pt_numero_tramite','per_ci as per_edad')
             ->join('persona_tramite', 'persona_tramite.pt_id','=', 'ficha.pt_id')
             ->join('persona','persona.per_id','=','persona_tramite.per_id')
             ->join('consultorio', 'consultorio.con_id', '=', 'ficha.con_id')
@@ -166,7 +183,25 @@ class FichaController extends Controller
             ->distinct()
             ->orderBy('fic_numero','asc')
             ->get();
-            return response()->json(['status'=>'ok','mensaje'=>'exito','fichas'=>$fichas],200);
+
+             /*para edades*/
+            $fichas_con_edades=[];
+            for ($i=0; $i <count($fichas) ; $i++) {
+                $perid=Persona::find($fichas[$i]->per_id);
+                $edad=Persona::edad($perid->per_fecha_nacimiento);
+                $item=$fichas[$i];
+                $item->per_edad=$edad;
+                if($item->per_genero=='F')
+                {       
+                    $item->per_genero='FEMENINO';
+                }
+                else{
+                    $item->per_genero='MASCULINO';
+                }
+                $fichas_con_edades[$i]=$item;
+            }
+
+            return response()->json(['status'=>'ok','mensaje'=>'exito','fichas'=>$fichas_con_edades],200);
         }
         
     }

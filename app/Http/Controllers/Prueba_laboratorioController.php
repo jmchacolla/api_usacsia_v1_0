@@ -99,6 +99,20 @@ class Prueba_laboratorioController extends Controller
 
         return response()->json(['status'=>'ok','mensaje'=>'exito','prueba_laboratorio'=>$prueba_laboratorio,'prueba_par'=>$pruebapar],200);
     }
+
+    public function destroy($pl_id)
+    {
+        $prueba_laboratorio = Prueba_laboratorio::find($pl_id);
+        if (!$prueba_laboratorio)
+        {
+            return response()->json(["mensaje"=>"no se encuentra un registro con ese código"]);
+        }
+        $prueba_laboratorio->delete();
+        return response()->json(['status'=>'ok','mensaje'=>'Prueba_laboratorioa borrada'],200); 
+    }
+
+
+
     // devuelve la ultima prueba_laboratorio del tramite
     public function ultima_pl_tramite($pt_id)
     {
