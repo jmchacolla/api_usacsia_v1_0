@@ -50,6 +50,13 @@ class Ficha_inspeccionController extends Controller
         $result=compact('ficha_inspeccion','empresa_tramite','establecimiento_solicitante','ficha_categoria');
         return response()->json(['status'=>'ok','mensaje'=>'exito','ficha_inspeccion'=>$ficha_inspeccion],200);
     }
+    //ver todas las fichas de inspeccion por empresa tramite
+    public function verfichas($et_id){
+        $ficha_inspeccion = Ficha_inspeccion::where('et_id',$et_id)->get();
+ 
+        
+        return response()->json(['status'=>'ok','mensaje'=>'exito','ficha_inspeccion'=>$ficha_inspeccion],200);
+    }
      public function store(Request $request){
 
         $ficha_inspeccion = new Ficha_inspeccion();
