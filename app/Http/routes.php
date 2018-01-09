@@ -313,4 +313,5 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('tramitecerestado', 'TramitecerEstadoController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::get('lista_etapa_estado', 'EmpresaTramiteController@listpor_etapa_estado');
     Route::get('verpagos/{et_id}', 'EmpresaTramiteController@verpagos');
+    Route::post('crearestados/{et_id}','TramitecerEstadoController@crearestados');
 });

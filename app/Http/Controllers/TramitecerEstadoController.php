@@ -43,6 +43,7 @@ class TramitecerEstadoController extends Controller
      $tramiteceresatdo->eta_id=$request->eta_id;
       //$tramiteceresatdo->te_estado=$request->te_estado;/*default pendiente*/
       //$tramiteceresatdo->te_observacion=$request->te_observacion;/*por defecto en null*/
+     $tramitecerestado->save();
       return response()->json(['status'=>'ok',"msg"=>"TramitecerEstado","etapa"=>$etapa], 200);
     }
     public function update(Request $request, $te_id)
@@ -56,6 +57,7 @@ class TramitecerEstadoController extends Controller
         if($request->te_estado){$tramitecerestado->te_estado=$request->te_estado;}/*default pendiente*/
         if($request->te_observacion){$tramitecerestado->te_observacion=$request->te_observacion;}/*por defecto en null*/
         //$tramiteceresatdo->et_id=$request->et_id;/*no se debe modificar*/
+        $tramitecerestado->save();
         return response()->json(['status'=>'ok',"msg"=>"TramitecerEstado","tramitecerestado"=>$tramitecerestado], 200);
     }
     public function prueba(Request $request, $et_id,$eta_id)
@@ -97,7 +99,7 @@ class TramitecerEstadoController extends Controller
         $tramitecerestado->te_fecha=$request->te_fecha;
         $tramitecerestado->userid_at='2';
         $tramitecerestado->save();
-        //$tramiteceresatdo->et_id=$request->et_id;/*no se debe modificar*/
+        //$tramitecerestado->et_id=$request->et_id;/*no se debe modificar*/
         return response()->json(['status'=>'ok',"msg"=>"TramitecerEstado","tramitecerestado"=>$tramitecerestado], 200);
     }
     
@@ -109,6 +111,19 @@ class TramitecerEstadoController extends Controller
         }
       
         return response()->json(['status'=>'ok',"msg"=>"TramitecerEstado","tramitecerestado"=>$tramitecerestado], 200);
+    }
+
+    public function crearestados($et_id)
+    {
+        $estapas=Etapa::all();
+        foreach ($estapas as $etapa) {
+            $tramitecerestado=new TramitecerEstado();
+            $tramitecerestado->et_id=$et_id;
+            $tramitecerestado->eta_id=$etapa->eta_id;
+            $tramitecerestado->save();
+        }
+        $tramiteestado=TramitecerEstado::where('et_id', $et_id)->get();
+        return response()->json(['status'=>'ok',"msg"=>"TramitecerEstado","tramiteestado"=>$tramiteestado], 200);
     }
 
 }
