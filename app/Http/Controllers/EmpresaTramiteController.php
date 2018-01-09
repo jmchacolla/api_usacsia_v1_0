@@ -23,6 +23,9 @@ use App\Models\Zona;
 use App\Models\Municipio;
 use App\Models\Zona_inspeccion;
 use App\Models\Certificado_sanitario;
+use App\Models\Ficha_inspeccion;
+use App\Models\Ficha_categoria;
+use App\Models\FichaCategoriaSancion;
 
 
 
@@ -99,9 +102,9 @@ class EmpresaTramiteController extends Controller
     /*        if($request->et_vigencia_pago){
         $empt->et_vigencia_pago=$request->et_vigencia_pago;//se completa despues de pagar en bd
         }*/
-    /*        if($request->et_fecha_ini){
-        $empt->et_fecha_ini=$request->et_fecha_ini; //DEFAULT ('now'::text)::date, trigger cuando se paga
-        }*/
+        //     if($request->et_fecha_ini){
+        // $empt->et_fecha_ini=$request->et_fecha_ini; //DEFAULT ('now'::text)::date, trigger cuando se paga
+        // }
         if($request->et_estado_pago){$empt->et_estado_pago=$request->et_estado_pago;} //DEFAULT 'PAGADO'::text,
         if($request->et_estado_tramite){$empt->et_estado_tramite=$request->et_estado_tramite;} //DEFAULT 'PENDIENTE'::text,
         if($request->et_monto){$empt->et_monto=$request->et_monto;}
@@ -133,7 +136,7 @@ class EmpresaTramiteController extends Controller
                 return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
             }
         }
-        return response()->json(['status'=>'ok',"mensaje"=>"PERSONA-NATURAL","persona"=>$persona], 200);
+        return response()->json(['status'=>'ok',"mensaje"=>"Propietario del establecimiento","persona"=>$persona], 200);
     }
     public function listar_cer_nat()
     {/*lista de empresas que pagaron*/
@@ -288,18 +291,22 @@ class EmpresaTramiteController extends Controller
         return response()->json(['status'=>'ok','mensaje'=>'exito','certificado'=>$certificado],200);
     }
 
-
+    public function verpagos($et_id)
+    {
+        $ficha=Ficha_inspeccion::where('et_id', $et_id)
+        ->orderBy('created_at', 'desc')
+        ->first();
+        if (!$ficha)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
+        }
+        $fichacategoria=Ficha_categoria::select('ficha_categoria.fc_id','ficha_categoria.cat_id', 'categoria.cat_id', 'categoria.sub_id', 'categoria.cat_secuencial', 'categoria.cat_area', 'categoria.cat_categoria', 'categoria.cat_codigo', 'categoria.cat_monto', 'categoria.cat_descripcion', 'categoria.cat_servicio', 'subclasificacion.sub_id', 'subclasificacion.cle_id', 'subclasificacion.sub_codigo', 'subclasificacion.sub_nombre')
+        ->where('fic_id', $ficha->fic_id)
+        ->orderBy('created_at', 'desc')
+        ->first();
+        $fichasancion=FichaCategoriaSancion::where('fic_id', $ficha->fic_id);
+        return response()->json(['status'=>'ok','mensaje'=>'exito','ficha'=>$ficha, 'fichacategoria'=>$fichacategoria, 'fichasancion'=>$fichasancion],200);
+    }
 }
-/*
-carne sanitario
-    estado del avance
-certificado sanitario
-    estado del avance
 
-    8:30
 
-estimacion
-    comunicacion con USACSIA
-    aprobacion
-
- */

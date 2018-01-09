@@ -68,6 +68,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('documento_tramite','DocumentoTramiteController',['only'=>['index','store','update']]);
     Route::get('lista_documentos_x_tramite/{et_id}','DocumentoTramiteController@lista_documentos_x_tramite');
     Route::get('personas_x_establecimiento/{ess_id}','EstablecimientoPersonaController@index');
+    Route::resource('personaempresa','EstablecimientoPersonaController',['only'=>['store','destroy']]);
     /*vero*/
 
 
@@ -86,8 +87,10 @@ Route::group(['middleware' => 'cors'], function ()
     Route::post('ambiente_laboratorio','LaboratorioController@crear_ambiente_laboratorio');
     Route::get('lis_laboratorio','LaboratorioController@listar_laboratorios');
 /*TRAMITES*/
-        
-    Route::resource('tramite','TramiteController',['only' => ['index','store', 'update', 'destroy', 'show']]);
+
+    /*tramites--vero  --arreglar las rutas*/
+    // Route::get('tramite','TramiteController@index');
+    Route::resource('tramite','TramiteController',['only' => ['store', 'update', 'destroy', 'show','index']]);
 /*PERSONA_TRAMITE*///============================================================
     Route::resource('pers_tra','Persona_tramiteController',['only' => ['store', 'update', 'destroy', 'show','index']]);
     //buscar persona_tramite --vero
@@ -312,6 +315,6 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('etapa', 'EtapaController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::resource('tramitecerestado', 'TramitecerEstadoController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::get('lista_etapa_estado', 'EmpresaTramiteController@listpor_etapa_estado');
-
-
+    Route::get('verpagos/{et_id}', 'EmpresaTramiteController@verpagos');
+    Route::post('crearestados/{et_id}','TramitecerEstadoController@crearestados');
 });
