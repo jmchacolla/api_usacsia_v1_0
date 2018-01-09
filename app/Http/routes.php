@@ -259,8 +259,10 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('buscarsub/{cle_id}', 'SubclasificacionController@buscarSub');
     //categoria por sub_id
     Route::get('buscarcat/{sub_id}', 'CategoriaController@buscarCat');
-    //ver ficha ins por et_id
+    //ver ultima ficha ins por et_id
     Route::get('buscarfi/{et_id}', 'Ficha_inspeccionController@ver');
+    // w ver todas las ficha ins por et_id9-1-2018
+    Route::get('ver_fichas/{et_id}', 'Ficha_inspeccionController@verfichas');
     //ver ficha ins por et_id
 /*    Route::get('vera/{et_id}', 'TramitecerEstadoController@ver');*/
     //w permite cambiar el estado de una etapa seleccionada 5-1-2018  //PENDIENTE
@@ -271,7 +273,8 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('estadosver/{et_id}/{eta_id}','TramitecerEstadoController@verestados');
     //w permite ver el estado de tramite de carnet sanitario para inspectores
     Route::get('estado_carnet/{per_ci}','Persona_tramiteController@ver_estado_cs');
-
+    //w ficha categoria sancion 
+    Route::resource('ficha_cat_san','Ficha_categoria_sancionController',['only' => ['store', 'update', 'destroy', 'show','index']]);
     
      /*jhon----operacines con receta*/
      Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);

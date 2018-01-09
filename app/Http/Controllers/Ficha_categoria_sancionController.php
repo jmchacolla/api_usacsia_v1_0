@@ -5,35 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\Models\Ficha_categoria_sancion;
 
 class Ficha_categoria_sancionController extends Controller
 {
    # crea una ficha_categoria_sancion
-    public function store(Request $request)
-    {
-        /*convirtiendo $request establecimiento a object*/
-        $requeste_array=$request->fi_id;
-        $requeste_string=json_encode($requeste_array);
-        $requeste_object=json_decode($requeste_string);
+   public function store(Request $request){
 
-        /*convirtiendo $request vector a object*/
-        $aux;
-        $requestv_array=$request->vector;
-        for ($i=0; $i < count($requestv_array); $i++) { 
-            $velement_string=json_encode($requestv_array[$i]);
-            $velement_object=json_decode($velement_string);
-            $aux=$velement_object;
+        $ficha_categoria_sancion= new Ficha_categoria_sancion();
+        $ficha_categoria_sancion->fc_id = $request->fc_id;
+        $ficha_categoria_sancion->cat_id = $request->cat_id;
+        $ficha_categoria_sancion->userid_at='2';
+        $ficha_categoria_sancion->save();
 
-            $rubroempresa = new Ficha_categoria();
-            $rubroempresa->fi_id=$request->fi_id;
-            $rubroempresa->cat_id=$velement_object->cat_id;
-            $rubroempresa->save();
-        }
-               /*
-        enviar
-        empresa
-        */
-     
-        return response()->json(['status'=>'ok',"msg" => "exito", "establecimiento" => $rubroempresa], 200);
+        return response()->json(['status'=>'ok',"msg"=>"creado exitosamente","ficha_cat_san"=>$ficha_categoria_sancion], 200);
+  
     }
 }
