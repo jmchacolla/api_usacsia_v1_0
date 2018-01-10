@@ -250,6 +250,10 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('busca_cert/{et_id}', 'EmpresaTramiteController@buscar_certificado');
     //w permite la busqueda de personas en las tabla persona 4-1-2018
     Route::get('personasb/{per_ci}','PersonaController@buscar');
+
+    Route::get('index2','PersonaController@index2');
+    Route::get('index3','PersonaController@index3');
+
     //w permite ver el rubro de una empresa 5-1-2018
     Route::get('rubro/{emp_id}','RubroEmpresaController@ver');
     //w permite ver el rubro de una empresa 5-1-2018  //PENDIENTE
@@ -264,6 +268,8 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('buscarcat/{sub_id}', 'CategoriaController@buscarCat');
     //ver ficha ultima ficha ins por et_id
     Route::get('buscarfi/{et_id}', 'Ficha_inspeccionController@ver');
+    // w ver todas las ficha ins por et_id9-1-2018
+    Route::get('ver_fichas/{et_id}', 'Ficha_inspeccionController@verfichas');
     //ver ficha ins por et_id
 /*    Route::get('vera/{et_id}', 'TramitecerEstadoController@ver');*/
     //w permite cambiar el estado de una etapa seleccionada 5-1-2018  //PENDIENTE
@@ -274,7 +280,12 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('estadosver/{et_id}/{eta_id}','TramitecerEstadoController@verestados');
     //w permite ver el estado de tramite de carnet sanitario para inspectores
     Route::get('estado_carnet/{per_ci}','Persona_tramiteController@ver_estado_cs');
-
+    //w ficha categoria sancion 
+    Route::resource('ficha_cat_san','Ficha_categoria_sancionController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+    //w permite ver el estado de tramite de carnet sanitario para inspectores
+    Route::get('ficha_cat_ver/{fc_id}','Ficha_categoria_sancionController@ver');
+    //w permite ver el estado de tramite de carnet sanitario para inspectores
+    Route::get('buscarfc/{fc_id}','Ficha_categoria_sancionController@buscar');
     
      /*jhon----operacines con receta*/
      Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);

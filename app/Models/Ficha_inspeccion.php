@@ -55,6 +55,7 @@ class Ficha_inspeccion extends Model
     protected $fillable = ['et_id', 'fun_id', 'cat_id', 'fi_fecha_asignacion', 'fi_fecha_realizacion', 'fi_observacion', 'fi_estado', 'fi_foco_insalubridad', 'fi_exibe_certificado', 'fi_exibe_carne', 'fi_extinguidor', 'fi_botiquin'];
     protected $hidden = ['created_at','updated_at','userid_at','deleted_at'];
     protected $dates=['deleted_at'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

@@ -21,6 +21,7 @@ use App\Models\PersonaJuridica;
 use App\Models\PersonaNatural;
 use App\Models\Persona;
 use App\Models\Ficha_categoria;
+use App\Models\Ficha_categoria_sancion;
 
 class Ficha_inspeccionController extends Controller
 {
@@ -36,7 +37,9 @@ class Ficha_inspeccionController extends Controller
         ->join('categoria','categoria.cat_id','=','ficha_categoria.cat_id')
         ->get();
 
-        $result=compact('ficha_inspeccion','empresa_tramite','establecimiento_solicitante','ficha_categoria');
+
+
+        $result=compact('ficha_inspeccion','empresa_tramite','establecimiento_solicitante','ficha_categoria'/*,'ficha_categoria_sancion'*/);
         return response()->json(['status'=>'ok','mensaje'=>'exito','ficha_inspeccion'=>$result],200);
     }
     public function ver($et_id){
@@ -48,6 +51,13 @@ class Ficha_inspeccionController extends Controller
         ->get();*/
 
         $result=compact('ficha_inspeccion','empresa_tramite','establecimiento_solicitante','ficha_categoria');
+        return response()->json(['status'=>'ok','mensaje'=>'exito','ficha_inspeccion'=>$ficha_inspeccion],200);
+    }
+    //ver todas las fichas de inspeccion por empresa tramite
+    public function verfichas($et_id){
+        $ficha_inspeccion = Ficha_inspeccion::where('et_id',$et_id)->get();
+ 
+        
         return response()->json(['status'=>'ok','mensaje'=>'exito','ficha_inspeccion'=>$ficha_inspeccion],200);
     }
      public function store(Request $request){
