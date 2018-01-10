@@ -137,7 +137,6 @@ class Persona extends Model
     {
 
         $fecha_nacimiento = new \Carbon\Carbon($per_fecha_nacimiento);
-
         $año_n = $fecha_nacimiento->format('Y');
         $mes_n = $fecha_nacimiento->format('m');
         $dia_n = $fecha_nacimiento->format('d');  

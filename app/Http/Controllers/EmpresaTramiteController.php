@@ -37,6 +37,35 @@ class EmpresaTramiteController extends Controller
         $empt=EmpresaTramite::all()/*select('empresa_tramite.et_id', 'empresa_tramite.et_numero_tramite','establecimieto_solicitante.ess_id', 'establecimieto_solicitante.ess_razon_social')*/;
         return response()->json(['status'=>'ok',"mensaje"=>"listado tramites CeS","empt"=>$empt], 200);
     }
+
+    public function tramitescer_pagados()
+    {   
+        $establecimientosol=EstablecimientoSolicitante::select('et_id','et_numero_tramite','propietario.pro_id','propietario.pro_tipo','ess_altitud','ess_avenida_calle','ess_correo_electronico','establecimiento_solicitante.ess_id','ess_latitud','ess_longitud','ess_numero','ess_razon_social','ess_stand','ess_telefono','ess_tipo','zon_id','zon_id as ess_propietario')
+        ->join('empresa_tramite','empresa_tramite.ess_id','=','establecimiento_solicitante.ess_id')
+        ->join('empresa','empresa.ess_id','=', 'establecimiento_solicitante.ess_id')
+        ->join('empresa_propietario','empresa_propietario.emp_id','=','empresa.emp_id')
+        ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
+        ->where('empresa_tramite.et_estado_pago','PAGADO')
+        ->get();
+
+        for ($i=0; $i < count($establecimientosol); $i++) { 
+            if($establecimientosol[$i]->pro_tipo=="J")
+            {
+                $pjuridica=PersonaJuridica::select('pjur_razon_social')
+                ->where('p_juridica.pro_id',$establecimientosol[$i]->pro_id)
+                ->first();
+                $establecimientosol[$i]->ess_propietario=$pjuridica->pjur_razon_social;
+            }else{
+                $pnatural=PersonaNatural::select('per_nombres','per_apellido_primero','per_apellido_segundo')
+                ->join('persona','persona.per_id','=','p_natural.per_id')
+                ->where('p_natural.pro_id',$establecimientosol[$i]->pro_id)
+                ->first();
+                $establecimientosol[$i]->ess_propietario=$pnatural->per_nombres.' '.$pnatural->per_apellido_primero.' '.$pnatural->per_apellido_segundo;
+            }
+        }
+        return response()->json(['status'=>'ok',"msg" => "exito", "establecimientosol" => $establecimientosol], 200);
+    }
+
     public function store(Request $request)
     {
         $empt=new EmpresaTramite();

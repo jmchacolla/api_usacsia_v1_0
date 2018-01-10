@@ -34,7 +34,7 @@ class Propietario extends Model
     /**
      * @var array
      */
-    protected $fillable = ['pro_telefono'];
+    protected $fillable = ['pro_telefono','pro_tipo'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'userid_at'];
 
     /**
