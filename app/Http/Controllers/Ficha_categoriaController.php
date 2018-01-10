@@ -55,9 +55,13 @@ class Ficha_categoriaController extends Controller
     }
 
     public function show($fi_id){
-        $ficha_categoria = Ficha_categoria::where('fi_id',$fi_id)
+        $ficha_categoria = Ficha_categoria::select('ficha_categoria.fc_id', 'ficha_categoria.cat_id', 'ficha_categoria.fi_id', 'categoria.cat_id', 'categoria.sub_id', 'categoria.cat_secuencial', 'categoria.cat_area', 'categoria.cat_categoria', 'categoria.cat_codigo', 'categoria.cat_monto', 'categoria.cat_descripcion', 'categoria.cat_servicio')
         ->join('categoria','categoria.cat_id','=','ficha_categoria.cat_id')
+        ->where('fi_id',$fi_id)
         ->get();
+        if (sizeof($ficha_categoria)<=0) {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
+        }
         return response()->json(['status'=>'ok','mensaje'=>'exito','ficha_categoria'=>$ficha_categoria],200);
     }
      

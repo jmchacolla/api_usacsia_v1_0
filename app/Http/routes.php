@@ -262,7 +262,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('buscarsub/{cle_id}', 'SubclasificacionController@buscarSub');
     //categoria por sub_id
     Route::get('buscarcat/{sub_id}', 'CategoriaController@buscarCat');
-    //ver ficha ins por et_id
+    //ver ficha ultima ficha ins por et_id
     Route::get('buscarfi/{et_id}', 'Ficha_inspeccionController@ver');
     //ver ficha ins por et_id
 /*    Route::get('vera/{et_id}', 'TramitecerEstadoController@ver');*/
@@ -314,4 +314,5 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('lista_etapa_estado', 'EmpresaTramiteController@listpor_etapa_estado');
     Route::get('verpagos/{et_id}', 'EmpresaTramiteController@verpagos');
     Route::post('crearestados/{et_id}','TramitecerEstadoController@crearestados');
+    Route::resource('fichasancion', 'Ficha_categoria_sancionController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
 });
