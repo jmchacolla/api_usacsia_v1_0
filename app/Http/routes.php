@@ -285,6 +285,10 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('estado_carnet/{per_ci}','Persona_tramiteController@ver_estado_cs');
     //w ficha categoria sancion 
     Route::resource('ficha_cat_san','Ficha_categoria_sancionController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+    //w permite ver el estado de tramite de carnet sanitario para inspectores
+    Route::get('ficha_cat_ver/{fc_id}','Ficha_categoria_sancionController@ver');
+    //w permite ver el estado de tramite de carnet sanitario para inspectores
+    Route::get('buscarfc/{fc_id}','Ficha_categoria_sancionController@buscar');
     
      /*jhon----operacines con receta*/
      Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
