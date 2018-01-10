@@ -250,6 +250,10 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('busca_cert/{et_id}', 'EmpresaTramiteController@buscar_certificado');
     //w permite la busqueda de personas en las tabla persona 4-1-2018
     Route::get('personasb/{per_ci}','PersonaController@buscar');
+
+    Route::get('index2','PersonaController@index2');
+    Route::get('index3','PersonaController@index3');
+
     //w permite ver el rubro de una empresa 5-1-2018
     Route::get('rubro/{emp_id}','RubroEmpresaController@ver');
     //w permite ver el rubro de una empresa 5-1-2018  //PENDIENTE
