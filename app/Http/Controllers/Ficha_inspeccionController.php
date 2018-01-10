@@ -21,6 +21,7 @@ use App\Models\PersonaJuridica;
 use App\Models\PersonaNatural;
 use App\Models\Persona;
 use App\Models\Ficha_categoria;
+use App\Models\Ficha_categoria_sancion;
 
 class Ficha_inspeccionController extends Controller
 {
@@ -36,7 +37,9 @@ class Ficha_inspeccionController extends Controller
         ->join('categoria','categoria.cat_id','=','ficha_categoria.cat_id')
         ->get();
 
-        $result=compact('ficha_inspeccion','empresa_tramite','establecimiento_solicitante','ficha_categoria');
+
+
+        $result=compact('ficha_inspeccion','empresa_tramite','establecimiento_solicitante','ficha_categoria'/*,'ficha_categoria_sancion'*/);
         return response()->json(['status'=>'ok','mensaje'=>'exito','ficha_inspeccion'=>$result],200);
     }
     public function ver($et_id){

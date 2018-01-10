@@ -40,6 +40,7 @@ class Ficha_categoriaController extends Controller
             $rubroempresa = new Ficha_categoria();
             $rubroempresa->fi_id=$request->fi_id;
             $rubroempresa->cat_id=$velement_object->cat_id;
+            $rubroempresa->cat_monto=$velement_object->cat_monto;
             $rubroempresa->save();
         }
   

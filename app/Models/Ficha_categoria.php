@@ -33,7 +33,7 @@ class Ficha_categoria extends Model
     /**
      * @var array
      */
-    protected $fillable = ['cat_id', 'fi_id'];
+    protected $fillable = ['cat_id', 'fi_id','cat_monto'];
     protected $hidden = ['created_at', 'updated_at', 'userid_at'];
     protected $dates=['deleted_at'];
 
