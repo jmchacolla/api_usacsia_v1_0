@@ -54,8 +54,31 @@ class Ficha_inspeccionController extends Controller
         return response()->json(['status'=>'ok','mensaje'=>'exito','ficha_inspeccion'=>$ficha_inspeccion],200);
     }
     //ver todas las fichas de inspeccion por empresa tramite
-    public function verfichas($et_id){
-        $ficha_inspeccion = Ficha_inspeccion::where('et_id',$et_id)->get();
+    public function verfichas(/*$fun_id,*/$et_id){
+       /* $ficha_inspeccion = Ficha_inspeccion::where('et_id',$et_id)
+        ->join('empresa_tramite','empresa_tramite.et_id','=',$et_id)
+        ->join('empresa','empresa.emp')->get();*/
+
+        $ficha_inspeccion=/*Zona_inspeccion::where('zona_inspeccion.fun_id',$fun_id)*/Ficha_inspeccion::where('ficha_inspeccion.et_id',$et_id)
+        ->join('empresa_tramite','empresa_tramite.et_id','=','ficha_inspeccion.et_id')
+        ->join('establecimiento_solicitante','establecimiento_solicitante.ess_id','=','empresa_tramite.ess_id')
+        ->join('empresa','empresa.ess_id','=','empresa_tramite.ess_id')
+   
+        ->join('tramitecer_estado', 'tramitecer_estado.et_id', '=', 'ficha_inspeccion.et_id')
+        ->join('etapa', 'etapa.eta_id', '=', 'tramitecer_estado.eta_id')
+        ->where('tramitecer_estado.eta_id', '=', 1)
+        ->where('tramitecer_estado.te_estado', '=', 'APROBADO')
+
+
+/*        ->orderBy('tramitecer_estado.te_fecha')*/
+
+        ->join('empresa_propietario','empresa_propietario.emp_id','=','empresa.emp_id')
+        ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
+        ->where('propietario.pro_tipo','N')
+        ->join('p_natural','p_natural.pro_id','=','propietario.pro_id')
+        ->join('persona','persona.per_id','=','p_natural.per_id')
+        ->select('empresa_tramite.et_id','et_monto','et_numero_tramite','establecimiento_solicitante.ess_id','ess_razon_social','p_natural.pnat_id','persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci','ficha_inspeccion.fi_id','ficha_inspeccion.created_at')
+        ->get();
  
         
         return response()->json(['status'=>'ok','mensaje'=>'exito','ficha_inspeccion'=>$ficha_inspeccion],200);

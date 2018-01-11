@@ -36,6 +36,8 @@ class Ficha_categoria_sancion extends Model
      * @var array
      */
     protected $fillable = ['fc_id', 'cat_id', 'created_at', 'updated_at', 'deleted_at', 'userid_at'];
+    protected $hidden = ['updated_at', 'userid_at'];
+    protected $dates=['deleted_at','created_at' ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

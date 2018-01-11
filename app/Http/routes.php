@@ -190,7 +190,9 @@ Route::group(['middleware' => 'cors'], function ()
 
 
      //wendy carnet 23-12-2017
-    Route::resource('carnet', 'Carnet_sanitarioController',['only' =>['index', 'store', 'update', 'show']]);
+    Route::resource('carnet', 'Carnet_sanitarioController',['only' =>['index', 'store', 'update']]);
+      /*SEGUIMIENTO TRAMITE CaS*/
+     Route::get('vercas/{pt_id}', 'Carnet_sanitarioController@show');
     // edita el campo estado de tramite de una persona tramite
     Route::put('tramite_estado/{pt_id}','Persona_tramiteController@editar');
     //wendy ficha de inspeccion 1 26-12-2017
@@ -246,6 +248,8 @@ Route::group(['middleware' => 'cors'], function ()
     Route::put('aprobacion3/{et_id}', 'EmpresaTramiteController@editar3');*//*eliminado*/
     //wen 1-1-2018 listar crear certificado sanitario
     Route::resource('certificado_sanitario','Certificado_sanitarioController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+    
+    Route::post('editar_tramitecer/{ces_id}', 'Certificado_sanitarioController@store');
     //wen 2-1-2018 aprobacion2
     Route::put('aprob2/{ces_id}', 'Certificado_sanitarioController@aprob2');
     //wen 2-1-2018 aprobacion3
@@ -261,6 +265,8 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('rubro/{emp_id}','RubroEmpresaController@ver');
     //w permite ver el rubro de una empresa 5-1-2018  //PENDIENTE
     Route::put('tram/{et_id}','TramitecerEstadoController@editarI');
+    //w permite ver el rubro de una empresa 5-1-2018  //PENDIENTE
+    Route::get('ver_tce/{et_id}','TramitecerEstadoController@ver');
     //w permite editar para la aprobacion de jefe certificado eliminar 8-1-2018
    /* Route::put('aprobacion1/{et_id}','TramitecerEstadoController@editarAp1');*/
     //w permite editar para la aprobacion de jefe certificado
@@ -269,7 +275,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('buscarsub/{cle_id}', 'SubclasificacionController@buscarSub');
     //categoria por sub_id
     Route::get('buscarcat/{sub_id}', 'CategoriaController@buscarCat');
-    //ver ultima ficha ins por et_id
+    //ver ficha ultima ficha ins por et_id
     Route::get('buscarfi/{et_id}', 'Ficha_inspeccionController@ver');
     // w ver todas las ficha ins por et_id9-1-2018
     Route::get('ver_fichas/{et_id}', 'Ficha_inspeccionController@verfichas');
@@ -280,7 +286,7 @@ Route::group(['middleware' => 'cors'], function ()
     //w permite ver editar la tabla tramitecer_Es //borrar 8-1-2018
     Route::put('celulr/{et_id}/{eta_id}','TramitecerEstadoController@prueba');
     //w permite ver el estado de un tramite segun etapa 5-1-2018  //PENDIENTE
-    Route::get('estadosver/{et_id}/{eta_id}','TramitecerEstadoController@verestados');
+    Route::get('verestados/{et_id}/{eta_id}','TramitecerEstadoController@verestados');
     //w permite ver el estado de tramite de carnet sanitario para inspectores
     Route::get('estado_carnet/{per_ci}','Persona_tramiteController@ver_estado_cs');
     //w ficha categoria sancion 
@@ -319,7 +325,7 @@ Route::group(['middleware' => 'cors'], function ()
 
     
 
-    Route::resource('pago_pendiente','PagoPendienteController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+    // Route::resource('pago_pendiente','PagoPendienteController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::get('ppportramite/{et_id}', 'PagoPendienteController@ppportramite');
     /*wendy   verifica si tiene carnet por ci*/
 /*wendy   verifica si tiene carnet por ci 27-12 2017*/
@@ -328,6 +334,23 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('etapa', 'EtapaController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::resource('tramitecerestado', 'TramitecerEstadoController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::get('lista_etapa_estado', 'EmpresaTramiteController@listpor_etapa_estado');
+
+
+    Route::resource('reportes', 'ReporteController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+
+    Route::get('c3_laboratorios','ReporteController@c3');
+
+
+
     Route::get('verpagos/{et_id}', 'EmpresaTramiteController@verpagos');
     Route::post('crearestados/{et_id}','TramitecerEstadoController@crearestados');
+    Route::resource('fichasancion', 'Ficha_categoria_sancionController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
+
+    /*pago jhon-----------------*/
+    Route::resource('pago_arancel','PagoArancelController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+    Route::resource('pago_sancion','PagoSancionController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+    Route::resource('orden_pago','OrdenPagoController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+    Route::get('verordenpago/{op_id}', 'OrdenPagoController@verordenpago');
+    Route::get('ordenpagoestado', 'OrdenPagoController@ordenpagoestado');
+
 });

@@ -132,6 +132,17 @@ class EstablecimientoSolicitanteController extends Controller
         $empresa=Empresa::where('ess_id', $ess_id)->first();
         $zon_id=$est_sol->zon_id;
         $zona=Zona::find($zon_id);
+        $propietario=EmpresaPropietario::where('emp_id',$empresa->emp_id)
+        ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
+        ->join('p_natural','p_natural.pro_id','=','propietario.pro_id')
+        ->join('persona','persona.per_id','=','p_natural.per_id')->first();
+        if ($propietario==null) {
+            $propietario=EmpresaPropietario::where('emp_id',$empresa->emp_id)
+            ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
+            ->join('p_juridica','p_juridica.pro_id','=','propietario.pro_id')
+            ->first();
+        }
+        
         $municipio=Municipio::find($zona->mun_id);
         $provincia=Provincia::find($municipio->mun_id);
         $departamento=Departamento::find($provincia->dep_id);
@@ -142,7 +153,7 @@ class EstablecimientoSolicitanteController extends Controller
 
         // $empresa=Empresa::
 
-        $resultado=compact('est_sol', 'empresa', 'zona', 'municipio', 'provincia', 'departamento');
+        $resultado=compact('est_sol', 'empresa','propietario', 'zona', 'municipio', 'provincia', 'departamento');
         return response()->json(['status'=>'ok',"msg" => "exito",'establecimiento'=>$resultado],200);
     }
 }

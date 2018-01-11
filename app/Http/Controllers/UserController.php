@@ -43,7 +43,6 @@ class UserController extends Controller
     $usuario->usu_inicio_vigencia=Carbon::now();
     $usuario->usu_fin_vigencia=Carbon::now()->addYears(2);
     $usuario->rol_id=$request->rol_id;
-    
     if($request->usu_tipo=='P')
     {
     $persona=Persona::find($request->usu_identificador);
