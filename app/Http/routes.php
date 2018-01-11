@@ -65,7 +65,10 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('prueba_par','Prueba_parController', ['only'=>['store','update','destroy']]);
     Route::get('parasitosprueba/{pl_id}','Prueba_parController@parasitosprueba');
     Route::get('parasitos_no_prueba/{pl_id}','Prueba_parController@parasitos_no_prueba');
-    Route::resource('documento_tramite','DocumentoTramiteController',['only'=>['index','store','update']]);
+    Route::resource('documento_tramite','DocumentoTramiteController',['only'=>['index','store']]);
+    
+    Route::resource('update_lista_documentotramite','DocumentoTramiteController@update_lista_documentotramite');
+
     Route::get('lista_documentos_x_tramite/{et_id}','DocumentoTramiteController@lista_documentos_x_tramite');
     Route::get('personas_x_establecimiento/{ess_id}','EstablecimientoPersonaController@index');
     Route::resource('personaempresa','EstablecimientoPersonaController',['only'=>['store','destroy']]);
@@ -302,6 +305,8 @@ Route::group(['middleware' => 'cors'], function ()
      Route::resource('clasificacion_general', 'ClasificacionGeneralController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
      /*jhon operaciones arancel clasificacion general*/
     Route::resource('empresa_tramite', 'EmpresaTramiteController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
+    Route::get('tramitescer_pagados', 'EmpresaTramiteController@tramitescer_pagados');
+
     /*jhon   busca por per_ci o ess_razon_social*/
     Route::get('buscarpropietario/{parametro}', 'EmpresaTramiteController@buscarpropietario');
     /*vero*/
