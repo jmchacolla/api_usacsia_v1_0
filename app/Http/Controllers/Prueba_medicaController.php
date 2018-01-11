@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 
 
 use App\Models\Prueba_medica;
+use App\Models\Prueba_laboratorio;
 use App\Models\Persona_tramite;
 use App\Models\Servicio;
 use App\Models\Prueba_enfermedad;
@@ -51,6 +52,8 @@ class Prueba_medicaController extends Controller
 		$prueba_medica->pm_talla=$request->pm_talla;
 		$prueba_medica->pm_imc=$request->pm_imc;
         $prueba_medica->pm_temperatura=$request->pm_temperatura;
+        $prueba_medica->pm_una_larga=$request->pm_una_larga;
+        $prueba_medica->pm_colabora=$request->pm_colabora;
 		// $prueba_medica->pm_diagnostico="";//---se edita al finalizar las pruebas
 		$prueba_medica->pm_estado='PENDIENTE';
 		// $prueba_medica->pm_fecha=$request->pm_fecha;
@@ -125,8 +128,18 @@ class Prueba_medicaController extends Controller
          $funcionario=Funcionario::select('funcionario.fun_id','fun_cargo','persona.per_id','per_ci','per_ci_expedido','per_nombres','per_apellido_primero','per_apellido_segundo','per_fecha_nacimiento','per_genero','per_numero_celular','per_tipo_documento','per_pais')
          ->join('persona','persona.per_id','=','funcionario.per_id')->where('funcionario.fun_id','=',$fun_id)->first();
          //saca los datos del paciente
-         $paciente=Persona::select('persona.per_id','per_ci','per_ci_expedido','per_nombres','per_apellido_primero','per_apellido_segundo','per_fecha_nacimiento','per_genero','per_numero_celular','per_tipo_documento','per_pais', 'per_ocupacion')
+         $paciente=Persona::select('persona.per_id','per_ci','per_ci_expedido','per_nombres','per_apellido_primero','per_apellido_segundo','per_fecha_nacimiento','per_genero','per_numero_celular','per_tipo_documento','per_pais', 'per_ocupacion','per_id as per_edad')
         ->where('persona.per_id','=',$per_id)->first();
+
+        /*paciente con edad*/
+        $paciente->per_edad=Persona::edad($paciente->per_fecha_nacimiento);
+        $pruebas=Prueba_enfermedad::where('prueba_enfermedad.pm_id',$pm_id);
+        if($paciente->per_genero=='F'){
+            $paciente->per_genero='FEMENINO';
+        }else{
+            $paciente->per_genero='MASCULINO';
+        }
+
         $pruebas=Prueba_enfermedad::where('prueba_enfermedad.pm_id',$pm_id)
         ->join('enfermedad','enfermedad.enfe_id', '=', 'prueba_enfermedad.enfe_id')
         ->orderby('enfermedad.enfe_id')
@@ -185,6 +198,8 @@ class Prueba_medicaController extends Controller
         ->where( 'persona.per_id','=', $per_id)
         ->orderby('pm_fecha', 'desc')
         ->get();
+        
+        
         $persona=Persona::find($per_id);
         
         if (!$listapruebas) {

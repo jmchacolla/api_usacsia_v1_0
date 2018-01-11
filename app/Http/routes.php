@@ -33,6 +33,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('telefono','TelefonoController', ['only'=>['index','update']]);
     Route::resource('enfermedad','EnfermedadController', ['only'=>['index','show','store','update','destroy']]);
 
+
     /*desde vero*/
     //Listar tratamientos de una enfermedad enf_id
     Route::get('tratamientos_x_enfermedad/{enfe_id}','EnfermedadController@tratamientos_x_enfermedad');
@@ -64,7 +65,13 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('prueba_par','Prueba_parController', ['only'=>['store','update','destroy']]);
     Route::get('parasitosprueba/{pl_id}','Prueba_parController@parasitosprueba');
     Route::get('parasitos_no_prueba/{pl_id}','Prueba_parController@parasitos_no_prueba');
-    Route::resource('documento_tramite','DocumentoTramiteController',['only'=>['index','store','update']]);
+    Route::resource('documento_tramite','DocumentoTramiteController',['only'=>['index','store']]);
+    
+    Route::resource('update_lista_documentotramite','DocumentoTramiteController@update_lista_documentotramite');
+
+    Route::get('lista_documentos_x_tramite/{et_id}','DocumentoTramiteController@lista_documentos_x_tramite');
+    Route::get('personas_x_establecimiento/{ess_id}','EstablecimientoPersonaController@index');
+    Route::resource('personaempresa','EstablecimientoPersonaController',['only'=>['store','destroy']]);
     /*vero*/
 
 
@@ -83,19 +90,21 @@ Route::group(['middleware' => 'cors'], function ()
     Route::post('ambiente_laboratorio','LaboratorioController@crear_ambiente_laboratorio');
     Route::get('lis_laboratorio','LaboratorioController@listar_laboratorios');
 /*TRAMITES*/
+
     /*tramites--vero  --arreglar las rutas*/
-    Route::get('tramite','TramiteController@index');
-    Route::resource('tramite','TramiteController',['only' => ['store', 'update', 'destroy', 'show']]);
+    // Route::get('tramite','TramiteController@index');
+    Route::resource('tramite','TramiteController',['only' => ['store', 'update', 'destroy', 'show','index']]);
 /*PERSONA_TRAMITE*///============================================================
     Route::resource('pers_tra','Persona_tramiteController',['only' => ['store', 'update', 'destroy', 'show','index']]);
     //buscar persona_tramite --vero
     Route::get('buscar_persona_tramite/{per_ci}','Persona_tramiteController@buscar_persona_tramite');
     //vero -- buscar tramite de la personapara ver si ya tiene una ficha el dia de hoy
     Route::get('buscar_persona_tramite_ficha/{per_ci}','Persona_tramiteController@buscar_persona_tramite_ficha');
+    Route::get('estado_tramite_persona/{per_ci}','Persona_tramiteController@estado_tramite_persona');
 
     //vero -- listar todos los tramites de 1 carnet sanitario o 2 certificado sanitario
     Route::get('tramites_x_tipo_tramite/{tra_id}','Persona_tramiteController@listar_x_tipo_tramite');
-    // jhon------------------------------fichas por fecha
+    // jhon-----lista fichas entre dos fechas, por estado, consultorio y funcionario asignado al consultorio
     Route::get('fichasfecha','FichaController@fichasfecha');
     //jhon ultima ficha atendida del tramite
     Route::get('ultimafichaatendida/{pt_id}','Persona_tramiteController@ultimafichaatendida');
@@ -136,7 +145,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('zonass','ZonaController',['only' => ['index', 'store', 'update', 'show','destroy']]);
 
     //listar funcionarios por cargo 
-    Route::get('funcionario_cargo/{cargo}', 'FuncionarioController@listaporcargo');
+    Route::get('funcionario_cargo', 'FuncionarioController@listaporcargo');
     //crear persona y funcionario
     Route::post('funcionario_persona', 'FuncionarioController@crear_funcionario');
     // operaciones con funcionario, crear funcionario desde una persona existente 
@@ -181,7 +190,9 @@ Route::group(['middleware' => 'cors'], function ()
 
 
      //wendy carnet 23-12-2017
-    Route::resource('carnet', 'Carnet_sanitarioController',['only' =>['index', 'store', 'update', 'show']]);
+    Route::resource('carnet', 'Carnet_sanitarioController',['only' =>['index', 'store', 'update']]);
+      /*SEGUIMIENTO TRAMITE CaS*/
+     Route::get('vercas/{pt_id}', 'Carnet_sanitarioController@show');
     // edita el campo estado de tramite de una persona tramite
     Route::put('tramite_estado/{pt_id}','Persona_tramiteController@editar');
     //wendy ficha de inspeccion 1 26-12-2017
@@ -204,12 +215,14 @@ Route::group(['middleware' => 'cors'], function ()
     Route::post('ficha6','Ficha_inspeccionController@crear_ficha6');
     //wendy ficha categoria 29-12-2017
     Route::resource('ficha_categoria', 'Ficha_categoriaController',['only' =>['index', 'store', 'update', 'show']]);
+    // ver ficha categoria
+   /* Route::get('ver_fi/{fi_id}','Ficha_categoriaController@verf');*/
 
     /*wen   lista certificados 28-12-2017*/
     Route::get('list_cert_nat', 'EmpresaTramiteController@listar_cer_nat');
     /*wen   lista certificados 28-12-2017*/
     Route::get('list_cert_ju', 'EmpresaTramiteController@listar_cer_ju');
-     /*wen   lista certificados 28-12-2017*/
+    /*wen   lista certificados 28-12-2017*/
     Route::resource('zon_ins','Zona_inspeccionController',['only' => ['store', 'update', 'destroy', 'show','index']]);
     /*wen   lista zonas por distrito 28-12-2017*/
     /*Route::get('zonas', 'ZonaController@zon_dist');*/
@@ -220,10 +233,9 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('inspectores', 'FuncionarioController@listIns');
     /*wen   asignar zona a inspector 29-12-2017*/
     Route::get('asignar/{zon_id}', 'Zona_inspeccionController@asignar');
-     /*wen   listar por inspector inspector 29-12-2017*/
+    /*wen   listar por inspector inspector 29-12-2017*/
     Route::get('list_insN/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorN');
     Route::get('list_insJ/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorJ');
-
     /*wen   listar por inspector inspector 4-1-2018*/
     Route::get('inspN/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorN2');
      /*wen   lista  distrito 4-1-2018*/
@@ -236,16 +248,53 @@ Route::group(['middleware' => 'cors'], function ()
     Route::put('aprobacion3/{et_id}', 'EmpresaTramiteController@editar3');*//*eliminado*/
     //wen 1-1-2018 listar crear certificado sanitario
     Route::resource('certificado_sanitario','Certificado_sanitarioController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+    
+    Route::post('editar_tramitecer/{ces_id}', 'Certificado_sanitarioController@store');
     //wen 2-1-2018 aprobacion2
     Route::put('aprob2/{ces_id}', 'Certificado_sanitarioController@aprob2');
     //wen 2-1-2018 aprobacion3
     Route::put('aprob3/{ces_id}', 'Certificado_sanitarioController@aprob3');
     Route::get('busca_cert/{et_id}', 'EmpresaTramiteController@buscar_certificado');
-    // permite la busqueda de personas en las tabla persona 4-1-2018
+    //w permite la busqueda de personas en las tabla persona 4-1-2018
     Route::get('personasb/{per_ci}','PersonaController@buscar');
-    // permite ver el rubro de una empresa 5-1-2018
+
+    Route::get('index2','PersonaController@index2');
+    Route::get('index3','PersonaController@index3');
+
+    //w permite ver el rubro de una empresa 5-1-2018
     Route::get('rubro/{emp_id}','RubroEmpresaController@ver');
-    
+    //w permite ver el rubro de una empresa 5-1-2018  //PENDIENTE
+    Route::put('tram/{et_id}','TramitecerEstadoController@editarI');
+    //w permite ver el rubro de una empresa 5-1-2018  //PENDIENTE
+    Route::get('ver_tce/{et_id}','TramitecerEstadoController@ver');
+    //w permite editar para la aprobacion de jefe certificado eliminar 8-1-2018
+   /* Route::put('aprobacion1/{et_id}','TramitecerEstadoController@editarAp1');*/
+    //w permite editar para la aprobacion de jefe certificado
+    /*Route::put('aprobacion2/{et_id}','TramitecerEstadoController@editarAp2');*/
+    //subclasificacion por cle_id
+    Route::get('buscarsub/{cle_id}', 'SubclasificacionController@buscarSub');
+    //categoria por sub_id
+    Route::get('buscarcat/{sub_id}', 'CategoriaController@buscarCat');
+    //ver ficha ultima ficha ins por et_id
+    Route::get('buscarfi/{et_id}', 'Ficha_inspeccionController@ver');
+    // w ver todas las ficha ins por et_id9-1-2018
+    Route::get('ver_fichas/{et_id}', 'Ficha_inspeccionController@verfichas');
+    //ver ficha ins por et_id
+/*    Route::get('vera/{et_id}', 'TramitecerEstadoController@ver');*/
+    //w permite cambiar el estado de una etapa seleccionada 5-1-2018  //PENDIENTE
+    Route::put('wen2/{et_id}/{eta_id}','TramitecerEstadoController@prueba');
+    //w permite ver editar la tabla tramitecer_Es //borrar 8-1-2018
+    Route::put('celulr/{et_id}/{eta_id}','TramitecerEstadoController@prueba');
+    //w permite ver el estado de un tramite segun etapa 5-1-2018  //PENDIENTE
+    Route::get('verestados/{et_id}/{eta_id}','TramitecerEstadoController@verestados');
+    //w permite ver el estado de tramite de carnet sanitario para inspectores
+    Route::get('estado_carnet/{per_ci}','Persona_tramiteController@ver_estado_cs');
+    //w ficha categoria sancion 
+    Route::resource('ficha_cat_san','Ficha_categoria_sancionController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+    //w permite ver el estado de tramite de carnet sanitario para inspectores
+    Route::get('ficha_cat_ver/{fc_id}','Ficha_categoria_sancionController@ver');
+    //w permite ver el estado de tramite de carnet sanitario para inspectores
+    Route::get('buscarfc/{fc_id}','Ficha_categoria_sancionController@buscar');
     
      /*jhon----operacines con receta*/
      Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
@@ -262,6 +311,8 @@ Route::group(['middleware' => 'cors'], function ()
      Route::resource('clasificacion_general', 'ClasificacionGeneralController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
      /*jhon operaciones arancel clasificacion general*/
     Route::resource('empresa_tramite', 'EmpresaTramiteController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
+    Route::get('tramitescer_pagados', 'EmpresaTramiteController@tramitescer_pagados');
+
     /*jhon   busca por per_ci o ess_razon_social*/
     Route::get('buscarpropietario/{parametro}', 'EmpresaTramiteController@buscarpropietario');
     /*vero*/
@@ -274,7 +325,7 @@ Route::group(['middleware' => 'cors'], function ()
 
     
 
-    Route::resource('pago_pendiente','PagoPendienteController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+    // Route::resource('pago_pendiente','PagoPendienteController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::get('ppportramite/{et_id}', 'PagoPendienteController@ppportramite');
     /*wendy   verifica si tiene carnet por ci*/
 /*wendy   verifica si tiene carnet por ci 27-12 2017*/
@@ -284,9 +335,22 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('tramitecerestado', 'TramitecerEstadoController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::get('lista_etapa_estado', 'EmpresaTramiteController@listpor_etapa_estado');
 
+
     Route::resource('reportes', 'ReporteController',['only'=>['store','update', 'destroy', 'show', 'index']]);
 
     Route::get('c3_laboratorios','ReporteController@c3');
 
+
+
+    Route::get('verpagos/{et_id}', 'EmpresaTramiteController@verpagos');
+    Route::post('crearestados/{et_id}','TramitecerEstadoController@crearestados');
+    Route::resource('fichasancion', 'Ficha_categoria_sancionController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
+
+    /*pago jhon-----------------*/
+    Route::resource('pago_arancel','PagoArancelController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+    Route::resource('pago_sancion','PagoSancionController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+    Route::resource('orden_pago','OrdenPagoController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+    Route::get('verordenpago/{op_id}', 'OrdenPagoController@verordenpago');
+    Route::get('ordenpagoestado', 'OrdenPagoController@ordenpagoestado');
 
 });

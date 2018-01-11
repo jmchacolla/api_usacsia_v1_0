@@ -23,6 +23,9 @@ use App\Models\Zona;
 use App\Models\Municipio;
 use App\Models\Zona_inspeccion;
 use App\Models\Certificado_sanitario;
+use App\Models\Ficha_inspeccion;
+use App\Models\Ficha_categoria;
+use App\Models\FichaCategoriaSancion;
 
 
 
@@ -34,6 +37,35 @@ class EmpresaTramiteController extends Controller
         $empt=EmpresaTramite::all()/*select('empresa_tramite.et_id', 'empresa_tramite.et_numero_tramite','establecimieto_solicitante.ess_id', 'establecimieto_solicitante.ess_razon_social')*/;
         return response()->json(['status'=>'ok',"mensaje"=>"listado tramites CeS","empt"=>$empt], 200);
     }
+
+    public function tramitescer_pagados()
+    {   
+        $establecimientosol=EstablecimientoSolicitante::select('et_id','et_numero_tramite','propietario.pro_id','propietario.pro_tipo','ess_altitud','ess_avenida_calle','ess_correo_electronico','establecimiento_solicitante.ess_id','ess_latitud','ess_longitud','ess_numero','ess_razon_social','ess_stand','ess_telefono','ess_tipo','zon_id','zon_id as ess_propietario')
+        ->join('empresa_tramite','empresa_tramite.ess_id','=','establecimiento_solicitante.ess_id')
+        ->join('empresa','empresa.ess_id','=', 'establecimiento_solicitante.ess_id')
+        ->join('empresa_propietario','empresa_propietario.emp_id','=','empresa.emp_id')
+        ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
+        ->where('empresa_tramite.et_estado_pago','PAGADO')
+        ->get();
+
+        for ($i=0; $i < count($establecimientosol); $i++) { 
+            if($establecimientosol[$i]->pro_tipo=="J")
+            {
+                $pjuridica=PersonaJuridica::select('pjur_razon_social')
+                ->where('p_juridica.pro_id',$establecimientosol[$i]->pro_id)
+                ->first();
+                $establecimientosol[$i]->ess_propietario=$pjuridica->pjur_razon_social;
+            }else{
+                $pnatural=PersonaNatural::select('per_nombres','per_apellido_primero','per_apellido_segundo')
+                ->join('persona','persona.per_id','=','p_natural.per_id')
+                ->where('p_natural.pro_id',$establecimientosol[$i]->pro_id)
+                ->first();
+                $establecimientosol[$i]->ess_propietario=$pnatural->per_nombres.' '.$pnatural->per_apellido_primero.' '.$pnatural->per_apellido_segundo;
+            }
+        }
+        return response()->json(['status'=>'ok',"msg" => "exito", "establecimientosol" => $establecimientosol], 200);
+    }
+
     public function store(Request $request)
     {
         $empt=new EmpresaTramite();
@@ -99,9 +131,9 @@ class EmpresaTramiteController extends Controller
     /*        if($request->et_vigencia_pago){
         $empt->et_vigencia_pago=$request->et_vigencia_pago;//se completa despues de pagar en bd
         }*/
-    /*        if($request->et_fecha_ini){
-        $empt->et_fecha_ini=$request->et_fecha_ini; //DEFAULT ('now'::text)::date, trigger cuando se paga
-        }*/
+        //     if($request->et_fecha_ini){
+        // $empt->et_fecha_ini=$request->et_fecha_ini; //DEFAULT ('now'::text)::date, trigger cuando se paga
+        // }
         if($request->et_estado_pago){$empt->et_estado_pago=$request->et_estado_pago;} //DEFAULT 'PAGADO'::text,
         if($request->et_estado_tramite){$empt->et_estado_tramite=$request->et_estado_tramite;} //DEFAULT 'PENDIENTE'::text,
         if($request->et_monto){$empt->et_monto=$request->et_monto;}
@@ -133,13 +165,16 @@ class EmpresaTramiteController extends Controller
                 return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
             }
         }
-        return response()->json(['status'=>'ok',"mensaje"=>"PERSONA-NATURAL","persona"=>$persona], 200);
+        return response()->json(['status'=>'ok',"mensaje"=>"Propietario del establecimiento","persona"=>$persona], 200);
     }
     public function listar_cer_nat()
     {/*lista de empresas que pagaron*/
         $empresa_tramite=EmpresaTramite::where('tra_id',2)
         ->where('et_estado_pago','PAGADO')
         ->join('establecimiento_solicitante','establecimiento_solicitante.ess_id','=','empresa_tramite.ess_id')
+        ->join('tramitecer_estado','tramitecer_estado.et_id','=','empresa_tramite.et_id')
+        ->where('tramitecer_estado.eta_id',3)
+        ->where('tramitecer_estado.te_estado','APROBADO')
         ->join('empresa','empresa.ess_id','=','empresa_tramite.ess_id')
         ->join('empresa_propietario','empresa_propietario.emp_id','=','empresa.emp_id')
         ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
@@ -148,6 +183,10 @@ class EmpresaTramiteController extends Controller
         ->join('persona','persona.per_id','=','p_natural.per_id')
         ->select('empresa_tramite.et_id','et_monto','et_numero_tramite','establecimiento_solicitante.ess_id','ess_razon_social','p_natural.pnat_id','persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci')
         ->get();
+
+        if (!$empresa_tramite) {
+                return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
+            }
         return response()->json(['status'=>'ok',"mensaje"=>"lista",'empresa_tramite'=>$empresa_tramite], 200);
     }
 
@@ -162,7 +201,7 @@ class EmpresaTramiteController extends Controller
         ->where('propietario.pro_tipo','J')
         ->join('p_juridica','p_juridica.pro_id','=','propietario.pro_id')
         
-        ->select('empresa_tramite.et_id','et_monto','et_numero_tramite','establecimiento_solicitante.ess_id','ess_razon_social','p_juridica.pjur_id','pjur_razon_social')
+        ->select('empresa_tramite.et_id','et_monto','et_numero_tramite','establecimiento_solicitante.ess_id','ess_razon_social','p_juridica.pjur_id','pjur_razon_social','pjur_nit')
         ->get();
    
         return response()->json(['status'=>'ok',"mensaje"=>"lista",'empresa_tramite'=>$empresa_tramite], 200);
@@ -203,11 +242,8 @@ class EmpresaTramiteController extends Controller
         return response()->json(['status'=>'ok',"mensaje"=>"lista",'empresa_tramite'=>$empresa_tramite], 200);
     }
     //aumente 2 para hacer pruebas
-    public function lista_x_inspectorN2(/*Request $request,*/$fun_id)
+    public function lista_x_inspectorN2($fun_id)
     {
-        /*$estado=$request->te_estado;
-        $etapa=$request->eta_id;*/
-
         $empresa_tramite=Zona_inspeccion::where('zona_inspeccion.fun_id',$fun_id)
         ->join('establecimiento_solicitante','establecimiento_solicitante.zon_id','=','zona_inspeccion.zon_id')
         ->join('empresa_tramite','empresa_tramite.ess_id','=','establecimiento_solicitante.ess_id')
@@ -281,18 +317,22 @@ class EmpresaTramiteController extends Controller
         return response()->json(['status'=>'ok','mensaje'=>'exito','certificado'=>$certificado],200);
     }
 
-
+    public function verpagos($et_id)
+    {
+        $ficha=Ficha_inspeccion::where('et_id', $et_id)
+        ->orderBy('created_at', 'desc')
+        ->first();
+        if (!$ficha)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
+        }
+        $fichacategoria=Ficha_categoria::select('ficha_categoria.fc_id','ficha_categoria.cat_id', 'categoria.cat_id', 'categoria.sub_id', 'categoria.cat_secuencial', 'categoria.cat_area', 'categoria.cat_categoria', 'categoria.cat_codigo', 'categoria.cat_monto', 'categoria.cat_descripcion', 'categoria.cat_servicio', 'subclasificacion.sub_id', 'subclasificacion.cle_id', 'subclasificacion.sub_codigo', 'subclasificacion.sub_nombre')
+        ->where('fic_id', $ficha->fic_id)
+        ->orderBy('created_at', 'desc')
+        ->first();
+        $fichasancion=FichaCategoriaSancion::where('fic_id', $ficha->fic_id);
+        return response()->json(['status'=>'ok','mensaje'=>'exito','ficha'=>$ficha, 'fichacategoria'=>$fichacategoria, 'fichasancion'=>$fichasancion],200);
+    }
 }
-/*
-carne sanitario
-    estado del avance
-certificado sanitario
-    estado del avance
 
-    8:30
 
-estimacion
-    comunicacion con USACSIA
-    aprobacion
-
- */

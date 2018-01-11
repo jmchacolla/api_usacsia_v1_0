@@ -17,9 +17,19 @@ class PersonaController extends Controller
     //listar todas las personas
     public function index()
     {
-        $persona=Persona::all();
-        return response()->json(['status'=>'ok','persona'=> $persona],200);
+        $persona=Persona::all('per_id','per_ci','per_ci_expedido','per_numero_celular','per_email','per_nombres','per_apellido_primero','per_fecha_nacimiento','per_ci as per_edad');
+        $persona= json_decode($persona);
+        $edades=[];
+        for ($i=0; $i <count($persona) ; $i++) {
+            $perid=Persona::find($persona[$i]->per_id);
+            $edad=Persona::edad($perid->per_fecha_nacimiento);
+            $item=$persona[$i];
+            $item->per_edad=$edad;
+            $edades[$i]=$item;
+        }
+        return response()->json(['status'=>'ok','persona'=>$edades],200);
     }
+
     //crear persona
     public function store(Request $request)
     {
@@ -40,7 +50,7 @@ class PersonaController extends Controller
         $persona->per_clave_publica= $request->per_clave_publica;
         $persona->per_avenida_calle=$request->per_avenida_calle;
         $persona->per_numero=$request->per_numero;
-        $persona->per_ocupacion=$request->per_ocupacion;
+        $persona->per_ocupacion=Str::upper($request->per_ocupacion);
         $persona->userid_at='2';
         $persona->save();
 
@@ -83,7 +93,7 @@ class PersonaController extends Controller
          $persona->per_clave_publica= $request->per_clave_publica;
          $persona->per_avenida_calle=$request->per_avenida_calle;
          $persona->per_numero=$request->per_numero;
-         $persona->per_ocupacion=$request->per_ocupacion;
+         $persona->per_ocupacion=Str::upper($request->per_ocupacion);
          $persona->userid_at='2';
          $persona->save();
 
@@ -169,10 +179,7 @@ class PersonaController extends Controller
             ],200);
     }
 
-
-
-
-        //eliminar persona
+    //eliminar persona
     public function destroy($per_id)
         {
             $persona = Persona::find($per_id);
@@ -190,11 +197,5 @@ class PersonaController extends Controller
                 ], 200
             );
         }
-
-
- 
-
-
-
 
 }

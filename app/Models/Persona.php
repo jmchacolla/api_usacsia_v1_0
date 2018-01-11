@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use Carbon;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon;
@@ -134,19 +135,21 @@ class Persona extends Model
 
 
     public function scopeEdad($query, $per_fecha_nacimiento)
+
  {
 
-$fecha_nacimiento = new \Carbon\Carbon($per_fecha_nacimiento);
+        $fecha_nacimiento = new \Carbon\Carbon($per_fecha_nacimiento);
 
-$año_n = $fecha_nacimiento->format('Y');
-$mes_n = $fecha_nacimiento->format('m');
-$dia_n = $fecha_nacimiento->format('d');  
-$edad = Carbon::createFromDate($año_n,$mes_n,$dia_n)->age;
+        $año_n = $fecha_nacimiento->format('Y');
+        $mes_n = $fecha_nacimiento->format('m');
+        $dia_n = $fecha_nacimiento->format('d');  
+        $edad = Carbon::createFromDate($año_n,$mes_n,$dia_n)->age;
 
-if($edad=="")    
-{
-    return -1;
-} 
-return $edad;
+    if($edad=="")    
+    {
+        return -1;
+    } 
+    return $edad;
 }
+
 }

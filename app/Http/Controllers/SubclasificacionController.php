@@ -15,7 +15,7 @@ class SubclasificacionController extends Controller
     public function index()
     {
         $subcla=Subclasificacion::all();
-        return response()->json(['status'=>'ok',"mensaje"=>"Lista de subclasificaciones","subcla"=>$subcla], 200);
+        return response()->json(['status'=>'ok',"mensaje"=>"Lista de subclasificaciones","subclacificacion"=>$subcla], 200);
     }
     public function store(Request $request)
     {
@@ -46,6 +46,15 @@ class SubclasificacionController extends Controller
         $subcla->sub_codigo=Str::upper($request->sub_codigo);
         $subcla->cg_nombre=Str::upper($request->cg_nombre);
         $subcla->save();
+        return response()->json(['status'=>'ok',"mensaje"=>"creado exitosamente","subcla"=>$subcla], 200);
+    }
+    public function buscarSub($cle_id)
+    {
+        $subcla= Subclasificacion::where('cle_id',$cle_id)->get();
+        if (!$subcla) {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
+        }
+       
         return response()->json(['status'=>'ok',"mensaje"=>"creado exitosamente","subcla"=>$subcla], 200);
     }
 }

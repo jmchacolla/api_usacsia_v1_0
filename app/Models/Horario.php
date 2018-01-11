@@ -39,7 +39,9 @@ class Horario extends Model
     /**
      * @var array
      */
-    protected $fillable = ['ser_id', 'amb_id', 'fun_id', 'hor_fecha_in', 'hor_fecha_fin', 'created_at', 'updated_at', 'deleted_at', 'userid_at'];
+    protected $fillable = ['ser_id', 'amb_id', 'fun_med_id', 'fun_enfe_id', 'hor_fecha_in', 'hor_fecha_fin'];
+    protected $hidden = ['created_at','updated_at','userid_at','deleted_at'];
+    protected $dates=['deleted_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

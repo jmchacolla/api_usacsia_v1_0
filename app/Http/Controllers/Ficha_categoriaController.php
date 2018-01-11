@@ -24,14 +24,12 @@ class Ficha_categoriaController extends Controller
          # crea una ficha_categoria
     public function store(Request $request)
     {
-        /*convirtiendo $request establecimiento a object*/
+        //convirtiendo $request establecimiento a object
         $requeste_array=$request->fi_id;
         $requeste_string=json_encode($requeste_array);
         $requeste_object=json_decode($requeste_string);
 
-
-
-        /*convirtiendo $request vector a object*/
+        //convirtiendo $request vector a object
         $aux;
         $requestv_array=$request->vector;
         for ($i=0; $i < count($requestv_array); $i++) { 
@@ -42,18 +40,27 @@ class Ficha_categoriaController extends Controller
             $rubroempresa = new Ficha_categoria();
             $rubroempresa->fi_id=$request->fi_id;
             $rubroempresa->cat_id=$velement_object->cat_id;
+            $rubroempresa->cat_monto=$velement_object->cat_monto;
             $rubroempresa->save();
         }
-               /*
-        enviar
-        empresa
-        */
-        $result=compact('est_sol','empresa','rubroempresa');
+  
+     
         return response()->json(['status'=>'ok',"msg" => "exito", "establecimiento" => $rubroempresa], 200);
     }
     public function index(){
     	$ficha_categoria = Ficha_categoria::all();
     	return response()->json(['status'=>'ok','mensaje'=>'exito','ficha_categoria'=>$ficha_categoria],200);
+    }
+
+    public function show($fi_id){
+        $ficha_categoria = Ficha_categoria::select('ficha_categoria.fc_id', 'ficha_categoria.cat_id', 'ficha_categoria.fi_id', 'categoria.cat_id', 'categoria.sub_id', 'categoria.cat_secuencial', 'categoria.cat_area', 'categoria.cat_categoria', 'categoria.cat_codigo', 'categoria.cat_monto', 'categoria.cat_descripcion', 'categoria.cat_servicio')
+        ->join('categoria','categoria.cat_id','=','ficha_categoria.cat_id')
+        ->where('fi_id',$fi_id)
+        ->get();
+        if (sizeof($ficha_categoria)<=0) {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
+        }
+        return response()->json(['status'=>'ok','mensaje'=>'exito','ficha_categoria'=>$ficha_categoria],200);
     }
      
 }

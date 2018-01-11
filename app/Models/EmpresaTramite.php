@@ -72,4 +72,12 @@ class EmpresaTramite extends Model
     {
         return $this->belongsTo('App\Funcionario', 'fun_id', 'fun_id');
     }
+
+   /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasMany
+    */
+   public function ordenpago()
+   {
+       return $this->hasMany('App\OrdenPago', 'et_id', 'et_id');
+   }
 }

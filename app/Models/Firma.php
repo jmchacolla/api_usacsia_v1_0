@@ -32,6 +32,8 @@ class Firma extends Model
      * @var array
      */
     protected $fillable = ['fun_id', 'fir_fecha_inicio', 'fir_fecha_fin', 'fir_url'];
+    protected $hidden = ['created_at','updated_at','userid_at','deleted_at'];
+    protected $dates=['deleted_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
