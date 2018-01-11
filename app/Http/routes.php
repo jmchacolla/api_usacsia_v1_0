@@ -67,7 +67,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('parasitos_no_prueba/{pl_id}','Prueba_parController@parasitos_no_prueba');
     Route::resource('documento_tramite','DocumentoTramiteController',['only'=>['index','store']]);
     
-    Route::resource('update_lista_documentotramite','DocumentoTramiteController@update_lista_documentotramite');
+    Route::post('update_lista_documentotramite','DocumentoTramiteController@update_lista_documentotramite');
 
     Route::get('lista_documentos_x_tramite/{et_id}','DocumentoTramiteController@lista_documentos_x_tramite');
     Route::get('personas_x_establecimiento/{ess_id}','EstablecimientoPersonaController@index');
