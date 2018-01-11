@@ -50,7 +50,7 @@ class PersonaController extends Controller
         $persona->per_clave_publica= $request->per_clave_publica;
         $persona->per_avenida_calle=$request->per_avenida_calle;
         $persona->per_numero=$request->per_numero;
-        $persona->per_ocupacion=$request->per_ocupacion;
+        $persona->per_ocupacion=Str::upper($request->per_ocupacion);
         $persona->userid_at='2';
         $persona->save();
 
@@ -93,7 +93,7 @@ class PersonaController extends Controller
          $persona->per_clave_publica= $request->per_clave_publica;
          $persona->per_avenida_calle=$request->per_avenida_calle;
          $persona->per_numero=$request->per_numero;
-         $persona->per_ocupacion=$request->per_ocupacion;
+         $persona->per_ocupacion=Str::upper($request->per_ocupacion);
          $persona->userid_at='2';
          $persona->save();
 

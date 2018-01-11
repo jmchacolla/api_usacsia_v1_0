@@ -172,7 +172,7 @@ class EmpresaTramiteController extends Controller
         ->where('propietario.pro_tipo','J')
         ->join('p_juridica','p_juridica.pro_id','=','propietario.pro_id')
         
-        ->select('empresa_tramite.et_id','et_monto','et_numero_tramite','establecimiento_solicitante.ess_id','ess_razon_social','p_juridica.pjur_id','pjur_razon_social')
+        ->select('empresa_tramite.et_id','et_monto','et_numero_tramite','establecimiento_solicitante.ess_id','ess_razon_social','p_juridica.pjur_id','pjur_razon_social','pjur_nit')
         ->get();
    
         return response()->json(['status'=>'ok',"mensaje"=>"lista",'empresa_tramite'=>$empresa_tramite], 200);
@@ -213,11 +213,8 @@ class EmpresaTramiteController extends Controller
         return response()->json(['status'=>'ok',"mensaje"=>"lista",'empresa_tramite'=>$empresa_tramite], 200);
     }
     //aumente 2 para hacer pruebas
-    public function lista_x_inspectorN2(/*Request $request,*/$fun_id)
+    public function lista_x_inspectorN2($fun_id)
     {
-        /*$estado=$request->te_estado;
-        $etapa=$request->eta_id;*/
-
         $empresa_tramite=Zona_inspeccion::where('zona_inspeccion.fun_id',$fun_id)
         ->join('establecimiento_solicitante','establecimiento_solicitante.zon_id','=','zona_inspeccion.zon_id')
         ->join('empresa_tramite','empresa_tramite.ess_id','=','establecimiento_solicitante.ess_id')

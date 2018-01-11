@@ -243,6 +243,8 @@ Route::group(['middleware' => 'cors'], function ()
     Route::put('aprobacion3/{et_id}', 'EmpresaTramiteController@editar3');*//*eliminado*/
     //wen 1-1-2018 listar crear certificado sanitario
     Route::resource('certificado_sanitario','Certificado_sanitarioController',['only' => ['store', 'update', 'destroy', 'show','index']]);
+    
+    Route::post('editar_tramitecer/{ces_id}', 'Certificado_sanitarioController@store');
     //wen 2-1-2018 aprobacion2
     Route::put('aprob2/{ces_id}', 'Certificado_sanitarioController@aprob2');
     //wen 2-1-2018 aprobacion3
@@ -258,6 +260,8 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('rubro/{emp_id}','RubroEmpresaController@ver');
     //w permite ver el rubro de una empresa 5-1-2018  //PENDIENTE
     Route::put('tram/{et_id}','TramitecerEstadoController@editarI');
+    //w permite ver el rubro de una empresa 5-1-2018  //PENDIENTE
+    Route::get('ver_tce/{et_id}','TramitecerEstadoController@ver');
     //w permite editar para la aprobacion de jefe certificado eliminar 8-1-2018
    /* Route::put('aprobacion1/{et_id}','TramitecerEstadoController@editarAp1');*/
     //w permite editar para la aprobacion de jefe certificado

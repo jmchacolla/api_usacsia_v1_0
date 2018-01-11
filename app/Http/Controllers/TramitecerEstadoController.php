@@ -17,9 +17,9 @@ class TramitecerEstadoController extends Controller
     }
     public function show($te_id)
     {
-       $tramitecerestado=TramitecerEstado::select('tramitecerestado.te_id', 'tramitecerestado.fun_id', 'tramitecerestado.et_id', 'tramitecerestado.eta_id', 'tramitecerestado.te_estado', 'tramitecerestado.te_observacion', 'etapa.eta_id', 'etapa.eta_nombre' )
+       $tramitecerestado=TramitecerEstado::select('tramitecer_estado.te_id', 'tramitecer_estado.fun_id', 'tramitecer_estado.et_id', 'tramitecer_estado.eta_id', 'tramitecer_estado.te_estado', 'tramitecer_estado.te_observacion', 'etapa.eta_id', 'etapa.eta_nombre' )
         ->where('te_id', $te_id)
-        ->join('etapa', 'etapa.eta_id', '=', 'tramitecerestado.eta_id')
+        ->join('etapa', 'etapa.eta_id', '=', 'tramitecer_estado.eta_id')
         ->get();
         if (sizeof($tramitecerestado)<=0) {
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
@@ -28,7 +28,8 @@ class TramitecerEstadoController extends Controller
     }
      public function ver($et_id)
     {
-       $tramiteceresatdo=TramitecerEstado::where('et_id', $et_id)       
+       $tramiteceresatdo=TramitecerEstado::where('et_id', $et_id)
+        ->join('etapa', 'etapa.eta_id', '=', 'tramitecer_estado.eta_id')
         ->get();
         if (sizeof($tramiteceresatdo)<=0) {
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);

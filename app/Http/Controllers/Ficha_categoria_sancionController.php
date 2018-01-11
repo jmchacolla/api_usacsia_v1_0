@@ -30,7 +30,7 @@ class Ficha_categoria_sancionController extends Controller
     public function ver($fc_id){
 
         $ficha_categoria_sancion= Ficha_categoria_sancion::where('fc_id',$fc_id)
-        ->join('categoria','categoria.cat_id','=','ficha_categoria_sancion.cat_id')
+        ->join('categoria','categoria.cat_id','=','ficha_categoria_sancion.cat_id')->select('ficha_categoria_sancion.fcs_id','ficha_categoria_sancion.cat_monto','categoria.cat_id','cat_descripcion','ficha_categoria_sancion.created_at')
        ->get();
         return response()->json(['status'=>'ok',"msg"=>"lista exitosa","ficha_cat_san"=>$ficha_categoria_sancion], 200);
   
