@@ -336,6 +336,6 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('pago_arancel','PagoArancelController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::resource('pago_sancion','PagoSancionController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::resource('orden_pago','OrdenPagoController',['only'=>['store','update', 'destroy', 'show', 'index']]);
-    
+    Route::get('verordenpago/{op_id}', 'OrdenPagoController@verordenpago');
     Route::get('ordenpagoestado', 'OrdenPagoController@ordenpagoestado');
 });

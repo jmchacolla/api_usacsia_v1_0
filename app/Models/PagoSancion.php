@@ -37,7 +37,7 @@ class PagoSancion extends Model
     /**
      * @var array
      */
-    protected $fillable = ['op_id', 'fun_id', 'fcs_id', 'ps_monto'];
+    protected $fillable = ['op_id', 'fun_id', 'fcs_id', 'ps_monto', 'ps_descripcion'];
     protected $hidden = ['created_at','updated_at','userid_at','deleted_at'];
     protected $dates=['deleted_at'];
 

@@ -24,6 +24,7 @@ class PagoSancionController extends Controller
         $pagos->fcs_id=$request->fcs_id;
         // $pagos->fun_id=$request->fun_id;
         $pagos->ps_monto=$request->ps_monto;
+        $pagos->ps_descripcion=$request->ps_descripcion;
         $pagos->save();
         return response()->json(['status'=>'ok',"mensaje"=>"Pago pendientes por trámite","pagos"=>$pagos], 200);
     }

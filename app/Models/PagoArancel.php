@@ -37,7 +37,7 @@ class PagoArancel extends Model
     /**
      * @var array
      */
-    protected $fillable = ['op_id', 'fun_id', 'fc_id', 'pa_monto'];
+    protected $fillable = ['op_id', 'fun_id', 'fc_id', 'pa_monto', 'pa_descripcion'];
     protected $hidden = ['created_at','updated_at','userid_at','deleted_at'];
     protected $dates=['deleted_at'];
 

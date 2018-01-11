@@ -23,6 +23,7 @@ class PagoArancelController extends Controller
         $pagoa->fc_id=$request->fc_id;
         // $pagoa->fun_id=$request->fun_id;
         $pagoa->pa_monto=$request->pa_monto;
+        $pagoa->pa_descripcion=$request->pa_descripcion;
         $pagoa->save();
         return response()->json(['status'=>'ok',"mensaje"=>"Pago pendientes por trámite","pagoa"=>$pagoa], 200);
     }

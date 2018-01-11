@@ -41,12 +41,12 @@ class OrdenPagoController extends Controller
         if (sizeof($ordenpago)<=0) {
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
         }
-        return response()->json(['status'=>'ok',"msg" => "Exito", "ordenpago" => $ordenpago, "$emptra" => $$emptra], 200);
+        return response()->json(['status'=>'ok',"msg" => "Exito", "ordenpago" => $ordenpago, "emptra" => $emptra], 200);
     }
     public function update(Request $request, $op_id)
     {
         $ordenpago=OrdenPago::find($op_id);
-        if ($ordenpago) {
+        if (!$ordenpago) {
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
         }
         // if($request->et_id){$ordenpago->et_id=$request->et_id;}
@@ -55,6 +55,7 @@ class OrdenPagoController extends Controller
         if($request->op_monto_total){$ordenpago->op_monto_total=$request->op_monto_total;}
         if($request->op_fecha_pagado){$ordenpago->op_fecha_pagado=$request->op_fecha_pagado;}
         if($request->op_descripcion){$ordenpago->op_descripcion=$request->op_descripcion;}
+        if($request->op_estado_pago){$ordenpago->op_estado_pago=$request->op_estado_pago;}
         $ordenpago->save();
         return response()->json(['status'=>'ok',"msg" => "Exito", "ordenpago" => $ordenpago], 200);
     }
@@ -71,5 +72,19 @@ class OrdenPagoController extends Controller
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
         }
         return response()->json(['status'=>'ok',"msg" => "Exito", "ordenpago" => $ordenpago, "emptra" => $emptra], 200);
+    }
+    public function verordenpago($op_id)
+    {
+        $ordenpago=OrdenPago::find($op_id);
+        if (!$ordenpago) {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
+        }
+        $emptra=EmpresaTramite::where('et_id', $ordenpago->et_id)->first();
+        if (!$emptra) {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
+        }
+        $pagoa=PagoArancel::where('op_id', $ordenpago->op_id)->get();
+        $pagos=PagoSancion::where('op_id', $ordenpago->op_id)->get();
+        return response()->json(['status'=>'ok',"msg" => "Exito", "ordenpago" => $ordenpago, "emptra" => $emptra, "pagoa" => $pagoa, "pagos" => $pagos], 200);
     }
 }
