@@ -187,7 +187,9 @@ Route::group(['middleware' => 'cors'], function ()
 
 
      //wendy carnet 23-12-2017
-    Route::resource('carnet', 'Carnet_sanitarioController',['only' =>['index', 'store', 'update', 'show']]);
+    Route::resource('carnet', 'Carnet_sanitarioController',['only' =>['index', 'store', 'update']]);
+      /*SEGUIMIENTO TRAMITE CaS*/
+     Route::get('vercas/{pt_id}', 'Carnet_sanitarioController@show');
     // edita el campo estado de tramite de una persona tramite
     Route::put('tramite_estado/{pt_id}','Persona_tramiteController@editar');
     //wendy ficha de inspeccion 1 26-12-2017

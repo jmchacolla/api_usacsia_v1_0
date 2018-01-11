@@ -66,4 +66,10 @@ class Carnet_sanitarioController extends Controller
         
 
     }
+    public function show($pt_id)
+    {
+        $carnet=Carnet_sanitario::where('pt_id',$pt_id)->get()->first();
+
+        return response()->json(['status'=>'ok','mensaje'=>'exito','carnet_sanitario'=>$carnet],200); 
+    }
 }
