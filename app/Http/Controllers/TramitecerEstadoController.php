@@ -67,11 +67,11 @@ class TramitecerEstadoController extends Controller
         if (!$tramitecerestado) {
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
         }
-        $tramitecerestado->fun_id=$request->fun_id;
-    /*    $tramitecerestado->eta_id=$request->eta_id;*/
-        $tramitecerestado->te_estado=$request->te_estado;
-        $tramitecerestado->te_observacion=$request->te_observacion;
-        $tramitecerestado->te_fecha=$request->te_fecha;
+        if($request->fun_id){$tramitecerestado->fun_id=$request->fun_id;}
+        /*if($request->eta_id){$tramitecerestado->eta_id=$request->eta_id;}*/
+        if($request->te_estado){$tramitecerestado->te_estado=$request->te_estado;}
+        if($request->te_observacion){$tramitecerestado->te_observacion=$request->te_observacion;}
+        if($request->te_fecha){$tramitecerestado->te_fecha=$request->te_fecha;}
         $tramitecerestado->userid_at='2';
         $tramitecerestado->save();
         //$tramiteceresatdo->et_id=$request->et_id;/*no se debe modificar*/
