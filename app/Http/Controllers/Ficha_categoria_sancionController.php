@@ -53,11 +53,14 @@ class Ficha_categoria_sancionController extends Controller
     }
     public function show($fi_id)
     {
-        $fichasancion=Ficha_categoria_sancion::select('ficha_categoria_sancion.fcs_id', 'ficha_categoria_sancion.fc_id', 'ficha_categoria_sancion.cat_id', 'ficha_categoria.cat_id', 'categoria.cat_id', 'categoria.sub_id', 'categoria.cat_secuencial', 'categoria.cat_area', 'categoria.cat_categoria', 'categoria.cat_codigo', 'categoria.cat_monto', 'categoria.cat_descripcion', 'categoria.cat_servicio', '')
+        $fichasancion=Ficha_categoria_sancion::select('ficha_categoria_sancion.fcs_id', 'ficha_categoria_sancion.fc_id', 'ficha_categoria_sancion.cat_id', 'ficha_categoria_sancion.cat_monto as fcs_porcentaje', 'ficha_categoria.cat_id', 'categoria.cat_id', 'categoria.sub_id', 'categoria.cat_secuencial', 'categoria.cat_area', 'categoria.cat_categoria', 'categoria.cat_codigo', 'categoria.cat_descripcion', 'categoria.cat_servicio', 'ficha_categoria.cat_monto')
         ->join('ficha_categoria', 'ficha_categoria.fc_id', '=', 'ficha_categoria_sancion.fc_id')
         ->join('categoria', 'categoria.cat_id', '=', 'ficha_categoria_sancion.cat_id')
         ->where('ficha_categoria.fi_id', '=', $fi_id)
         ->get();
+        foreach ($fichasancion as $value) {
+            $value->fcs_total=$value->fcs_porcentaje*$value->cat_monto;
+        }
         if (sizeof($fichasancion)<=0) {
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
         }

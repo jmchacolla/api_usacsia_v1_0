@@ -277,7 +277,7 @@ Route::group(['middleware' => 'cors'], function ()
     //w permite ver editar la tabla tramitecer_Es //borrar 8-1-2018
     Route::put('celulr/{et_id}/{eta_id}','TramitecerEstadoController@prueba');
     //w permite ver el estado de un tramite segun etapa 5-1-2018  //PENDIENTE
-    Route::get('estadosver/{et_id}/{eta_id}','TramitecerEstadoController@verestados');
+    Route::get('verestados/{et_id}/{eta_id}','TramitecerEstadoController@verestados');
     //w permite ver el estado de tramite de carnet sanitario para inspectores
     Route::get('estado_carnet/{per_ci}','Persona_tramiteController@ver_estado_cs');
     //w ficha categoria sancion 
@@ -314,7 +314,7 @@ Route::group(['middleware' => 'cors'], function ()
 
     
 
-    Route::resource('pago_pendiente','PagoPendienteController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+    // Route::resource('pago_pendiente','PagoPendienteController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::get('ppportramite/{et_id}', 'PagoPendienteController@ppportramite');
     /*wendy   verifica si tiene carnet por ci*/
 /*wendy   verifica si tiene carnet por ci 27-12 2017*/
@@ -326,4 +326,11 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('verpagos/{et_id}', 'EmpresaTramiteController@verpagos');
     Route::post('crearestados/{et_id}','TramitecerEstadoController@crearestados');
     Route::resource('fichasancion', 'Ficha_categoria_sancionController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
+
+    /*pago jhon-----------------*/
+    Route::resource('pago_arancel','PagoArancelController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+    Route::resource('pago_sancion','PagoSancionController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+    Route::resource('orden_pago','OrdenPagoController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+    
+    Route::get('ordenpagoestado', 'OrdenPagoController@ordenpagoestado');
 });
