@@ -284,4 +284,9 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('tramitecerestado', 'TramitecerEstadoController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::get('lista_etapa_estado', 'EmpresaTramiteController@listpor_etapa_estado');
 
+    Route::resource('reportes', 'ReporteController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+
+    Route::get('c3_laboratorios','ReporteController@c3');
+
+
 });

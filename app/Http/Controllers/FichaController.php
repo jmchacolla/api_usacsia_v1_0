@@ -34,9 +34,7 @@ class FichaController extends Controller
             $ultima_asignacion=Ficha::select('ficha.con_id','ficha.fic_numero')
             ->where('ficha.fic_id',$ultima_ficha_asignada)
             ->first();
-
-            
-            $consultorio_asignado=Consultorio::select('con_id','con_cod')
+           $consultorio_asignado=Consultorio::select('con_id','con_cod')
             ->where('con_estado',true)
             ->where('con_id','>',$ultima_asignacion->con_id)
             ->first();
@@ -72,7 +70,7 @@ class FichaController extends Controller
                 ->where('con_estado',true)
                 ->orderby('con_id','asc')
                 ->first();
-                $numero_ficha=1;
+                $numero_ficha=1;  
         }
         
         $ficha = new Ficha();
