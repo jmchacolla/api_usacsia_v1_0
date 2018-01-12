@@ -12,6 +12,8 @@ use App\Models\Zona;
 use App\Models\Municipio;
 use App\Models\Provincia;
 use App\Models\Departamento;
+use App\Models\Propietario;
+use App\Models\PersonaNatural;
 class PersonaController extends Controller
 {
     //listar todas las personas
@@ -138,13 +140,23 @@ class PersonaController extends Controller
 
 
 
-        $persona= Persona::where('per_ci',$per_ci)/*->whereNull('paciente.deleted_at')*/->select('persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci','per_ci_expedido','per_fecha_nacimiento','per_email','per_numero_celular','per_genero','per_ocupacion','zon_id','per_avenida_calle', 'per_numero')->get()->first();
+        $persona= Persona::where('per_ci',$per_ci)/*->whereNull('paciente.deleted_at')*/->select('persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci','per_ci_expedido','per_fecha_nacimiento','per_email','per_numero_celular','per_genero','per_ocupacion','zon_id','per_avenida_calle', 'per_numero','persona.per_id as pro_id')->get()->first();
         if ($persona) {
             $imagen = Imagen::where('per_id', $persona->per_id)->get()->first();
             $zona= Zona::find($persona->zon_id);
             $municipio=Municipio::find($zona->mun_id);
             $provincia = Provincia::find($municipio->pro_id);
             $departamento = Departamento::find($provincia->dep_id);
+
+            $es_propietario=PersonaNatural::all()
+            ->where('per_id',$persona->per_id)
+            ->first();
+            if($es_propietario){
+                $persona->pro_id=$es_propietario->pro_id;
+            }
+            else{
+                $persona->pro_id=null;
+            }
         }
         else
         {
