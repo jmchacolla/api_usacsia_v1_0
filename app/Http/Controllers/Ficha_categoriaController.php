@@ -45,7 +45,7 @@ class Ficha_categoriaController extends Controller
         }
   
      
-        return response()->json(['status'=>'ok',"msg" => "exito", "establecimiento" => $rubroempresa], 200);
+        return response()->json(['status'=>'ok',"msg" => "exito", "establecimiento"], 200);
     }
     public function index(){
     	$ficha_categoria = Ficha_categoria::all();

@@ -4,7 +4,10 @@ namespace App\Models;
 use Carbon;
 
 use Illuminate\Database\Eloquent\Model;
+<<<<<<< HEAD
 /*use Carbon;*/
+=======
+>>>>>>> 7ecd8011e2db74455a4a413e4fbcac8304088945
 
 /**
  * @property int $per_id
