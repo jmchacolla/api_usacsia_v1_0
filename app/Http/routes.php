@@ -65,7 +65,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('prueba_par','Prueba_parController', ['only'=>['store','update','destroy']]);
     Route::get('parasitosprueba/{pl_id}','Prueba_parController@parasitosprueba');
     Route::get('parasitos_no_prueba/{pl_id}','Prueba_parController@parasitos_no_prueba');
-    Route::resource('documento_tramite','DocumentoTramiteController',['only'=>['index','store']]);
+    Route::resource('documento_tramite','DocumentoTramiteController',['only'=>['index','store','destroy']]);
     
     Route::post('update_lista_documentotramite','DocumentoTramiteController@update_lista_documentotramite');
 
@@ -323,6 +323,9 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('pnatural', 'PersonaNaturalController',['only'=>['store','show']]);
     Route::get('pro_id_pjuridica_pnatural/{pro_id}', 'PersonaNaturalController@pro_id_pjuridica_pnatural');
     Route::resource('documento','DocumentoController',['only'=>['index','store','show']]);
+    Route::get('doc_no_registrados/{et_id}','DocumentoController@doc_no_registrados');
+    Route::get('doc_registrados/{et_id}','DocumentoController@doc_registrados');
+
     Route::post('update_lista_consultorios','ConsultorioController@update_lista_consultorios');
 
     
