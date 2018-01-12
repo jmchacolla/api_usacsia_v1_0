@@ -142,7 +142,11 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('municipio/{pro_id}','MunicipioController@municipio_provincia');
     //listar zona por municipio
     Route::get('zona/{mun_id}', 'ZonaController@index');
-    Route::resource('zonass','ZonaController',['only' => ['index', 'store', 'update', 'show','destroy']]);
+    //w zonas 12-1-2018
+    Route::resource('zonass','ZonaController',['only' => ['store', 'update', 'show','destroy']]);
+    //listar zona por municipio
+    /*Route::post('createzon', 'ZonaController@crearz');
+    Route::get('listazon', 'ZonaController@lista');*/
 
     //listar funcionarios por cargo 
     Route::get('funcionario_cargo', 'FuncionarioController@listaporcargo');
@@ -278,7 +282,9 @@ Route::group(['middleware' => 'cors'], function ()
     //ver ficha ultima ficha ins por et_id
     Route::get('buscarfi/{et_id}', 'Ficha_inspeccionController@ver');
     // w ver todas las ficha ins por et_id9-1-2018
-    Route::get('ver_fichas/{et_id}', 'Ficha_inspeccionController@verfichas');
+    Route::get('ver_fichas/{et_id}', 'Ficha_inspeccionController@verfichasN');
+    // w ver todas las ficha ins por et_id 12-1-2018
+    Route::get('ver_fichasJ/{et_id}', 'Ficha_inspeccionController@verfichasJ');
     //ver ficha ins por et_id
 /*    Route::get('vera/{et_id}', 'TramitecerEstadoController@ver');*/
     //w permite cambiar el estado de una etapa seleccionada 5-1-2018  //PENDIENTE
@@ -287,7 +293,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::put('celulr/{et_id}/{eta_id}','TramitecerEstadoController@prueba');
     //w permite ver el estado de un tramite segun etapa 5-1-2018  //PENDIENTE
     Route::get('verestados/{et_id}/{eta_id}','TramitecerEstadoController@verestados');
-    //w permite ver el estado de tramite de carnet sanitario para inspectores
+    //w permite ver el estado de tramite de carnet sanitario para inspectores --no se usa este servicio 12-1-2018
     Route::get('estado_carnet/{per_ci}','Persona_tramiteController@ver_estado_cs');
     //w ficha categoria sancion 
     Route::resource('ficha_cat_san','Ficha_categoria_sancionController',['only' => ['store', 'update', 'destroy', 'show','index']]);
@@ -295,6 +301,18 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('ficha_cat_ver/{fc_id}','Ficha_categoria_sancionController@ver');
     //w permite ver el estado de tramite de carnet sanitario para inspectores
     Route::get('buscarfc/{fc_id}','Ficha_categoria_sancionController@buscar');
+
+
+
+
+
+
+
+
+
+
+
+
     
      /*jhon----operacines con receta*/
      Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
