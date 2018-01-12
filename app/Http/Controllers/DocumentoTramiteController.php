@@ -97,4 +97,18 @@ class DocumentoTramiteController extends Controller
             return response()->json(['status'=>'ok',"mensaje"=>"sin editar"], 200);
         }
     }
+
+    public function destroy($dt_id)
+    {
+        $documento_tramite = DocumentoTramite::find($dt_id);
+        if (!$documento_tramite)
+        {
+            return response()->json(["mensaje"=>"no se encuentra un registro con ese código"]);
+        }
+        $documento_tramite->delete();
+        return response()->json(['status'=>'ok','mensaje'=>'Documento borrada'],200); 
+    }
+
+
+
 }
