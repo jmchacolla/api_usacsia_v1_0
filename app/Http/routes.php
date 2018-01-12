@@ -278,7 +278,9 @@ Route::group(['middleware' => 'cors'], function ()
     //ver ficha ultima ficha ins por et_id
     Route::get('buscarfi/{et_id}', 'Ficha_inspeccionController@ver');
     // w ver todas las ficha ins por et_id9-1-2018
-    Route::get('ver_fichas/{et_id}', 'Ficha_inspeccionController@verfichas');
+    Route::get('ver_fichas/{et_id}', 'Ficha_inspeccionController@verfichasN');
+    // w ver todas las ficha ins por et_id 12-1-2018
+    Route::get('ver_fichasJ/{et_id}', 'Ficha_inspeccionController@verfichasJ');
     //ver ficha ins por et_id
 /*    Route::get('vera/{et_id}', 'TramitecerEstadoController@ver');*/
     //w permite cambiar el estado de una etapa seleccionada 5-1-2018  //PENDIENTE
