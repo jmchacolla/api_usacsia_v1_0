@@ -8,6 +8,7 @@ use App\User;
 use Hash;
 use Validator;
 use App\Models\Persona;
+use App\Models\EstablecimientoSolicitante;
 use App\Models\Funcionario;
 use App\Models\Rol;
 
@@ -50,13 +51,15 @@ class UserController extends Controller
             $usuario->password=Hash::make($persona->per_ci);
             $usuario->save();
         }
-     /*   if($request->usu_tipo=='E')
+        if($request->usu_tipo=='E')
         {
             $establecimiento=EstablecimientoSolicitante::find($request->usu_identificador);
             $usuario->usu_nick=$establecimiento->ess_razon_social;
-            $usuario->password=Hash::make($establecimiento->per_ci);
+            $cadena = str_replace(' ', '', $establecimiento->ess_razon_social);
+           
+            $usuario->password=Hash::make($cadena);
             $usuario->save();
-        }*/
+        }
 
     return response()->json(['status'=>'ok',"msg"=>"exito",'usuario'=>$usuario], 200);
 

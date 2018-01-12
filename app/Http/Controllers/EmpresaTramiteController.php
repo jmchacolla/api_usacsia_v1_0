@@ -189,7 +189,7 @@ class EmpresaTramiteController extends Controller
             }
         return response()->json(['status'=>'ok',"mensaje"=>"lista",'empresa_tramite'=>$empresa_tramite], 200);
     }
-
+//etapa 3 = ya pagaron arancel
     public function listar_cer_ju()
     {
         $empresa_tramite=EmpresaTramite::where('tra_id',2)

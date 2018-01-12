@@ -155,6 +155,7 @@ class EstablecimientoSolicitanteController extends Controller
         $municipio=Municipio::find($zona->mun_id);
         $provincia=Provincia::find($municipio->mun_id);
         $departamento=Departamento::find($provincia->dep_id);
+        $imagen=ImagenEstablecimiento::where('ess_id',$ess_id)->first();
         if (!$empresa) {
             $resultado=compact('est_sol', 'zona', 'municipio', 'provincia', 'departamento');
             return response()->json(['status'=>'ok',"msg" => "exito",'establecimiento'=>$resultado],200);
@@ -162,7 +163,7 @@ class EstablecimientoSolicitanteController extends Controller
 
         // $empresa=Empresa::
 
-        $resultado=compact('est_sol', 'empresa','propietario', 'zona', 'municipio', 'provincia', 'departamento');
+        $resultado=compact('est_sol', 'empresa','propietario', 'zona', 'municipio', 'provincia', 'departamento','imagen');
         return response()->json(['status'=>'ok',"msg" => "exito",'establecimiento'=>$resultado],200);
     }
 }
