@@ -348,7 +348,7 @@ Route::group(['middleware' => 'cors'], function ()
 
 
     Route::get('verpagos/{et_id}', 'EmpresaTramiteController@verpagos');
-    Route::post('crearestados/{et_id}','TramitecerEstadoController@crearestados');
+    Route::post('crearestados','TramitecerEstadoController@crearestados');
     Route::resource('fichasancion', 'Ficha_categoria_sancionController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
 
     /*pago jhon-----------------*/
