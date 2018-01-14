@@ -77,7 +77,7 @@ class TramitecerEstadoController extends Controller
         //$tramiteceresatdo->et_id=$request->et_id;/*no se debe modificar*/
         return response()->json(['status'=>'ok',"msg"=>"TramitecerEstado","tramitecerestado"=>$tramitecerestado], 200);
     }
-    public function pruebaver($et_id,$eta_id)
+    /*public function pruebaver($et_id,$eta_id)
     {
        $tramitecerestado=TramitecerEstado::where('et_id',$et_id)->where('eta_id',$eta_id)->first();
         if (!$tramitecerestado) {
@@ -85,7 +85,7 @@ class TramitecerEstadoController extends Controller
         }
       
         return response()->json(['status'=>'ok',"msg"=>"TramitecerEstado","tramitecerestado"=>$tramitecerestado], 200);
-    }
+    }*/
     
     public function editarI(Request $request, $et_id)
     {

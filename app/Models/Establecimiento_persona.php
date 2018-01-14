@@ -58,4 +58,22 @@ class Establecimiento_persona extends Model
     {
         return $this->belongsTo('App\Persona', 'per_id', 'per_id');
     }
+
+
+    // public function scopeContarEstados($query,$ess_id,$personas_x_establecimiento)
+    // {
+    //     foreach ($personas_x_establecimiento as $value){
+    //             if($value->){
+    //                     $tramite_estado->te_estado='OBSERVADO';
+    //             }
+    //         }
+        
+    //     $iniciados=Establecimiento_persona::select()
+    //     if($edad=="")    
+    //         return -1;
+    //     return $edad;
+    // }
+
+
+
 }

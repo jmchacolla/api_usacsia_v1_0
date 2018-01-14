@@ -18,6 +18,8 @@ use App\Models\Provincia;
 use App\Models\Departamento;
 use App\Models\Empresa;
 use App\Models\PagoPendiente;
+use App\Models\ImagenEstablecimiento;
+
 
 
 
@@ -52,6 +54,13 @@ class EstablecimientoSolicitanteController extends Controller
         $est_sol->ess_longitud=$requeste_object->ess_longitud;//guarda vacio si no se envia nada
         $est_sol->ess_altitud=$requeste_object->ess_altitud;//guarda vacio si no se envia nada
         $est_sol->save();
+
+        $imagen_establecimiento=new ImagenEstablecimiento();
+        $imagen_establecimiento->ess_id=$est_sol->ess_id;
+        $imagen_establecimiento->ima_nombre=$requeste_object->ie_nombre;
+        $imagen_establecimiento->ie_enlace=$requeste_object->ie_enlace;
+        $imagen_establecimiento->save();
+
 
         $empresa = new Empresa();
         $empresa->ess_id=$est_sol->ess_id;
@@ -146,6 +155,7 @@ class EstablecimientoSolicitanteController extends Controller
         $municipio=Municipio::find($zona->mun_id);
         $provincia=Provincia::find($municipio->mun_id);
         $departamento=Departamento::find($provincia->dep_id);
+        $imagen=ImagenEstablecimiento::where('ess_id',$ess_id)->first();
         if (!$empresa) {
             $resultado=compact('est_sol', 'zona', 'municipio', 'provincia', 'departamento');
             return response()->json(['status'=>'ok',"msg" => "exito",'establecimiento'=>$resultado],200);
@@ -153,7 +163,7 @@ class EstablecimientoSolicitanteController extends Controller
 
         // $empresa=Empresa::
 
-        $resultado=compact('est_sol', 'empresa','propietario', 'zona', 'municipio', 'provincia', 'departamento');
+        $resultado=compact('est_sol', 'empresa','propietario', 'zona', 'municipio', 'provincia', 'departamento','imagen');
         return response()->json(['status'=>'ok',"msg" => "exito",'establecimiento'=>$resultado],200);
     }
 }

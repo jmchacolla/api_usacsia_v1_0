@@ -8,6 +8,7 @@ use App\User;
 use Hash;
 use Validator;
 use App\Models\Persona;
+use App\Models\EstablecimientoSolicitante;
 use App\Models\Funcionario;
 use App\Models\Rol;
 
@@ -36,21 +37,30 @@ class UserController extends Controller
     
     public function store(Request $request)
     {
-    $usuario= new User();
-    $usuario->usu_identificador=$request->usu_identificador;
-    $usuario->usu_tipo=$request->usu_tipo;
-    $usuario->usu_clave_publica='NO DEFINIDO';
-    $usuario->usu_inicio_vigencia=Carbon::now();
-    $usuario->usu_fin_vigencia=Carbon::now()->addYears(2);
-    $usuario->rol_id=$request->rol_id;
-    
-    if($request->usu_tipo=='P')
-    {
-    $persona=Persona::find($request->usu_identificador);
-    $usuario->usu_nick=$persona->per_ci;
-    $usuario->password=Hash::make($persona->per_ci);
-    $usuario->save();
-    }
+        $usuario= new User();
+        $usuario->usu_identificador=$request->usu_identificador;
+        $usuario->usu_tipo=$request->usu_tipo;
+        $usuario->usu_clave_publica='NO DEFINIDO';
+        $usuario->usu_inicio_vigencia=Carbon::now();
+        $usuario->usu_fin_vigencia=Carbon::now()->addYears(2);
+        $usuario->rol_id=$request->rol_id;
+        if($request->usu_tipo=='P')
+        {
+            $persona=Persona::find($request->usu_identificador);
+            $usuario->usu_nick=$persona->per_ci;
+            $usuario->password=Hash::make($persona->per_ci);
+            $usuario->save();
+        }
+        if($request->usu_tipo=='E')
+        {
+            $establecimiento=EstablecimientoSolicitante::find($request->usu_identificador);
+            $usuario->usu_nick=$establecimiento->ess_razon_social;
+            $cadena = str_replace(' ', '', $establecimiento->ess_razon_social);
+           
+            $usuario->password=Hash::make($cadena);
+            $usuario->save();
+        }
+
     return response()->json(['status'=>'ok',"msg"=>"exito",'usuario'=>$usuario], 200);
 
     }

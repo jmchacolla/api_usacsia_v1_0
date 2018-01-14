@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Models\DocumentoTramite;
 use App\Models\EmpresaTramite;
+use App\Models\TramitecerEstado;
+
 
 
 class DocumentoTramiteController extends Controller
@@ -52,7 +54,9 @@ class DocumentoTramiteController extends Controller
 
     public function update_lista_documentotramite(Request $request)
     {// ACTUALIZA LISTA DE DOCUMENTOS TRAMITE CON SSUS OBSERVACIONES
+        
         /*convirtiendo $request vector a object*/
+
         if(count($request->observaciones)){
             $requesto_array=$request->observaciones;
             for ($i=0; $i < count($requesto_array); $i++) {
@@ -60,16 +64,51 @@ class DocumentoTramiteController extends Controller
                 $velement_object=json_decode($velement_string);
                 $documentotramite = DocumentoTramite::where('dt_id',$velement_object->dt_id)->first();
                 if($documentotramite){
-                    $documentotramite->dt_observado=true;
+                    $documentotramite->dt_observado=$velement_object->dt_observado;
+                    if($documentotramite->dt_observado)
                     $documentotramite->dt_fecha_revision=date('Y-m-d');
                     $documentotramite->dt_observacion=$velement_object->dt_observacion;
                     $documentotramite->save();
                 }
             }
+            $requestodo_array=$request->todo;
+            $requestodo_string=json_encode($requestodo_array);
+            $requestodo_object=json_decode($requestodo_string);
+            $tramite_estado=TramitecerEstado::find($requestodo_object->et_id);
+            
+            $traest=DocumentoTramite::select('dt_observado')
+            ->where('documento_tramite.et_id',$requestodo_object->et_id)
+            ->get();
 
-        return response()->json(['status'=>'ok',"mensaje"=>"editado exitosamente"], 200);
+            foreach ($traest  as $value) {
+                if($value->dt_observado){
+                        $tramite_estado->te_estado='OBSERVADO';
+                }else{
+                        $tramite_estado->te_estado='SIN OBSERVACIÓN';
+                }
+            }
+           
+            $tramite_estado->te_observacion=$documentotramite->dt_observacion;
+            $tramite_estado->fun_id=$requestodo_object->fun_id;
+            $tramite_estado->save();
+        return response()->json(['status'=>'ok',"mensaje"=>"editado exitosamente",'tramiteestado'=>$tramite_estado,'los estados'=>$traest,'existe'=>in_array(true, (array)$traest,true)], 200);
         }else{
+
             return response()->json(['status'=>'ok',"mensaje"=>"sin editar"], 200);
         }
     }
+
+    public function destroy($dt_id)
+    {
+        $documento_tramite = DocumentoTramite::find($dt_id);
+        if (!$documento_tramite)
+        {
+            return response()->json(["mensaje"=>"no se encuentra un registro con ese código"]);
+        }
+        $documento_tramite->delete();
+        return response()->json(['status'=>'ok','mensaje'=>'Documento borrada'],200); 
+    }
+
+
+
 }

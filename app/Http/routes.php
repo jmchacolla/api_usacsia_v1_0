@@ -65,9 +65,9 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('prueba_par','Prueba_parController', ['only'=>['store','update','destroy']]);
     Route::get('parasitosprueba/{pl_id}','Prueba_parController@parasitosprueba');
     Route::get('parasitos_no_prueba/{pl_id}','Prueba_parController@parasitos_no_prueba');
-    Route::resource('documento_tramite','DocumentoTramiteController',['only'=>['index','store']]);
+    Route::resource('documento_tramite','DocumentoTramiteController',['only'=>['index','store','destroy']]);
     
-    Route::resource('update_lista_documentotramite','DocumentoTramiteController@update_lista_documentotramite');
+    Route::post('update_lista_documentotramite','DocumentoTramiteController@update_lista_documentotramite');
 
     Route::get('lista_documentos_x_tramite/{et_id}','DocumentoTramiteController@lista_documentos_x_tramite');
     Route::get('personas_x_establecimiento/{ess_id}','EstablecimientoPersonaController@index');
@@ -278,7 +278,9 @@ Route::group(['middleware' => 'cors'], function ()
     //ver ficha ultima ficha ins por et_id
     Route::get('buscarfi/{et_id}', 'Ficha_inspeccionController@ver');
     // w ver todas las ficha ins por et_id9-1-2018
-    Route::get('ver_fichas/{et_id}', 'Ficha_inspeccionController@verfichas');
+    Route::get('ver_fichas/{et_id}', 'Ficha_inspeccionController@verfichasN');
+    // w ver todas las ficha ins por et_id 12-1-2018
+    Route::get('ver_fichasJ/{et_id}', 'Ficha_inspeccionController@verfichasJ');
     //ver ficha ins por et_id
 /*    Route::get('vera/{et_id}', 'TramitecerEstadoController@ver');*/
     //w permite cambiar el estado de una etapa seleccionada 5-1-2018  //PENDIENTE
@@ -321,6 +323,9 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('pnatural', 'PersonaNaturalController',['only'=>['store','show']]);
     Route::get('pro_id_pjuridica_pnatural/{pro_id}', 'PersonaNaturalController@pro_id_pjuridica_pnatural');
     Route::resource('documento','DocumentoController',['only'=>['index','store','show']]);
+    Route::get('doc_no_registrados/{et_id}','DocumentoController@doc_no_registrados');
+    Route::get('doc_registrados/{et_id}','DocumentoController@doc_registrados');
+
     Route::post('update_lista_consultorios','ConsultorioController@update_lista_consultorios');
 
     
@@ -334,6 +339,14 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('etapa', 'EtapaController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::resource('tramitecerestado', 'TramitecerEstadoController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::get('lista_etapa_estado', 'EmpresaTramiteController@listpor_etapa_estado');
+
+
+    Route::resource('reportes', 'ReporteController',['only'=>['store','update', 'destroy', 'show', 'index']]);
+
+    Route::get('c3_laboratorios','ReporteController@c3');
+
+
+
     Route::get('verpagos/{et_id}', 'EmpresaTramiteController@verpagos');
     Route::post('crearestados/{et_id}','TramitecerEstadoController@crearestados');
     Route::resource('fichasancion', 'Ficha_categoria_sancionController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
@@ -344,4 +357,5 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('orden_pago','OrdenPagoController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::get('verordenpago/{op_id}', 'OrdenPagoController@verordenpago');
     Route::get('ordenpagoestado', 'OrdenPagoController@ordenpagoestado');
+
 });
