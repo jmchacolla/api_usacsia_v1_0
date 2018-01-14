@@ -286,7 +286,7 @@ Route::group(['middleware' => 'cors'], function ()
     //w permite cambiar el estado de una etapa seleccionada 5-1-2018  //PENDIENTE
     Route::put('wen2/{et_id}/{eta_id}','TramitecerEstadoController@prueba');
     //w permite ver editar la tabla tramitecer_Es //borrar 8-1-2018
-    Route::put('celulr/{et_id}/{eta_id}','TramitecerEstadoController@prueba');
+   /* Route::put('celulr/{et_id}/{eta_id}','TramitecerEstadoController@prueba');*/
     //w permite ver el estado de un tramite segun etapa 5-1-2018  //PENDIENTE
     Route::get('verestados/{et_id}/{eta_id}','TramitecerEstadoController@verestados');
     //w permite ver el estado de tramite de carnet sanitario para inspectores
@@ -295,9 +295,18 @@ Route::group(['middleware' => 'cors'], function ()
     Route::resource('ficha_cat_san','Ficha_categoria_sancionController',['only' => ['store', 'update', 'destroy', 'show','index']]);
     //w permite ver el estado de tramite de carnet sanitario para inspectores
     Route::get('ficha_cat_ver/{fc_id}','Ficha_categoria_sancionController@ver');
-    //w permite ver el estado de tramite de carnet sanitario para inspectores
+    //w 
     Route::get('buscarfc/{fc_id}','Ficha_categoria_sancionController@buscar');
-    
+      //w permite ver el estado de tramite de carnet sanitario para inspectores
+    Route::get('verpropietario/{ess_id}','EmpresaController@propietario');
+    //w crear sancion a todas las categorias 13-1-2018
+    Route::post('crearsan','Ficha_categoria_sancionController@crea');
+      //w lista de sanciones segun fi_id 14-1-2018
+    Route::get('versancion/{fi_id}','Ficha_categoria_sancionController@versancion');
+  
+
+
+
      /*jhon----operacines con receta*/
      Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
      
