@@ -26,6 +26,7 @@ use App\Models\Certificado_sanitario;
 use App\Models\Ficha_inspeccion;
 use App\Models\Ficha_categoria;
 use App\Models\FichaCategoriaSancion;
+use App\Models\ImagenEstablecimiento;
 
 
 
@@ -97,6 +98,7 @@ class EmpresaTramiteController extends Controller
         $empresa=Empresa::where('ess_id', $ess_id)->first();
         $zona=Zona::find($establecimiento_sol->zon_id);
         $municipio=Municipio::find($zona->mun_id);
+        $imagen=ImagenEstablecimiento::where('ess_id', $ess_id)->first();
 
         $propietario=EmpresaPropietario::where('emp_id',$empresa->emp_id)
         ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
@@ -110,7 +112,7 @@ class EmpresaTramiteController extends Controller
         }
         
     
-        $result=compact('empresa_tramite','establecimiento_sol','empresa','propietario', 'zona', 'municipio');
+        $result=compact('empresa_tramite','establecimiento_sol','empresa','propietario', 'zona', 'municipio','imagen');
 
         return response()->json(['status'=>'ok',"mensaje"=>"creado exitosamente",/*"empt"=>$empt,"est"=>$est,"empresa"=>$empresa,"est_pers"=>$est_per*/'establecimiento'=>$result], 200);
 
@@ -160,7 +162,7 @@ class EmpresaTramiteController extends Controller
             ->join('establecimiento_solicitante', 'establecimiento_solicitante.ess_id', '=', 'empresa.ess_id')
             ->join('empresa_tramite', 'empresa_tramite.ess_id', '=', 'establecimiento_solicitante.ess_id')
             ->where('p_juridica.pjur_nit', $parametro)
-            ->get();
+            ->get()/*->first()*/;
             if (!$persona) {
                 return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
             }

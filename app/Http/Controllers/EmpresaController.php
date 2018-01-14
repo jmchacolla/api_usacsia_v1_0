@@ -38,4 +38,25 @@ class EmpresaController extends Controller
         return response()->json(["msg" => "exito", "empresa" => $resultado], 200);
 
     }
+    public function propietario($ess_id){
+        $propietario=Empresa::where('ess_id',$ess_id)
+        ->join('empresa_propietario','empresa_propietario.emp_id','=','empresa.emp_id')
+        ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
+        ->join('p_natural','p_natural.pro_id','=','propietario.pro_id')
+        ->join('persona','persona.per_id','=','p_natural.per_id')
+        ->select('persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci','propietario.pro_id','pro_tipo')->first();
+
+
+        if ($propietario==null) {
+            $propietario=Empresa::where('ess_id',$ess_id)
+            ->join('empresa_propietario','empresa_propietario.emp_id','=','empresa.emp_id')
+            ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
+            ->join('p_juridica','p_juridica.pro_id','=','propietario.pro_id')
+            ->select('p_juridica.pjur_id','pjur_razon_social','pjur_nit','propietario.pro_id','pro_tipo')
+            ->first();
+        }
+       
+        return response()->json(['status'=>'ok',"mensaje"=>"exito",'propietario'=>$propietario], 200);
+
+    }
 }
