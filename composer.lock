@@ -119,13 +119,11 @@
                 "class",
                 "preload"
             ],
-<<<<<<< HEAD
-            "time": "2017-12-10 11:40:39"
-=======
 
             "time": "2017-12-10 11:40:39"
 
->>>>>>> 0a7cc718b80087e3b2b83bc8c048bd827a25fe21
+
+
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -706,8 +704,6 @@
                 "schedule"
             ],
             "time": "2017-01-23 04:29:33"
-<<<<<<< HEAD
-=======
         },
         {
             "name": "namshi/jose",
@@ -771,7 +767,6 @@
                 "token"
             ],
             "time": "2016-12-05 07:27:31"
->>>>>>> 0a7cc718b80087e3b2b83bc8c048bd827a25fe21
         },
         {
             "name": "namshi/jose",
@@ -1339,13 +1334,9 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-<<<<<<< HEAD
-            "time": "2017-12-14 19:40:10"
-=======
 
             "time": "2017-12-14 19:40:10"
 
->>>>>>> 0a7cc718b80087e3b2b83bc8c048bd827a25fe21
         },
         {
             "name": "symfony/finder",
@@ -1948,8 +1939,7 @@
                 "dump"
             ],
             "time": "2016-07-26 08:03:56"
-<<<<<<< HEAD
-=======
+
         },
         {
             "name": "tymon/jwt-auth",
@@ -2013,7 +2003,6 @@
                 "tymon"
             ],
             "time": "2017-06-07 21:32:02"
->>>>>>> 0a7cc718b80087e3b2b83bc8c048bd827a25fe21
         },
         {
             "name": "tymon/jwt-auth",
@@ -2903,13 +2892,9 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-<<<<<<< HEAD
+
             "time": "2017-11-10 14:09:06"
-=======
 
-            "time": "2017-11-10T14:09:06+00:00"
-
->>>>>>> 0a7cc718b80087e3b2b83bc8c048bd827a25fe21
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -2956,12 +2941,9 @@
                     "email": "me@mikevanriel.com"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2017-07-14 14:27:02"
-=======
-            "time": "2017-07-14T14:27:02+00:00"
 
->>>>>>> 0a7cc718b80087e3b2b83bc8c048bd827a25fe21
+            "time": "2017-07-14 14:27:02"
+
         },
         {
             "name": "phpspec/prophecy",
