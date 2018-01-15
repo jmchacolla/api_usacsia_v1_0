@@ -82,9 +82,9 @@ class Ficha_categoria_sancionController extends Controller
         foreach ($fichasancion as $value) {
             $value->fcs_total=$value->fcs_porcentaje*$value->cat_monto;
         }
-        if (sizeof($fichasancion)<=0) {
-            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
-        }
+        // if (sizeof($fichasancion)<=0) {
+        //     return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.']), ],404);
+        // }
         return response()->json(['status'=>'ok',"msg" => "exito", "fichasancion" => $fichasancion], 200);
     }
     public function versancion($fi_id)
@@ -95,7 +95,7 @@ class Ficha_categoria_sancionController extends Controller
         ->get();
 
         if (count($fichasancion)==0) {
-            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.']), "fichasancion"=>$fichasancion],404);
         }
         return response()->json(['status'=>'ok',"msg" => "exito", "fichasancion" => $fichasancion], 200);
     }
