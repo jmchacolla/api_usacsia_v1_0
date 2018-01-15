@@ -84,7 +84,7 @@ class DocumentoTramiteController extends Controller
                 if($value->dt_observado){
                         $tramite_estado->te_estado='OBSERVADO';
                 }else{
-                        $tramite_estado->te_estado='SIN OBSERVACIÓN';
+                        $tramite_estado->te_estado='APROBADO';
                 }
             }
            
@@ -106,7 +106,7 @@ class DocumentoTramiteController extends Controller
             return response()->json(["mensaje"=>"no se encuentra un registro con ese código"]);
         }
         $documento_tramite->delete();
-        return response()->json(['status'=>'ok','mensaje'=>'Documento borrada'],200); 
+        return response()->json(['status'=>'ok','mensaje'=>'Documento borrado'],200); 
     }
 
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 use App\Http\Requests;
 use App\Models\Etapa;
@@ -126,5 +127,35 @@ class TramitecerEstadoController extends Controller
         $tramiteestado=TramitecerEstado::where('et_id', $et_id)->get();
         return response()->json(['status'=>'ok',"msg"=>"TramitecerEstado","tramiteestado"=>$tramiteestado], 200);
     }
+
+    public function estado_empleados($et_id, Request $request)
+    {
+        $tramiteestado=TramitecerEstado::select('te_id','et_id','te_estado','te_observacion','etapa.eta_id','eta_nombre')
+        ->join('etapa','etapa.eta_id','=','tramitecer_estado.eta_id')
+        ->where('et_id', $et_id)
+        ->where('eta_nombre','like','%EMPLEADO%')
+        ->first();
+        $tramiteestado->te_estado=Str::upper($request->te_estado);
+        $tramiteestado->te_observacion=Str::upper($request->te_observacion);
+        if($tramiteestado->te_observacion=='')
+        {
+             $tramiteestado->te_observacion='SIN OBSERVACIÓN';
+        }   
+            
+        $tramiteestado->save();
+
+        return response()->json(['status'=>'ok',"msg"=>"TramitecerEstado","tramitestado"=>$tramiteestado], 200);
+    }
+
+    public function ver_estado_empleados($et_id)
+    {
+        $tramiteestado=TramitecerEstado::select('te_id','et_id','te_estado','te_observacion','etapa.eta_id','eta_nombre','tramitecer_estado.updated_at as updated')
+        ->join('etapa','etapa.eta_id','=','tramitecer_estado.eta_id')
+        ->where('et_id', $et_id)
+        ->where('eta_nombre','like','%EMPLEADO%')
+        ->first();
+        return response()->json(['status'=>'ok',"msg"=>"TramitecerEstado","tramitestado"=>$tramiteestado], 200);
+    }
+    
 
 }

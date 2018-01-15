@@ -101,6 +101,9 @@ Route::group(['middleware' => 'cors'], function ()
     //vero -- buscar tramite de la personapara ver si ya tiene una ficha el dia de hoy
     Route::get('buscar_persona_tramite_ficha/{per_ci}','Persona_tramiteController@buscar_persona_tramite_ficha');
     Route::get('estado_tramite_persona/{per_ci}','Persona_tramiteController@estado_tramite_persona');
+    //vero -- verifica si existe una persona en un establecimiento.
+    Route::get('establecimiento_persona/{per_id}/{ess_id}','EstablecimientoPersonaController@establecimiento_persona');
+
 
     //vero -- listar todos los tramites de 1 carnet sanitario o 2 certificado sanitario
     Route::get('tramites_x_tipo_tramite/{tra_id}','Persona_tramiteController@listar_x_tipo_tramite');
@@ -349,6 +352,10 @@ Route::group(['middleware' => 'cors'], function ()
 
     Route::get('verpagos/{et_id}', 'EmpresaTramiteController@verpagos');
     Route::post('crearestados/{et_id}','TramitecerEstadoController@crearestados');
+    
+    Route::put('estado_empleados/{et_id}','TramitecerEstadoController@estado_empleados');
+    Route::get('ver_estado_empleados/{et_id}','TramitecerEstadoController@ver_estado_empleados');
+
     Route::resource('fichasancion', 'Ficha_categoria_sancionController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
 
     /*pago jhon-----------------*/
