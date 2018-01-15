@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Models\Propietario;
@@ -18,7 +19,7 @@ class PersonaJuridicaController extends Controller
 
     		$pjur=new PersonaJuridica();
     		$pjur->pro_id=$propietario->pro_id;
-    		$pjur->pjur_razon_social=$request->pjur_razon_social;
+    		$pjur->pjur_razon_social=Str::upper($request->pjur_razon_social);
     		$pjur->pjur_nit=$request->pjur_nit;
     		$pjur->save();
 

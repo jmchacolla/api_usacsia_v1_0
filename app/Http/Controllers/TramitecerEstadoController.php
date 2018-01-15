@@ -115,16 +115,16 @@ class TramitecerEstadoController extends Controller
         return response()->json(['status'=>'ok',"msg"=>"TramitecerEstado","tramitecerestado"=>$tramitecerestado], 200);
     }
 
-    public function crearestados($et_id)
+    public function crearestados(Request $request)
     {
         $estapas=Etapa::all();
         foreach ($estapas as $etapa) {
             $tramitecerestado=new TramitecerEstado();
-            $tramitecerestado->et_id=$et_id;
+            $tramitecerestado->et_id=$request->et_id;
             $tramitecerestado->eta_id=$etapa->eta_id;
             $tramitecerestado->save();
         }
-        $tramiteestado=TramitecerEstado::where('et_id', $et_id)->get();
+        $tramiteestado=TramitecerEstado::where('et_id', $request->et_id)->get();
         return response()->json(['status'=>'ok',"msg"=>"TramitecerEstado","tramiteestado"=>$tramiteestado], 200);
     }
 
