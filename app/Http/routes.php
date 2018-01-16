@@ -362,10 +362,10 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('verpagos/{et_id}', 'EmpresaTramiteController@verpagos');
 
     Route::post('crearestados/{et_id}','TramitecerEstadoController@crearestados');
-    
+    /*veroooo*/
     Route::put('estado_empleados/{et_id}','TramitecerEstadoController@estado_empleados');
     Route::get('ver_estado_empleados/{et_id}','TramitecerEstadoController@ver_estado_empleados');
-
+    /*verooo*/
     Route::post('crearestados','TramitecerEstadoController@crearestados');
     Route::resource('fichasancion', 'Ficha_categoria_sancionController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
 
