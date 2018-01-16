@@ -105,7 +105,7 @@ class Persona_tramiteController extends Controller
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra la persona_tramite con ese código.'])],404);
         }
         $tramite=Tramite::find($persona_tramite->tra_id);
-        $persona=Persona::all('per_id','per_ci','per_ci_expedido','per_numero_celular','per_email','per_nombres','per_apellido_primero','per_fecha_nacimiento','per_ci as per_edad','zon_id','per_genero')
+        $persona=Persona::all('per_id','per_ci','per_ci_expedido','per_numero_celular','per_email','per_nombres','per_apellido_primero','per_apellido_segundo','per_fecha_nacimiento','per_ci as per_edad','zon_id','per_genero')
         ->where('per_id',$persona_tramite->per_id)
         ->first();
         $persona->per_edad=Persona::edad($persona->per_fecha_nacimiento);
