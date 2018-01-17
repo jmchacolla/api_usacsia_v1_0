@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Models\Ficha_categoria_sancion;
+use App\Models\Ficha_categoria;
 use App\Models\Categoria;
 
 
@@ -13,10 +14,30 @@ class Ficha_categoria_sancionController extends Controller
 {
    public function index()
    {
-       # code...
+      #$ficha_cat_san=Ficha_categoria_sancion::
    }
+    public function crea(Request $request){
+        $fc=Ficha_categoria::where('fi_id',$request->fi_id)->get();
+        $cat_idd=$request->cat_id;
+        $bb=Categoria::where('cat_id',$cat_idd)->first();
+        $mont=$bb->cat_monto;
+        foreach ($fc as $value) {
+            
+            $ficha_categoria_sancion= new Ficha_categoria_sancion();
+            $ficha_categoria_sancion->fc_id = $value->fc_id;
+            $ficha_categoria_sancion->cat_id = $cat_idd;
+            $ficha_categoria_sancion->cat_monto = $mont;
+            $ficha_categoria_sancion->userid_at='2';
+            $ficha_categoria_sancion->save();
+        }
 
-   # crea una ficha_categoria_sancion
+
+        $res=compact('fc','cat_idd','ficha_categoria_sancion');
+
+        return response()->json(['status'=>'ok',"msg"=>"creado exitosamente","ficha_cat_san"=>$res], 200);
+  
+    }
+   # crea una ficha_categoria_sancion --ya no se usa 13-1-2018
    public function store(Request $request){
 
         $cat_idd=$request->cat_id;
@@ -61,9 +82,22 @@ class Ficha_categoria_sancionController extends Controller
         foreach ($fichasancion as $value) {
             $value->fcs_total=$value->fcs_porcentaje*$value->cat_monto;
         }
-        if (sizeof($fichasancion)<=0) {
-            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
+        // if (sizeof($fichasancion)<=0) {
+        //     return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.']), ],404);
+        // }
+        return response()->json(['status'=>'ok',"msg" => "exito", "fichasancion" => $fichasancion], 200);
+    }
+    public function versancion($fi_id)
+    {
+        $fichasancion=Ficha_categoria::where('ficha_categoria.fi_id',$fi_id)
+        ->join('ficha_categoria_sancion','ficha_categoria_sancion.fc_id','=','ficha_categoria.fc_id')
+        ->join('categoria','categoria.cat_id','=','ficha_categoria_sancion.cat_id')
+        ->get();
+
+        if (count($fichasancion)==0) {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.']), "fichasancion"=>$fichasancion],404);
         }
         return response()->json(['status'=>'ok',"msg" => "exito", "fichasancion" => $fichasancion], 200);
     }
+
 }

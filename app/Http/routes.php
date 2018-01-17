@@ -103,6 +103,9 @@
     //vero -- buscar tramite de la personapara ver si ya tiene una ficha el dia de hoy
     Route::get('buscar_persona_tramite_ficha/{per_ci}','Persona_tramiteController@buscar_persona_tramite_ficha');
     Route::get('estado_tramite_persona/{per_ci}','Persona_tramiteController@estado_tramite_persona');
+    //vero -- verifica si existe una persona en un establecimiento.
+    Route::get('establecimiento_persona/{per_id}/{ess_id}','EstablecimientoPersonaController@establecimiento_persona');
+
 
     //vero -- listar todos los tramites de 1 carnet sanitario o 2 certificado sanitario
     Route::get('tramites_x_tipo_tramite/{tra_id}','Persona_tramiteController@listar_x_tipo_tramite');
@@ -288,7 +291,7 @@
     //w permite cambiar el estado de una etapa seleccionada 5-1-2018  //PENDIENTE
     Route::put('wen2/{et_id}/{eta_id}','TramitecerEstadoController@prueba');
     //w permite ver editar la tabla tramitecer_Es //borrar 8-1-2018
-    Route::put('celulr/{et_id}/{eta_id}','TramitecerEstadoController@prueba');
+   /* Route::put('celulr/{et_id}/{eta_id}','TramitecerEstadoController@prueba');*/
     //w permite ver el estado de un tramite segun etapa 5-1-2018  //PENDIENTE
     Route::get('verestados/{et_id}/{eta_id}','TramitecerEstadoController@verestados');
     //w permite ver el estado de tramite de carnet sanitario para inspectores
@@ -297,9 +300,20 @@
     Route::resource('ficha_cat_san','Ficha_categoria_sancionController',['only' => ['store', 'update', 'destroy', 'show','index']]);
     //w permite ver el estado de tramite de carnet sanitario para inspectores
     Route::get('ficha_cat_ver/{fc_id}','Ficha_categoria_sancionController@ver');
-    //w permite ver el estado de tramite de carnet sanitario para inspectores
+    //w 
     Route::get('buscarfc/{fc_id}','Ficha_categoria_sancionController@buscar');
-    
+      //w permite ver el estado de tramite de carnet sanitario para inspectores
+    Route::get('verpropietario/{ess_id}','EmpresaController@propietario');
+    //w crear sancion a todas las categorias 13-1-2018
+    Route::post('crearsan','Ficha_categoria_sancionController@crea');
+      //w lista de sanciones segun fi_id 14-1-2018
+    Route::get('versancion/{fi_id}','Ficha_categoria_sancionController@versancion');
+    //w buscar usuario fi_id 14-1-2018
+    Route::get('user_buscar/{usu_identificador}','UserController@user_buscar');
+    //w listar pendientes por inspector fi_id 14-1-2018
+    Route::get('zonains_funcionario/{fun_id}','Zona_inspeccionController@zonains_funcionario');
+
+
      /*jhon----operacines con receta*/
      Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
      
@@ -350,7 +364,13 @@
 
 
     Route::get('verpagos/{et_id}', 'EmpresaTramiteController@verpagos');
-    Route::post('crearestados/{et_id}','TramitecerEstadoController@crearestados');
+
+    /*Route::post('crearestados/{et_id}','TramitecerEstadoController@crearestados');*/
+    /*veroooo*/
+    Route::put('estado_empleados/{et_id}','TramitecerEstadoController@estado_empleados');
+    Route::get('ver_estado_empleados/{et_id}','TramitecerEstadoController@ver_estado_empleados');
+    /*verooo*/
+    Route::post('crearestados','TramitecerEstadoController@crearestados');
     Route::resource('fichasancion', 'Ficha_categoria_sancionController', ['only'=>['store','update', 'destroy', 'show', 'index']]);
 
     /*pago jhon-----------------*/

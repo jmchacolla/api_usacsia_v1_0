@@ -150,7 +150,7 @@ return response()->json(['status'=>'ok','mensaje'=>'exito','ficha'=>$array],200)
     {
        $fecha=Carbon::now();
 
-        $laboratorio=Prueba_laboratorio::select('persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','prueba_laboratorio.pl_id','pl_estado','persona_tramite.pt_id','per_ci as responsable')->join('muestra','muestra.mue_id','=','prueba_laboratorio.mue_id')->join('persona_tramite','persona_tramite.pt_id','=','muestra.pt_id')->join('persona','persona.per_id','=','persona_tramite.per_id')->get();
+        $laboratorio=Prueba_laboratorio::select('persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','prueba_laboratorio.pl_id','pl_estado','persona_tramite.pt_id','per_ci as responsable','muestra.mue_id','mue_tipo')->join('muestra','muestra.mue_id','=','prueba_laboratorio.mue_id')->join('persona_tramite','persona_tramite.pt_id','=','muestra.pt_id')->join('persona','persona.per_id','=','persona_tramite.per_id')->get();
 
         foreach ($laboratorio as $laboratorios) {
 
