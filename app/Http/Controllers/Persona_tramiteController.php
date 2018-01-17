@@ -18,6 +18,7 @@ use App\Models\Ficha;
 use App\Models\Receta;
 use App\Models\Prueba_medica;
 use App\Models\Prueba_laboratorio;
+use App\Models\Establecimiento_persona;
 
 
 
@@ -282,21 +283,31 @@ class Persona_tramiteController extends Controller
     }
 
 
-    public function estado_tramite_persona($per_ci)
+    public function estado_tramite_persona($per_ci,$ess_id)
     {
        $persona=Persona::where('per_ci', $per_ci)->first();
        if (!$persona) {
            return response()->json(['errors'=>array(['code'=>404,'message'=>'Cedula de identidad no encontrada'])],404);
        }
-
        $pertramite=Persona_tramite::select('pt_estado_tramite','persona.per_id','per_ci','per_ci_expedido','per_nombres','per_apellido_primero','per_apellido_segundo')
        ->join('persona','persona.per_id','=','persona_tramite.per_id')
        ->where('persona_tramite.per_id',$persona->per_id)
        ->orderBy('persona_tramite.created_at', 'desc')
        ->first();
+
        if (!$pertramite){
-           return response()->json(['errors'=>array(['code'=>404,'message'=>'Sin tramite'])],404);
+            $personaestablecimiento = Establecimiento_persona::select('per_id')
+           ->where('establecimiento_persona.ess_id',$ess_id)
+           ->where('establecimiento_persona.per_id',$persona->per_id)
+           ->first();
+
+            if (!$personaestablecimiento)
+            {
+                return response()->json(['errors'=>array(['code'=>404,'message'=>'Sin tramite','existe'=>false,'estado_pt'=>$persona])],404);
+            }
+           return response()->json(['errors'=>array(['code'=>404,'message'=>'Sin tramite','existe'=>true,'estado_pt'=>$persona])],404);
        }
+
        return response()->json(['status'=>'ok','estado_pt'=>$pertramite],200);
     }
 
