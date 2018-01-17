@@ -379,3 +379,34 @@
     Route::get('ordenpagoestado', 'OrdenPagoController@ordenpagoestado');
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
