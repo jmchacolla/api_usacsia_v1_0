@@ -10,19 +10,17 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+
 	Route::get('/', function () {
     return response()->json(['status'=>'ok','aplicacion'=>'welcome API_USACSIA'], 200);
 	});
 
     Route::post('login','ApiAuthController@userAuth');
-
-    
-
-	Route::resource('pais','PaisController');
+    Route::resource('pais','PaisController');
 	Route::resource('usuarios','UserController',['only' => ['store', 'update', 'show','destroy','index']]);
     /*dorys para las sesiones*/
 	Route::resource('roles','RolController',['only' => ['store','show','index']]);   
-	Route::post('login','ApiAuthController@userAuth');
+	//Route::post('login','ApiAuthController@userAuth');
 
  // permite buscar paciente por el ci
      Route::get('personas_ci/{per_ci}','PersonaController@buscar_persona');
