@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-
 use App\Http\Requests;
 use App\Models\Persona;
 use App\Models\Imagen;
@@ -14,6 +13,7 @@ use App\Models\Provincia;
 use App\Models\Departamento;
 use App\Models\Propietario;
 use App\Models\PersonaNatural;
+use Carbon;
 class PersonaController extends Controller
 {
     //listar todas las personas
@@ -45,7 +45,7 @@ class PersonaController extends Controller
         $persona->per_nombres= Str::upper($request->per_nombres);
         $persona->per_apellido_primero= Str::upper($request->per_apellido_primero);
         $persona->per_apellido_segundo= Str::upper($request->per_apellido_segundo);
-        $persona->per_fecha_nacimiento= $request->per_fecha_nacimiento;
+        $persona->per_fecha_nacimiento=  Carbon::now();//$request->per_fecha_nacimiento;
         $persona->per_genero= $request->per_genero;
         $persona->per_email= $request->per_email;
         $persona->per_numero_celular= $request->per_numero_celular;
@@ -53,7 +53,6 @@ class PersonaController extends Controller
         $persona->per_avenida_calle=$request->per_avenida_calle;
         $persona->per_numero=$request->per_numero;
         $persona->per_ocupacion=Str::upper($request->per_ocupacion);
-        $persona->userid_at='2';
         $persona->save();
 
         //creando imagen de persona

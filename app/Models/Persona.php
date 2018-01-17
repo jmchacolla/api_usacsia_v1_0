@@ -60,7 +60,7 @@ class Persona extends Model
      */
     protected $fillable = ['zon_id', 'per_ci', 'per_tipo_documento', 'per_pais', 'per_ci_expedido', 'per_nombres', 'per_apellido_primero', 'per_apellido_segundo', 'per_fecha_nacimiento', 'per_genero', 'per_email', 'per_numero_celular', 'per_clave_publica', 'per_avenida_calle', 'per_numero', 'per_ocupacion'];
     protected $hidden = ['created_at','updated_at','userid_at','deleted_at'];
-    protected $dates=['deleted_at'];
+    protected $dates=['deleted_at','per_fecha_nacimiento'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

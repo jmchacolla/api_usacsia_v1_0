@@ -10,12 +10,14 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-Route::group(['middleware' => 'cors'], function () 
-{  
-
 	Route::get('/', function () {
     return response()->json(['status'=>'ok','aplicacion'=>'welcome API_USACSIA'], 200);
 	});
+
+    Route::post('login','ApiAuthController@userAuth');
+
+    
+
 	Route::resource('pais','PaisController');
 	Route::resource('usuarios','UserController',['only' => ['store', 'update', 'show','destroy','index']]);
     /*dorys para las sesiones*/
@@ -358,4 +360,4 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('verordenpago/{op_id}', 'OrdenPagoController@verordenpago');
     Route::get('ordenpagoestado', 'OrdenPagoController@ordenpagoestado');
 
-});
+
