@@ -306,8 +306,10 @@ Route::group(['middleware' => 'cors'], function ()
     Route::post('crearsan','Ficha_categoria_sancionController@crea');
       //w lista de sanciones segun fi_id 14-1-2018
     Route::get('versancion/{fi_id}','Ficha_categoria_sancionController@versancion');
-  
-
+    //w buscar usuario fi_id 14-1-2018
+    Route::get('user_buscar/{usu_identificador}','UserController@user_buscar');
+    //w listar pendientes por inspector fi_id 14-1-2018
+    Route::get('zonains_funcionario/{fun_id}','Zona_inspeccionController@zonains_funcionario');
 
 
      /*jhon----operacines con receta*/
