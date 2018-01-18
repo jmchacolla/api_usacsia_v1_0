@@ -169,8 +169,9 @@ class EmpresaTramiteController extends Controller
         }
         return response()->json(['status'=>'ok',"mensaje"=>"Propietario del establecimiento","persona"=>$persona], 200);
     }
-    public function listar_cer_nat()
-    {/*lista de empresas que pagaron*/
+    /*lista de empresas que pagaron*/
+   /* public function listar_cer_nat()
+    {
         $empresa_tramite=EmpresaTramite::where('tra_id',2)
         ->where('et_estado_pago','PAGADO')
         ->join('establecimiento_solicitante','establecimiento_solicitante.ess_id','=','empresa_tramite.ess_id')
@@ -190,9 +191,9 @@ class EmpresaTramiteController extends Controller
                 return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
             }
         return response()->json(['status'=>'ok',"mensaje"=>"lista",'empresa_tramite'=>$empresa_tramite], 200);
-    }
+    }*/
 //etapa 3 = ya pagaron arancel
-    public function listar_cer_ju()
+    /*public function listar_cer_ju()
     {
         $empresa_tramite=EmpresaTramite::where('tra_id',2)
         ->where('et_estado_pago','PAGADO')
@@ -212,7 +213,7 @@ class EmpresaTramiteController extends Controller
         ->get();
    
         return response()->json(['status'=>'ok',"mensaje"=>"lista",'empresa_tramite'=>$empresa_tramite], 200);
-    }
+    }*/
 
 
     public function buscarpjuridica($pjur_nit)
@@ -309,6 +310,50 @@ class EmpresaTramiteController extends Controller
         ->where('tramitecer_estado.te_estado', '=', $estado)
         ->orderBy('tramitecer_estado.te_fecha')
         ->get();
+        if (!$empresa_tramite) {
+            return response()->json(['errors'=>array(['code'=>404, 'message'=>'No se encuentra un registro con ese código.'])],404);
+        }
+        return response()->json(['status'=>'ok',"mensaje"=>"Lista estado",'empresa_tramite'=>$empresa_tramite], 200);
+
+    }
+    //lista para inspectores only
+    public function empresatramite_validos($fun_id)
+    {
+        
+
+        $empresa_tramite=Zona_inspeccion::where('zona_inspeccion.fun_id',$fun_id)
+        ->join('establecimiento_solicitante','establecimiento_solicitante.zon_id','=','zona_inspeccion.zon_id')
+        ->join('empresa_tramite','empresa_tramite.ess_id','=','establecimiento_solicitante.ess_id')/**/
+        ->join('empresa','empresa.ess_id','=','empresa_tramite.ess_id')
+        ->join('empresa_propietario','empresa_propietario.emp_id','=','empresa.emp_id')
+        ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
+        ->join('tramitecer_estado', 'tramitecer_estado.et_id', '=', 'empresa_tramite.et_id')
+        ->join('etapa', 'etapa.eta_id', '=', 'tramitecer_estado.eta_id')
+        ->where('tramitecer_estado.eta_id', '=', 1)
+        ->where('tramitecer_estado.te_estado', '=', 'APROBADO')
+        ->orderBy('tramitecer_estado.te_fecha')
+  
+    
+        ->select('empresa_tramite.et_id', 'empresa_tramite.et_id', 'empresa_tramite.tra_id', 'empresa_tramite.ess_id', 'empresa_tramite.et_numero_tramite', 'empresa_tramite.et_vigencia_pago', 'empresa_tramite.et_fecha_ini', 'empresa_tramite.et_estado_pago', 'empresa_tramite.et_estado_tramite', 'empresa_tramite.et_monto', 'empresa_tramite.et_tipo_tramite','establecimiento_solicitante.ess_id','establecimiento_solicitante.ess_razon_social', 'establecimiento_solicitante.ess_telefono', 'establecimiento_solicitante.ess_correo_electronico', 'establecimiento_solicitante.ess_tipo','empresa.emp_id','empresa.ess_id', 'empresa.emp_kardex', 'tramitecer_estado.te_id', 'tramitecer_estado.te_estado', 'tramitecer_estado.te_fecha', 'etapa.eta_id', 'propietario.pro_id','propietario.pro_tipo')
+        ->get();
+
+        for ($i=0; $i < count($empresa_tramite); $i++) { 
+            if($empresa_tramite[$i]->pro_tipo=="J")
+            {
+                $pjuridica=PersonaJuridica::select('pjur_razon_social')
+                ->where('p_juridica.pro_id',$empresa_tramite[$i]->pro_id)
+                ->first();
+                $empresa_tramite[$i]->ess_propietario=$pjuridica->pjur_razon_social;
+            }else{
+                $pnatural=PersonaNatural::select('per_nombres','per_apellido_primero','per_apellido_segundo')
+                ->join('persona','persona.per_id','=','p_natural.per_id')
+                ->where('p_natural.pro_id',$empresa_tramite[$i]->pro_id)
+                ->first();
+                $empresa_tramite[$i]->ess_propietario=$pnatural->per_nombres.' '.$pnatural->per_apellido_primero.' '.$pnatural->per_apellido_segundo;
+            }
+        }
+
+       
         if (!$empresa_tramite) {
             return response()->json(['errors'=>array(['code'=>404, 'message'=>'No se encuentra un registro con ese código.'])],404);
         }

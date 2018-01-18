@@ -45,7 +45,7 @@ class Certificado_sanitarioController extends Controller
         
         return response()->json(['status'=>'ok',"msg" => "exito", "certificado_sanitario" => $certificado_sanitario ], 200);
     }
-    public function aprob2(Request $request, $ces_id)
+    /*public function aprob2(Request $request, $ces_id)
     {
         $certificado_sanitario=Certificado_sanitario::find($ces_id);
 
@@ -59,8 +59,8 @@ class Certificado_sanitarioController extends Controller
 
  
         return response()->json(['status'=>'ok','mensaje'=>'exito','certificado_sanitario'=>$certificado_sanitario],200);
-    }
-    public function aprob3(Request $request, $ces_id)
+    }*/
+    /*public function aprob3(Request $request, $ces_id)
     {
          $certificado_sanitario=Certificado_sanitario::find($ces_id);
 
@@ -74,7 +74,7 @@ class Certificado_sanitarioController extends Controller
 
  
         return response()->json(['status'=>'ok','mensaje'=>'exito','certificado_sanitario'=>$certificado_sanitario],200);
-    }
+    }*/
     public function show($et_id)
     {
         $certificado_sanitario=Certificado_sanitario::where('et_id',$et_id)->get()->first();

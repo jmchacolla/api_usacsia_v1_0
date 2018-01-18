@@ -77,14 +77,14 @@
 
     // Route::get('personatramite/{pt_id}', 'Persona_tramiteController@personadetramite');
 
-    /*wen*/
+    /*wen-------------18-1-2018 ---no se usa*/
     Route::get('ambiente','AmbienteController@index');
     Route::post('ambiente','AmbienteController@store');
 
     /*CONSULTORIO*/
    Route::resource('consultorio','ConsultorioController',['only' => ['store', 'update', 'destroy', 'show','index']]);
     Route::post('ambiente_consultorio','ConsultorioController@crear_ambiente_consultorio');
-    Route::get('lis_consultorio','ConsultorioController@listar_consultorios');
+    /*Route::get('lis_consultorio','ConsultorioController@listar_consultorios');*/
 /*LABORATORIO*/
     Route::resource('laboratorio','LaboratorioController',['only' => ['store', 'update', 'destroy', 'show','index']]);
     Route::post('ambiente_laboratorio','LaboratorioController@crear_ambiente_laboratorio');
@@ -172,13 +172,13 @@
     //JHON empresa
     Route::resource('establecimiento_solicitante','EstablecimientoSolicitanteController', ['only' =>['index', 'store', 'update', 'show']]);
     //jhon empresa operaciones
-    Route::resource('empresa', 'EmpresaController', ['only' => ['index', 'store', 'update', 'show']]);
+    Route::resource('empresa', 'EmpresaController', ['only' => ['index', 'store']]);
 
     //jhon fichas
     Route::resource('ficha', 'FichaController',['only' =>['index', 'store', 'update', 'show']]);
 
     /*EMPRESA wendy -- 13-12-17*/
-    Route::resource('empresa', 'EmpresaController', ['only' => ['store', 'update', 'destroy', 'show','index']]);
+   /* Route::resource('empresa', 'EmpresaController', ['only' => ['store', 'update', 'destroy', 'show','index']]);*/
 // permite listar a personas que ya concluyeron su tramite
      Route::get('lista_final','Persona_tramiteController@lista_pers_tra');
      // permite listar a personas que ya concluyeron su tramite
@@ -193,7 +193,7 @@
 
 
      //wendy carnet 23-12-2017
-    Route::resource('carnet', 'Carnet_sanitarioController',['only' =>['index', 'store', 'update']]);
+    Route::resource('carnet', 'Carnet_sanitarioController',['only' =>['index', 'store']]);
       /*SEGUIMIENTO TRAMITE CaS*/
      Route::get('vercas/{pt_id}', 'Carnet_sanitarioController@show');
     // edita el campo estado de tramite de una persona tramite
@@ -222,9 +222,9 @@
    /* Route::get('ver_fi/{fi_id}','Ficha_categoriaController@verf');*/
 
     /*wen   lista certificados 28-12-2017*/
-    Route::get('list_cert_nat', 'EmpresaTramiteController@listar_cer_nat');
+    /*Route::get('list_cert_nat', 'EmpresaTramiteController@listar_cer_nat');*/
     /*wen   lista certificados 28-12-2017*/
-    Route::get('list_cert_ju', 'EmpresaTramiteController@listar_cer_ju');
+    /*Route::get('list_cert_ju', 'EmpresaTramiteController@listar_cer_ju');*/
     /*wen   lista certificados 28-12-2017*/
     Route::resource('zon_ins','Zona_inspeccionController',['only' => ['store', 'update', 'destroy', 'show','index']]);
     /*wen   lista zonas por distrito 28-12-2017*/
@@ -252,17 +252,17 @@
     //wen 1-1-2018 listar crear certificado sanitario
     Route::resource('certificado_sanitario','Certificado_sanitarioController',['only' => ['store', 'update', 'destroy', 'show','index']]);
     
-    Route::post('editar_tramitecer/{ces_id}', 'Certificado_sanitarioController@store');
+    /*Route::post('editar_tramitecer/{ces_id}', 'Certificado_sanitarioController@store');*/
     //wen 2-1-2018 aprobacion2
-    Route::put('aprob2/{ces_id}', 'Certificado_sanitarioController@aprob2');
+    /*Route::put('aprob2/{ces_id}', 'Certificado_sanitarioController@aprob2');*/
     //wen 2-1-2018 aprobacion3
-    Route::put('aprob3/{ces_id}', 'Certificado_sanitarioController@aprob3');
+    /*Route::put('aprob3/{ces_id}', 'Certificado_sanitarioController@aprob3');*/
     Route::get('busca_cert/{et_id}', 'EmpresaTramiteController@buscar_certificado');
     //w permite la busqueda de personas en las tabla persona 4-1-2018
     Route::get('personasb/{per_ci}','PersonaController@buscar');
 
-    Route::get('index2','PersonaController@index2');
-    Route::get('index3','PersonaController@index3');
+ /*   Route::get('index2','PersonaController@index2');
+    Route::get('index3','PersonaController@index3');*/
 
     //w permite ver el rubro de una empresa 5-1-2018
     Route::get('rubro/{emp_id}','RubroEmpresaController@ver');
@@ -310,7 +310,11 @@
     Route::get('user_buscar/{usu_identificador}','UserController@user_buscar');
     //w listar pendientes por inspector fi_id 14-1-2018
     Route::get('zonains_funcionario/{fun_id}','Zona_inspeccionController@zonains_funcionario');
+    //w ver la ficha inspeccion 6 fi_id 18-1-2018
+    Route::get('ficha_inspeccion_f6/{fi_id}','Ficha_inspeccionController@ficha_inspeccion_verf6');
 
+//w lista de empresas por funcionario 18-1-2018
+    Route::get('empresatramite_validos/{fun_id}','EmpresaTramiteController@empresatramite_validos');
 
      /*jhon----operacines con receta*/
      Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
@@ -336,7 +340,7 @@
     Route::resource('pjuridica', 'PersonaJuridicaController',['only'=>['store','show']]);
     Route::resource('pnatural', 'PersonaNaturalController',['only'=>['store','show']]);
     Route::get('pro_id_pjuridica_pnatural/{pro_id}', 'PersonaNaturalController@pro_id_pjuridica_pnatural');
-    Route::resource('documento','DocumentoController',['only'=>['index','store','show']]);
+    Route::resource('documento','DocumentoController',['only'=>['index','store']]);
     Route::get('doc_no_registrados/{et_id}','DocumentoController@doc_no_registrados');
     Route::get('doc_registrados/{et_id}','DocumentoController@doc_registrados');
 
@@ -349,6 +353,8 @@
     /*wendy   verifica si tiene carnet por ci*/
 /*wendy   verifica si tiene carnet por ci 27-12 2017*/
     Route::get('verifica/{per_ci}', 'Carnet_sanitarioController@verifica');
+
+
     Route::get('ins_fecha_est_fun', 'Ficha_inspeccionController@list_inspec_fechas_estado_fun');
     Route::resource('etapa', 'EtapaController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::resource('tramitecerestado', 'TramitecerEstadoController',['only'=>['store','update', 'destroy', 'show', 'index']]);
