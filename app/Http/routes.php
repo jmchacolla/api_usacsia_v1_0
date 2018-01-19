@@ -100,7 +100,7 @@ Route::group(['middleware' => 'cors'], function ()
     Route::get('buscar_persona_tramite/{per_ci}','Persona_tramiteController@buscar_persona_tramite');
     //vero -- buscar tramite de la personapara ver si ya tiene una ficha el dia de hoy
     Route::get('buscar_persona_tramite_ficha/{per_ci}','Persona_tramiteController@buscar_persona_tramite_ficha');
-    Route::get('estado_tramite_persona/{per_ci}','Persona_tramiteController@estado_tramite_persona');
+    Route::get('estado_tramite_persona/{per_ci}/{ess_id}','Persona_tramiteController@estado_tramite_persona');
     //vero -- verifica si existe una persona en un establecimiento.
     Route::get('establecimiento_persona/{per_id}/{ess_id}','EstablecimientoPersonaController@establecimiento_persona');
 

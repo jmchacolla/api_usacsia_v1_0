@@ -18,6 +18,7 @@ class EstablecimientoPersonaController extends Controller
         ->where('establecimiento_persona.ess_id',$ess_id)
         ->orderby('ep_id','asc')
         ->get();
+        $sin_tramite=0;
         $iniciados=0;
         $concluidos=0;
         $observados=0;
@@ -31,26 +32,31 @@ class EstablecimientoPersonaController extends Controller
                 ->where('persona_tramite.per_id', $value->per_id)
                 ->first();
 
-                if($datos_ultimo_tramite->pt_estado_tramite=='INICIADO'){
-                    $iniciados++;
-
+                if($datos_ultimo_tramite){
+                    if($datos_ultimo_tramite->pt_estado_tramite=='INICIADO'){
+                        $iniciados++;
+                    }
+                    if($datos_ultimo_tramite->pt_estado_tramite=='OBSERVADO'){
+                        $observados++;
+                    }
+                    if($datos_ultimo_tramite->pt_estado_tramite=='VENCIDO'){
+                        $vencidos++;
+                    }
+                    if($datos_ultimo_tramite->pt_estado_tramite=='CONCLUIDO'){
+                        $concluidos++;
+                    }
+                    if($datos_ultimo_tramite->pt_estado_tramite=='APROBADO'){
+                        $aprobados++;
+                    }
+                    $value->pt_estado_tramite=$datos_ultimo_tramite->pt_estado_tramite;
+                }else{
+                    $value->pt_estado_tramite='SIN TRÁMITE';
+                    $sin_tramite++;
                 }
-                if($datos_ultimo_tramite->pt_estado_tramite=='OBSERVADO'){
-                    $observados++;
-                }
-                if($datos_ultimo_tramite->pt_estado_tramite=='VENCIDO'){
-                    $vencidos++;
-                }
-                if($datos_ultimo_tramite->pt_estado_tramite=='CONCLUIDO'){
-                    $concluidos++;
-                }
-                if($datos_ultimo_tramite->pt_estado_tramite=='APROBADO'){
-                    $aprobados++;
-                }
-                $value->pt_estado_tramite=$datos_ultimo_tramite->pt_estado_tramite;
             }
       
          return response()->json(['status'=>'ok','mensaje'=>'exito','personas_x_establecimiento'=>$personas_x_establecimiento,
+            'sin_tramite'=>$sin_tramite,
             'iniciados'=>$iniciados,
             'observados'=>$observados,
             'vencidos'=>$vencidos,
@@ -66,7 +72,7 @@ class EstablecimientoPersonaController extends Controller
         $personaestablecimiento= new Establecimiento_persona();
         $personaestablecimiento->per_id=$request->per_id;
         $personaestablecimiento->ess_id=$request->ess_id;
-        $personaestablecimiento->ep_cargo=$request->ep_cargo;
+        $personaestablecimiento->ep_cargo=Str::upper($request->ep_cargo);
         $personaestablecimiento->ep_estado_laboral=$request->ep_estado_laboral;
         $personaestablecimiento->save();
          return response()->json(['status'=>'ok','mensaje'=>'exito','personaestablecimiento'=>$personaestablecimiento],200); 
