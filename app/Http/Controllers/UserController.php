@@ -85,6 +85,34 @@ class UserController extends Controller
             ], 200
         );
     }
+     public function user_buscar($usu_identificador)
+    {
+        $usuario=\App\User::where('usu_identificador',$usu_identificador)->get()->first();
+ 
+        if ($usuario!=null)
+        {
+            return response()->json([
+                'status' => 'ok',
+                "msg" => "existe",
+                "usuario" => $usuario
+            ], 200
+        );
+        }
+        else{
+       
+         
+
+
+return response()->json([
+                    'status' => 'no',
+                    "msg" => "no existe",
+                    "usuario" => $usuario
+                ], 200
+            );
+
+     }
+    }
+
 
    /* public function update(Request $request, $usu_id)
     {
