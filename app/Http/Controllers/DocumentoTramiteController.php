@@ -52,7 +52,7 @@ class DocumentoTramiteController extends Controller
         return response()->json(['status'=>'ok',"msg" => "exito",'documentotramite'=>$documentotramite,'tramite'=>$numero_tramite],200); 
     }
 
-    public function update_lista_documentotramite(Request $request)
+     public function update_lista_documentotramite(Request $request)
     {// ACTUALIZA LISTA DE DOCUMENTOS TRAMITE CON SSUS OBSERVACIONES
         
         /*convirtiendo $request vector a object*/
@@ -99,7 +99,6 @@ class DocumentoTramiteController extends Controller
             return response()->json(['status'=>'ok',"mensaje"=>"sin editar"], 200);
         }
     }
-
     public function destroy($dt_id)
     {
         $documento_tramite = DocumentoTramite::find($dt_id);

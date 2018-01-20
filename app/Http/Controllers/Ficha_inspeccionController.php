@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
 use App\Models\Ficha_inspeccion;
 use App\Models\Ficha1;
@@ -22,6 +23,7 @@ use App\Models\PersonaNatural;
 use App\Models\Persona;
 use App\Models\Ficha_categoria;
 use App\Models\Ficha_categoria_sancion;
+
 
 class Ficha_inspeccionController extends Controller
 {
@@ -330,6 +332,15 @@ class Ficha_inspeccionController extends Controller
         $ficha3->fi3_almacenamiento =$request->fi3_almacenamiento;
         $ficha3->fi3_almacenamiento_obs =$request->fi3_almacenamiento_obs;
         $ficha3->fi3_observacion =$request->fi3_observacion;
+        $ficha3->fi3_foco_insalubridad_obs=$request->fi3_foco_insalubridad_obs ;
+        $ficha3->fi3_comunicacion=$request->fi3_comunicacion;
+        $ficha3->fi3_comunicacion_obs=$request->fi3_comunicacion_obs ;
+        $ficha3->fi3_superficie_obs=$request->fi3_superficie_obs ;
+        $ficha3->fi3_iluminacion=$request->fi3_iluminacion ;
+        $ficha3->fi3_iluminacion_obs=$request->fi3_iluminacion_obs ;
+        $ficha3->fi3_almacenes=$request->fi3_almacenes ;
+        $ficha3->fi3_almacenes_obs=$request->fi3_almacenes_obs ;
+        $ficha3->fi3_fumigacion=$request->fi3_fumigacion ;
         $ficha3->userid_at='2';
 
         $ficha3->save();
@@ -532,7 +543,9 @@ class Ficha_inspeccionController extends Controller
         $ficha6->fi6_botiquin =$request->fi6_botiquin;
         $ficha6->fi6_extinguidor =$request->fi6_extinguidor;
         $ficha6->fi6_control_vectores =$request->fi6_control_vectores;
-        $ficha6->fi6_control_vectores =$request->fi6_control_vectores;
+        $ficha6->fi6_observaciones =$request->fi6_observaciones;
+        $ficha6->fi6_hombres =$request->fi6_hombres;
+        $ficha6->fi6_mujeres =$request->fi6_mujeres;
         $ficha6->userid_at='2';
 
         $ficha6->save();
@@ -542,6 +555,18 @@ class Ficha_inspeccionController extends Controller
         return response()->json(['status'=>'ok',"msg"=>"creado exitosamente","ficha6_inspeccion"=>$resultado], 200);
 
     }
+    public function ficha_inspeccion_verf6($fi_id){
+
+        $suma=Ficha6::where('fi_id',$fi_id)
+        /*->join('ficha6','ficha6.fi_id','=','ficha_inspeccion.fi_id')
+        ->select('ficha6.fi_id', DB::RAW('SUM(fi6_ubicacion,fi6_exibicion_certificado) as total'))*/
+        ->get();
+
+
+        return response()->json(['status'=>'ok',"msg"=>"creado exitosamente","suma"=>$suma], 200);
+
+    }
+
 
     public function list_inspec_fechas_estado_fun(Request $request)
     {
