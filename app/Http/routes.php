@@ -26,6 +26,7 @@
 
  // permite buscar paciente por el ci
      Route::get('personas_ci/{per_ci}','PersonaController@buscar_persona');
+
  //crear,editar,ver,eliminar,listar persona
     Route::resource('persona', 'PersonaController', ['only' => ['store', 'update', 'show','destroy','index']]);
     // ver datos del funcionario por el per_id
@@ -341,6 +342,8 @@
     Route::resource('documento','DocumentoController',['only'=>['index','store','show']]);
     Route::get('doc_no_registrados/{et_id}','DocumentoController@doc_no_registrados');
     Route::get('doc_registrados/{et_id}','DocumentoController@doc_registrados');
+    Route::get('establecimientos_x_persona/{per_ci}','PersonaController@establecimientos_x_persona');
+    // vero
 
     Route::post('update_lista_consultorios','ConsultorioController@update_lista_consultorios');
 

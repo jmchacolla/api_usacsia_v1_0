@@ -74,24 +74,26 @@ class DocumentoTramiteController extends Controller
             $requestodo_array=$request->todo;
             $requestodo_string=json_encode($requestodo_array);
             $requestodo_object=json_decode($requestodo_string);
-            $tramite_estado=TramitecerEstado::find($requestodo_object->et_id);
+            $tramitecer_estado=TramitecerEstado::where('tramitecer_estado.et_id',$requestodo_object->et_id)
+            ->where('tramitecer_estado.eta_id',1)->first();
             
-            $traest=DocumentoTramite::select('dt_observado')
+            $traest=DocumentoTramite::select('dt_observado', 'dt_observacion')
             ->where('documento_tramite.et_id',$requestodo_object->et_id)
             ->get();
 
             foreach ($traest  as $value) {
                 if($value->dt_observado){
-                        $tramite_estado->te_estado='OBSERVADO';
+                        $tramitecer_estado->te_estado='OBSERVADO';
                 }else{
-                        $tramite_estado->te_estado='APROBADO';
+                        $tramitecer_estado->te_estado='APROBADO';
                 }
+                 $tramitecer_estado->te_observacion=$tramitecer_estado->te_observacion." ".$value->dt_observacion;
             }
            
-            $tramite_estado->te_observacion=$documentotramite->dt_observacion;
-            $tramite_estado->fun_id=$requestodo_object->fun_id;
-            $tramite_estado->save();
-        return response()->json(['status'=>'ok',"mensaje"=>"editado exitosamente",'tramiteestado'=>$tramite_estado,'los estados'=>$traest,'existe'=>in_array(true, (array)$traest,true)], 200);
+           
+            $tramitecer_estado->fun_id=$requestodo_object->fun_id;
+            $tramitecer_estado->save();
+        return response()->json(['status'=>'ok',"mensaje"=>"editado exitosamente",'tramiteestado'=>$tramitecer_estado,'los estados'=>$traest,'existe'=>in_array(true, (array)$traest,true)], 200);
         }else{
 
             return response()->json(['status'=>'ok',"mensaje"=>"sin editar"], 200);
