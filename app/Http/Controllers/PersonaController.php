@@ -19,19 +19,20 @@ use Carbon;
 class PersonaController extends Controller
 {
     //listar todas las personas
-    public function index()
+    public function index(Request $request)
     {
-        $persona=Persona::all('per_id','per_ci','per_ci_expedido','per_numero_celular','per_email','per_nombres','per_apellido_primero','per_fecha_nacimiento','per_ci as per_edad');
-        $persona= json_decode($persona);
-        $edades=[];
-        for ($i=0; $i <count($persona) ; $i++) {
-            $perid=Persona::find($persona[$i]->per_id);
-            $edad=Persona::edad($perid->per_fecha_nacimiento);
-            $item=$persona[$i];
-            $item->per_edad=$edad;
-            $edades[$i]=$item;
+        $rows=$request->nro;
+        if(!$request->nro)
+            $rows=25;
+
+        $persona=Persona::select('per_id as per_indice','per_id','per_ci','per_ci_expedido','per_numero_celular','per_email','per_nombres','per_apellido_primero','per_fecha_nacimiento','per_ci as per_edad')->orderby('per_id','desc')->paginate($rows);
+        foreach ($persona as $value) {
+            $unapersona=Persona::find($value->per_id);
+            $value->per_edad=Persona::edad($unapersona->per_fecha_nacimiento);
         }
-        return response()->json(['status'=>'ok','persona'=>$edades],200);
+
+
+        return response()->json(['status'=>'ok','persona'=>$persona],200);
     }
 
     //crear persona

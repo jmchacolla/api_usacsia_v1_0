@@ -162,7 +162,7 @@ class EmpresaTramiteController extends Controller
             ->join('establecimiento_solicitante', 'establecimiento_solicitante.ess_id', '=', 'empresa.ess_id')
             ->join('empresa_tramite', 'empresa_tramite.ess_id', '=', 'establecimiento_solicitante.ess_id')
             ->where('p_juridica.pjur_nit', $parametro)
-            // ->orderBy('empresa_tramite.et_id','desc')
+            ->orderBy('empresa_tramite.et_id','desc')
             ->get()/*->first()*/;
             if (!$persona) {
                 return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
