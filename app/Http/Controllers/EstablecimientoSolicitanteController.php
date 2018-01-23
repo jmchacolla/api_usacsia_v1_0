@@ -67,10 +67,7 @@ class EstablecimientoSolicitanteController extends Controller
         $empresa = new Empresa();
         $empresa->ess_id=$est_sol->ess_id;
         if($requeste_object->emp_nit){$empresa->emp_nit=$requeste_object->emp_nit;}
-<<<<<<< HEAD
-=======
 
->>>>>>> ef5b0597b5da9f823ef82f7ba7fe47c29cc176e7
         $empresa->emp_url_nit=$requeste_object->emp_url_nit;
         $empresa->emp_url_licencia=$requeste_object->emp_url_licencia;
         $empresa->save();

@@ -162,7 +162,7 @@ class EmpresaTramiteController extends Controller
             ->join('establecimiento_solicitante', 'establecimiento_solicitante.ess_id', '=', 'empresa.ess_id')
             ->join('empresa_tramite', 'empresa_tramite.ess_id', '=', 'establecimiento_solicitante.ess_id')
             ->where('p_juridica.pjur_nit', $parametro)
-            ->orderBy('empresa_tramite.et_id','desc')
+            // ->orderBy('empresa_tramite.et_id','desc')
             ->get()/*->first()*/;
             if (!$persona) {
                 return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
@@ -336,6 +336,7 @@ class EmpresaTramiteController extends Controller
   
     
         ->select('empresa_tramite.et_id', 'empresa_tramite.et_id', 'empresa_tramite.tra_id', 'empresa_tramite.ess_id', 'empresa_tramite.et_numero_tramite', 'empresa_tramite.et_vigencia_pago', 'empresa_tramite.et_fecha_ini', 'empresa_tramite.et_estado_pago', 'empresa_tramite.et_estado_tramite', 'empresa_tramite.et_monto', 'empresa_tramite.et_tipo_tramite','establecimiento_solicitante.ess_id','establecimiento_solicitante.ess_razon_social', 'establecimiento_solicitante.ess_telefono', 'establecimiento_solicitante.ess_correo_electronico', 'establecimiento_solicitante.ess_tipo','empresa.emp_id','empresa.ess_id', 'empresa.emp_kardex', 'tramitecer_estado.te_id', 'tramitecer_estado.te_estado', 'tramitecer_estado.te_fecha', 'etapa.eta_id', 'propietario.pro_id','propietario.pro_tipo')
+        ->distinct()
         ->get();
 
         for ($i=0; $i < count($empresa_tramite); $i++) { 
