@@ -582,18 +582,6 @@ class EmpresaTramiteController extends Controller
     }
 
 
-    public function empresatramite_estado(Request $request,$et_id)
-    {
-        
-        $empresa_tramite=EmpresaTramite::find($et_id);
-        $empresa_tramite->et_estado_tramite=$request->et_estado_tramite;
-        $empresa_tramite->save();
-        if (!$empresa_tramite)
-        {
-            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una tramite de carnet sanitario con ese código.'])],404);
-        }
-        return response()->json(['status'=>'ok','mensaje'=>'exito','empresa_tramite'=>$empresa_tramite],200);
-        }
 
     public function reportecaja_cesform(Request $request)
     {
@@ -628,4 +616,31 @@ class EmpresaTramiteController extends Controller
     }
 
 
+    public function empresatramite_estado(Request $request,$et_id)
+    {
+        
+        $empresa_tramite=EmpresaTramite::find($et_id);
+        $empresa_tramite->et_estado_tramite=$request->et_estado_tramite;
+        $empresa_tramite->save();
+        if (!$empresa_tramite)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una tramite de carnet sanitario con ese código.'])],404);
+        }
+        return response()->json(['status'=>'ok','mensaje'=>'exito','empresa_tramite'=>$empresa_tramite],200);
+        }
+         public function empresatramite_qr($et_id)
+    {
+        
+        $empresa_tramite=EmpresaTramite::find($et_id);
+        $ficha_inspeccion=Ficha_inspeccion::where('et_id',$et_id)->get();
+        
+        $empresa_tramite->et_estado_tramite=$request->et_estado_tramite;
+        $empresa_tramite->save();
+        if (!$empresa_tramite)
+        {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una tramite de carnet sanitario con ese código.'])],404);
+        }
+        return response()->json(['status'=>'ok','mensaje'=>'exito','empresa_tramite'=>$empresa_tramite],200);
+        }
 
+}
