@@ -13,23 +13,26 @@ use App\Models\Provincia;
 use App\Models\Departamento;
 use App\Models\Propietario;
 use App\Models\PersonaNatural;
+use App\Models\EmpresaPropietario;
+use App\Models\EmpresaTramite;
 use Carbon;
 class PersonaController extends Controller
 {
     //listar todas las personas
-    public function index()
+    public function index(Request $request)
     {
-        $persona=Persona::all('per_id','per_ci','per_ci_expedido','per_numero_celular','per_email','per_nombres','per_apellido_primero','per_fecha_nacimiento','per_ci as per_edad');
-        $persona= json_decode($persona);
-        $edades=[];
-        for ($i=0; $i <count($persona) ; $i++) {
-            $perid=Persona::find($persona[$i]->per_id);
-            $edad=Persona::edad($perid->per_fecha_nacimiento);
-            $item=$persona[$i];
-            $item->per_edad=$edad;
-            $edades[$i]=$item;
+        $rows=$request->nro;
+        if(!$request->nro)
+            $rows=25;
+
+        $persona=Persona::select('per_id as per_indice','per_id','per_ci','per_ci_expedido','per_numero_celular','per_email','per_nombres','per_apellido_primero','per_fecha_nacimiento','per_ci as per_edad')->orderby('per_id','desc')->paginate($rows);
+        foreach ($persona as $value) {
+            $unapersona=Persona::find($value->per_id);
+            $value->per_edad=Persona::edad($unapersona->per_fecha_nacimiento);
         }
-        return response()->json(['status'=>'ok','persona'=>$edades],200);
+
+
+        return response()->json(['status'=>'ok','persona'=>$persona],200);
     }
 
     //crear persona
@@ -140,6 +143,7 @@ class PersonaController extends Controller
 
 
         $persona= Persona::where('per_ci',$per_ci)/*->whereNull('paciente.deleted_at')*/->select('persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci','per_ci_expedido','per_fecha_nacimiento','per_email','per_numero_celular','per_genero','per_ocupacion','zon_id','per_avenida_calle', 'per_numero','persona.per_id as pro_id')->get()->first();
+
         if ($persona) {
             $imagen = Imagen::where('per_id', $persona->per_id)->get()->first();
             $zona= Zona::find($persona->zon_id);
@@ -156,6 +160,8 @@ class PersonaController extends Controller
             else{
                 $persona->pro_id=null;
             }
+            
+
         }
         else
         {
@@ -189,6 +195,78 @@ class PersonaController extends Controller
                 "personas" => $personas
             ],200);
     }
+
+    
+    public function establecimientos_x_persona($per_ci){
+         $persona= Persona::where('per_ci',$per_ci)->select('persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci','per_ci_expedido','per_fecha_nacimiento','per_email','per_numero_celular','per_genero','per_ocupacion','zon_id','per_avenida_calle', 'per_numero','persona.per_id as pro_id')->first();
+
+        if ($persona) {
+            $imagen = Imagen::where('per_id', $persona->per_id)->get()->first();
+            $zona= Zona::find($persona->zon_id);
+            $municipio=Municipio::find($zona->mun_id);
+            $provincia = Provincia::find($municipio->pro_id);
+            $departamento = Departamento::find($provincia->dep_id);
+
+            $es_propietario=PersonaNatural::all()
+            ->where('per_id',$persona->per_id)
+            ->first();
+            if($es_propietario){
+                $persona->pro_id=$es_propietario->pro_id;
+                 $establecimentos_x_persona=EmpresaPropietario::select('es.ess_razon_social','emp_nit','es.ess_id', 'es.ess_id as estado_tramite','es.ess_id as numero_tramite', 'es.ess_id as tramite')
+                ->join('empresa','empresa.emp_id','=','empresa_propietario.emp_id')
+                ->join('establecimiento_solicitante as es','es.ess_id','=','empresa.ess_id')
+                ->where('empresa_propietario.pro_id',$persona->pro_id)
+                ->get();
+
+                foreach ($establecimentos_x_persona as $value) {
+                    /*estado del ultimo tramite*/
+                    $estado_tramite_establecimiento=EmpresaTramite::select('et_estado_tramite','et_numero_tramite')
+                    ->where('empresa_tramite.ess_id',$value->ess_id)
+                    ->orderby('empresa_tramite.et_id','desc')
+                    ->first();
+                    $value->estado_tramite=$estado_tramite_establecimiento->et_estado_tramite;
+                    $value->numero_tramite=$estado_tramite_establecimiento->et_numero_tramite;
+
+                    // iniciar tramite= pago vencido nunca aprobado.
+                    // renovacion= pago vencido y aprobado, o solo aprobado.
+                    // no renovacion si tramite curso= iniciado, pendiente de pago.
+                        /*tramite a sido apobado alguna vez?*/
+                        $aprobado='APROBADO';
+                        $estado_tramite=EmpresaTramite::select('et_estado_tramite')
+                        ->where('empresa_tramite.ess_id',$value->ess_id)
+                        ->where('empresa_tramite.et_estado_tramite',$aprobado)
+                        ->first();
+                        
+
+                        if($estado_tramite){
+                            if($estado_tramite_establecimiento->et_estado_tramite=="VENCIDO" || $estado_tramite_establecimiento->et_estado_tramite=="APROBADO" ){
+                                $value->tramite="RENOVACION";
+                            }else{
+                                $value->tramite="TRAMITE EN CURSO";
+                            }
+                        }else{
+                            if($estado_tramite_establecimiento->et_estado_tramite=="INICIADO" || $estado_tramite_establecimiento->et_estado_tramite=="PENDIENTE"){
+                                $value->tramite="TRAMITE EN CURSO";
+                            }else{
+                                $value->tramite="INICIAR TRAMITE";
+                            }
+                        }
+                }
+
+
+                if($establecimentos_x_persona->first()){
+                    return response()->json(['mensaje'=>'exito','establecimentos_x_persona'=>$establecimentos_x_persona],200); 
+                }else{
+                    return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentran registros.'])],404);
+                }
+            }
+            else{
+                $persona->pro_id=null;
+            }
+        }
+    }
+
+
 
     //eliminar persona
     public function destroy($per_id)

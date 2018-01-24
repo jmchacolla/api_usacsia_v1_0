@@ -15,7 +15,7 @@ class CategoriaController extends Controller
 {
     public function index()
     {
-        $categoria=Categoria::all();
+        $categoria=Categoria::orderBy('cat_codigo', 'asc')->get();
         return response()->json(['status'=>'ok',"mensaje"=>"listado de categorias","categoria"=>$categoria], 200);
     }
     public function store(Request $request)
@@ -33,13 +33,13 @@ class CategoriaController extends Controller
         return response()->json(['status'=>'ok',"mensaje"=>"listado de categorias","categoria"=>$categoria], 200);
     }
 
-    public function update($cat_id)
+    public function update(Request $request,$cat_id)
     {
         $categoria=Categoria::find($cat_id);
         if (!$categoria) {
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
         }
-        $categoria->sub_id=Str::upper($request->sub_id);
+        $categoria->sub_id=$request->sub_id;
         $categoria->cat_secuencial=Str::upper($request->cat_secuencial);
         $categoria->cat_area=Str::upper($request->cat_area);
         $categoria->cat_categoria=Str::upper($request->cat_categoria);
@@ -68,5 +68,15 @@ class CategoriaController extends Controller
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
         }
         return response()->json(['status'=>'ok',"mensaje"=>"exito","categoria"=>$categoria], 200);
+    }
+    public function destroy($cat_id)
+    {
+        $categoria=Categoria::find($cat_id);
+        if (!$categoria) {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
+        }
+        $categoria->delete();
+        return response()->json(['status'=>'ok',"mensaje"=>"exito","categoria"=>$categoria], 200);
+
     }
 }

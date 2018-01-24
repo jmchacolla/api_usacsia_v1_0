@@ -24,6 +24,7 @@
 
  // permite buscar paciente por el ci
      Route::get('personas_ci/{per_ci}','PersonaController@buscar_persona');
+
  //crear,editar,ver,eliminar,listar persona
     Route::resource('persona', 'PersonaController', ['only' => ['store', 'update', 'show','destroy','index']]);
     // ver datos del funcionario por el per_id
@@ -275,6 +276,8 @@
    /* Route::put('aprobacion1/{et_id}','TramitecerEstadoController@editarAp1');*/
     //w permite editar para la aprobacion de jefe certificado
     /*Route::put('aprobacion2/{et_id}','TramitecerEstadoController@editarAp2');*/
+    /*jhon clasificacion de especialidad por clasificacion gral*/
+    Route::get('buscarcle/{cg_id}', 'ClasificacionEspecialidadController@buscarcle');
     //subclasificacion por cle_id
     Route::get('buscarsub/{cle_id}', 'SubclasificacionController@buscarSub');
     //categoria por sub_id
@@ -316,8 +319,15 @@
 
     //w lista de empresas por funcionario 18-1-2018
     Route::get('empresatramite_validos/{fun_id}','EmpresaTramiteController@empresatramite_validos');
+
     //w cambia el estado_tramite
     Route::put('empresatramite_estado/{et_id}','EmpresaTramiteController@empresatramite_estado');
+
+    /*vero -  lista de tramites establecimiento para realizar inspeccion*/
+    Route::get('tramitecer_asignar_inpeccion','EmpresaTramiteController@tramitecer_asignar_inpeccion');
+    Route::get('tramitecer_asignados_inspeccion','EmpresaTramiteController@tramitecer_asignados_inspeccion');
+    Route::post('editar_lista_tramitecer_estado','EmpresaTramiteController@editar_lista_tramitecer_estado');
+    
 
      /*jhon----operacines con receta*/
      Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
@@ -346,6 +356,8 @@
     Route::resource('documento','DocumentoController',['only'=>['index','store']]);
     Route::get('doc_no_registrados/{et_id}','DocumentoController@doc_no_registrados');
     Route::get('doc_registrados/{et_id}','DocumentoController@doc_registrados');
+    Route::get('establecimientos_x_persona/{per_ci}','PersonaController@establecimientos_x_persona');
+    // vero
 
     Route::post('update_lista_consultorios','ConsultorioController@update_lista_consultorios');
 
@@ -386,10 +398,18 @@
     Route::resource('orden_pago','OrdenPagoController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::get('verordenpago/{op_id}', 'OrdenPagoController@verordenpago');
     Route::get('ordenpagoestado', 'OrdenPagoController@ordenpagoestado');
+
     //aprobados segun fecha 23-01-2018
     Route::get('persona_tramite_aprobados','Persona_tramiteController@persona_tramite_aprobados');
     //observados segun fecha 23-01-2018 -- aun no se usa
     Route::get('persona_tramite_observadosl','Persona_tramiteController@persona_tramite_observadosl');
+
+    /*jhon reportes caja*/
+    Route::get('reportecaja_cas', 'Persona_tramiteController@reportecaja_cas');
+    Route::get('reportecaja_cesform', 'EmpresaTramiteController@reportecaja_cesform');
+    Route::get('reportecaja_orden', 'OrdenPagoController@reportecaja_orden');
+    
+
 
 
 

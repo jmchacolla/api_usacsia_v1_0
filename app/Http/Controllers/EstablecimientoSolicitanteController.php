@@ -53,6 +53,8 @@ class EstablecimientoSolicitanteController extends Controller
         $est_sol->ess_latitud=$requeste_object->ess_latitud;//guarda vacio si no se envia nada
         $est_sol->ess_longitud=$requeste_object->ess_longitud;//guarda vacio si no se envia nada
         $est_sol->ess_altitud=$requeste_object->ess_altitud;//guarda vacio si no se envia nada
+        $est_sol->ess_hora_ini=$requeste_object->ess_hora_ini;//guarda vacio si no se envia nada
+        $est_sol->ess_hora_fin=$requeste_object->ess_hora_fin;//guarda vacio si no se envia nada
         $est_sol->save();
 
         $imagen_establecimiento=new ImagenEstablecimiento();
@@ -91,13 +93,20 @@ class EstablecimientoSolicitanteController extends Controller
 
         /*crear pendiente en empresa_tramite*/
         /*crear tramitecer_emp por cada etapa*/
+        $algun_tramite_concluido=EmpresaTramite::select()
+        ->where('ess_id',$est_sol->ess_id)
+        ->where('et_estado_tramite', 'APROBADO')
+        ->first();
+
         $empresatramite = new EmpresaTramite();
         $empresatramite->tra_id=$requeste_object->tra_id;
+        if($algun_tramite_concluido){
+            $empresatramite->et_tipo_tramite='RENOVACIÓN';
+        }else{
+            $empresatramite->et_estado_tramite='NUEVO';
+        }
         $empresatramite->ess_id=$est_sol->ess_id;
         $empresatramite->save();
-
-
-
 
 
         /*

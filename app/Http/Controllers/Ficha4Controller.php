@@ -20,6 +20,8 @@ class Ficha4Controller extends Controller
     	        $ficha4->fi4_cielo =$request->fi4_cielo;
     	        $ficha4->fi4_murallas =$request->fi4_murallas;
     	        $ficha4->fi4_muralla_altura =$request->fi4_muralla_altura;
+                $ficha4->fi4_muralla_puntaje =$request->fi4_muralla_puntaje;
+
     	        $ficha4->fi4_puerta_ventana =$request->fi4_puerta_ventana;
     	        $ficha4->fi4_iluminacion =$request->fi4_iluminacion;
     	        $ficha4->fi4_ventilacion =$request->fi4_ventilacion;

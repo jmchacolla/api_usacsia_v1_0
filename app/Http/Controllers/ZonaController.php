@@ -30,7 +30,7 @@ class ZonaController extends Controller
     public function zon_Mdist(Request $request)
     {
         $mdist=$request->zon_macrodistrito;
-        $zona = Zona::where('zon_macrodistrito', $mdist)->orderBy('zon_macrodistrito')->get();
+        $zona = Zona::where('zon_macrodistrito', $mdist)->orderBy('zon_macrodistrito')->orderBy('zon_nombre','asc')->get();
         return response()->json(['status'=>'ok','mensaje'=>'exito','zona'=>$zona],200);
     }
     public function distritos()

@@ -9,6 +9,15 @@ use App\Models\OrdenPago;
 use App\Models\PagoArancel;
 use App\Models\PagoSancion;
 use App\Models\EmpresaTramite;
+use App\Models\Empresa;
+use App\Models\EstablecimientoSolicitante;
+use App\Models\EmpresaPropietario;
+use App\Models\Propietario;
+use App\Models\PersonaNatural;
+use App\Models\PersonaJuridica;
+use App\Models\Persona;
+
+
 
 class OrdenPagoController extends Controller
 {
@@ -86,5 +95,38 @@ class OrdenPagoController extends Controller
         $pagoa=PagoArancel::where('op_id', $ordenpago->op_id)->get();
         $pagos=PagoSancion::where('op_id', $ordenpago->op_id)->get();
         return response()->json(['status'=>'ok',"msg" => "Exito", "ordenpago" => $ordenpago, "emptra" => $emptra, "pagoa" => $pagoa, "pagos" => $pagos], 200);
+    }
+    public function reportecaja_orden(Request $request)
+    {
+        $fecha1=$request->fecha1;
+        $fecha2=$request->fecha2;
+
+        $reporteorden=OrdenPago::where('op_fecha_pagado', '>=', $fecha1)
+        ->where('op_fecha_pagado', '<=', $fecha2)
+        ->where('op_estado_pago','=', 'PAGADO')
+        ->get();
+        
+        foreach ($reporteorden as $value) {
+            $etramite=EmpresaTramite::find($value->et_id);
+            $establecimiento=EstablecimientoSolicitante::find($etramite->ess_id);
+            $empresa=Empresa::where('ess_id', $establecimiento->ess_id)->first();
+            $empro=EmpresaPropietario::where('emp_id', $empresa->emp_id)->first();
+            $propietario=Propietario::find($empro->pro_id);
+            if($propietario->pro_tipo=='N'){
+                $pnat=PersonaNatural::where('pro_id', $propietario->pro_id)->first();
+                $persona=Persona::find($pnat->per_id);
+                $value->propietario=$persona->per_nombres.' '.$persona->per_apellido_primero.' '.$persona->per_apellido_segundo;
+                $value->identificador=$persona->per_ci.' '.$persona->per_ci_expedido;
+            }
+            if($propietario->pro_tipo=='J'){
+                $pj=PersonaJuridica::where('pro_id', $propietario->pro_id)->first();
+                $value->propietario=$pj->pjur_razon_social;
+                $value->identificador=$pj->pjur_nit;
+            }
+
+            $value->ro_tramite='CRETIFICADO SANITARIO PAGO ARANCEL';
+
+        }
+        return response()->json(['status'=>'ok','reporteorden'=>$reporteorden],200);
     }
 }

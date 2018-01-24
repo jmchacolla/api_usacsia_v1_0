@@ -44,7 +44,7 @@ class SubclasificacionController extends Controller
         }
         $subcla->cle_id=Str::upper($request->cle_id);
         $subcla->sub_codigo=Str::upper($request->sub_codigo);
-        $subcla->cg_nombre=Str::upper($request->cg_nombre);
+        $subcla->sub_nombre=Str::upper($request->sub_nombre);
         $subcla->save();
         return response()->json(['status'=>'ok',"mensaje"=>"creado exitosamente","subcla"=>$subcla], 200);
     }
@@ -55,6 +55,15 @@ class SubclasificacionController extends Controller
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
         }
        
+        return response()->json(['status'=>'ok',"mensaje"=>"creado exitosamente","subcla"=>$subcla], 200);
+    }
+    public function destroy($sub_id)
+    {
+        $subcla=Subclasificacion::find($sub_id);
+        if (!$subcla) {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
+        }
+        $subcla->delete();
         return response()->json(['status'=>'ok',"mensaje"=>"creado exitosamente","subcla"=>$subcla], 200);
     }
 }
