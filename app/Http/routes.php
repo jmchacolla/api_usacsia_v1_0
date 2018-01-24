@@ -408,6 +408,8 @@
     Route::get('reportecaja_cas', 'Persona_tramiteController@reportecaja_cas');
     Route::get('reportecaja_cesform', 'EmpresaTramiteController@reportecaja_cesform');
     Route::get('reportecaja_orden', 'OrdenPagoController@reportecaja_orden');
+
+     Route::get('persona_tramite_aprobados','Persona_tramiteController@persona_tramite_aprobados');
     
 
 

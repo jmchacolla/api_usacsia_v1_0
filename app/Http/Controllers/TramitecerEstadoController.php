@@ -156,6 +156,9 @@ class TramitecerEstadoController extends Controller
         ->first();
         return response()->json(['status'=>'ok',"msg"=>"TramitecerEstado","tramitestado"=>$tramiteestado], 200);
     }
+
+
+
     
 
 }

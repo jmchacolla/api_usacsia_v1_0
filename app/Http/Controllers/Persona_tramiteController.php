@@ -364,7 +364,9 @@ class Persona_tramiteController extends Controller
     }
 
 
-    public function persona_tramite_aprobados(Request $request){
+     public function persona_tramite_aprobados(Request $request){
+
+   
         $fecha=$request->fecha;
 
         $persona_tramite=Carnet_sanitario::where('pt_fecha_fin',$fecha)
@@ -374,4 +376,6 @@ class Persona_tramiteController extends Controller
         return response()->json(['status'=>'ok','persona_tramite'=>$persona_tramite],200);
 
     }
+
+
 }
