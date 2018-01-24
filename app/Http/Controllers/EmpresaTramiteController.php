@@ -399,8 +399,7 @@ class EmpresaTramiteController extends Controller
 
         $reporte=EmpresaTramite::where('et_fecha_ini', '>=', $fecha1)
         ->where('et_fecha_ini', '<=', $fecha2)
-        ->where('et_estado_pago','=', 'PAGADO')
-        ->orWhere('et_estado_pago','=', 'VENCIDO')
+        ->where('et_estado_pago','!=', 'PENDIENTE')
         ->get();
         foreach ($reporte as $value) {
             $tramite=Tramite::find($value->tra_id);
