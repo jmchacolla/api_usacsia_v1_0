@@ -388,6 +388,11 @@
     Route::resource('orden_pago','OrdenPagoController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::get('verordenpago/{op_id}', 'OrdenPagoController@verordenpago');
     Route::get('ordenpagoestado', 'OrdenPagoController@ordenpagoestado');
+    /*jhon reportes caja*/
+    Route::get('reportecaja_cas', 'Persona_tramiteController@reportecaja_cas');
+    Route::get('reportecaja_cesform', 'EmpresaTramiteController@reportecaja_cesform');
+    Route::get('reportecaja_orden', 'OrdenPagoController@reportecaja_orden');
+    
 
 
 

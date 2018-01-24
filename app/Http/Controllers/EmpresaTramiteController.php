@@ -392,6 +392,37 @@ class EmpresaTramiteController extends Controller
         $fichasancion=FichaCategoriaSancion::where('fic_id', $ficha->fic_id);
         return response()->json(['status'=>'ok','mensaje'=>'exito','ficha'=>$ficha, 'fichacategoria'=>$fichacategoria, 'fichasancion'=>$fichasancion],200);
     }
+    public function reportecaja_cesform(Request $request)
+    {
+        $fecha1=$request->fecha1;
+        $fecha2=$request->fecha2;
+
+        $reporte=EmpresaTramite::where('et_fecha_ini', '>=', $fecha1)
+        ->where('et_fecha_ini', '<=', $fecha2)
+        ->where('et_estado_pago','=', 'PAGADO')
+        ->orWhere('et_estado_pago','=', 'VENCIDO')
+        ->get();
+        foreach ($reporte as $value) {
+            $tramite=Tramite::find($value->tra_id);
+            $establecimiento=EstablecimientoSolicitante::find($value->ess_id);
+            $empresa=Empresa::where('ess_id', $establecimiento->ess_id)->first();
+            $empro=EmpresaPropietario::where('emp_id', $empresa->emp_id)->first();
+            $propietario=Propietario::find($empro->pro_id);
+            if($propietario->pro_tipo=='N'){
+                $pnat=PersonaNatural::where('pro_id', $propietario->pro_id)->first();
+                $persona=Persona::find($pnat->per_id);
+                $value->propietario=$persona->per_nombres.' '.$persona->per_apellido_primero.' '.$persona->per_apellido_segundo;
+                $value->identificador=$persona->per_ci.' '.$persona->per_ci_expedido;
+            }
+            if($propietario->pro_tipo=='J'){
+                $pj=PersonaJuridica::where('pro_id', $propietario->pro_id)->first();
+                $value->propietario=$pj->pjur_razon_social;
+                $value->identificador=$pj->pjur_nit;
+            }
+            $value->tra_nombre=$tramite->tra_nombre;
+        }
+        return response()->json(['status'=>'ok','reporte'=>$reporte],200);
+    }
 }
 
 

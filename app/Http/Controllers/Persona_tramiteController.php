@@ -343,5 +343,23 @@ class Persona_tramiteController extends Controller
         $resultado=compact('persona_tramite', 'persona','tramite','muestra','prueba_laboratorio','ficha','prueba_medica');
         return response()->json(['status'=>'ok','pertramite'=>$resultado],200);
     }
+    public function reportecaja_cas(Request $request)
+    {
+        $fecha1=$request->fecha1;
+        $fecha2=$request->fecha2;
+
+        $reporte=Persona_tramite::where('pt_fecha_ini', '>=', $fecha1)
+        ->where('pt_fecha_ini', '<=', $fecha2)
+        ->get();
+        foreach ($reporte as $value) {
+            $tramite=Tramite::find($value->tra_id);
+            $persona=Persona::find($value->per_id);
+
+            $value->tra_nombre=$tramite->tra_nombre;
+            $value->per_nombre_completo=$persona->per_nombres.' '.$persona->per_apellido_primero.' '.$persona->per_apellido_segundo;
+            $value->per_ci=$persona->per_ci.' '.$persona->per_ci_expedido;
+        }
+        return response()->json(['status'=>'ok','reporte'=>$reporte],200);
+    }
 
 }
