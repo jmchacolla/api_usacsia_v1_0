@@ -363,20 +363,6 @@ class Persona_tramiteController extends Controller
         return response()->json(['status'=>'ok','reporte'=>$reporte],200);
     }
 
-    /* aun no se usa
-     public function persona_tramite_observadosl(Request $request){
-        $fecha=$request->fecha;
-
-        $persona_tramite=Prueba_laboratorio::where('pl_fecha_recepcion',$fecha)
-        ->where('prueba_laboratorio.pl_estado','OBSERVADO')
-        ->join('muestra','muestra.mue_id','=','prueba_laboratorio.mue_id')
-        ->join('persona_tramite','persona_tramite.pt_id','=','muestra.pt_id')
-        ->join('persona','persona.per_id','=','persona_tramite.per_id')
-        ->get(['persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci','per_ci_expedido','per_ocupacion','persona_tramite.pt_estado_tramite','pt_vigencia_documento','pt_tipo_tramite','pl_estado']);
-        return response()->json(['status'=>'ok','persona_tramite'=>$persona_tramite],200);
-
-    }
-*/
 
     public function persona_tramite_aprobados(Request $request){
         $fecha=$request->fecha;
