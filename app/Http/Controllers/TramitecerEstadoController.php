@@ -62,7 +62,7 @@ class TramitecerEstadoController extends Controller
         $tramitecerestado->save();
         return response()->json(['status'=>'ok',"msg"=>"TramitecerEstado","tramitecerestado"=>$tramitecerestado], 200);
     }
-    public function prueba(Request $request, $et_id,$eta_id)
+    public function tramitecer_estado_busca(Request $request, $et_id,$eta_id)
     {
        $tramitecerestado=TramitecerEstado::where('et_id',$et_id)->where('eta_id',$eta_id)->first();
         if (!$tramitecerestado) {

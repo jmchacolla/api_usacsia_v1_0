@@ -38,8 +38,8 @@ class Carnet_sanitario extends Model
      * @var array
      */
     protected $fillable = ['pt_id', 'cas_numero', 'cas_fecha_inicio', 'cas_fecha_fin', 'cas_url','cas_nombre'];
-    protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'userid_at'];
-    protected $dates=['deleted_at'];
+    protected $hidden = [ 'updated_at', 'deleted_at', 'userid_at'];
+    protected $dates=['created_at','deleted_at'];
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -59,7 +59,7 @@ class Carnet_sanitario extends Model
         $carnet_sanitario->userid_at='2';
         $carnet_sanitario->save();
 
-            $paciente_establecimiento= new Paciente_establecimiento();
+            /*$paciente_establecimiento= new Paciente_establecimiento();
             $paciente_establecimiento->es_id=$es_id;
             $paciente_establecimiento->pac_id=$pac_id;
             $paciente_establecimiento->pe_hist_clinico=$pe_hist_clinico;
@@ -67,7 +67,7 @@ class Carnet_sanitario extends Model
             $paciente_establecimiento->userid_at='2';
             $paciente_establecimiento->save();
 
-            return $paciente_establecimiento;
+            return $paciente_establecimiento;*/
 
     }
 }

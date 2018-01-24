@@ -28,7 +28,7 @@ class EstablecimientoSolicitanteController extends Controller
     //listar todos los establecimientos
     public function index()
     {   
-        $est_sol=EstablecimientoSolicitante::all();
+        $est_sol=EstablecimientoSolicitante::orderBy('created_at', 'desc')->get();
         return response()->json(['status'=>'ok',"msg" => "exito", "est_sol" => $est_sol], 200);
 
     }

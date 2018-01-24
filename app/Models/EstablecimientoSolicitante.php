@@ -49,8 +49,8 @@ class EstablecimientoSolicitante extends Model
      * @var array
      */
     protected $fillable = ['zon_id', 'coo_per_id', 'ess_razon_social', 'ess_telefono', 'ess_correo_electronico', 'ess_tipo', 'ess_avenida_calle', 'ess_numero', 'ess_stand', 'ess_latitud', 'ess_longitud', 'ess_altitud'];
-    protected $hidden = ['created_at','updated_at','userid_at','deleted_at'];
-    protected $dates=['deleted_at'];
+    protected $hidden = ['updated_at','userid_at','deleted_at'];
+    protected $dates=['created_at','deleted_at'];
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

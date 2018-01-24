@@ -566,9 +566,8 @@ class Ficha_inspeccionController extends Controller
         return response()->json(['status'=>'ok',"msg"=>"creado exitosamente","suma"=>$suma], 200);
 
     }
-
-
-    public function list_inspec_fechas_estado_fun(Request $request)
+   
+   public function list_inspec_fechas_estado_fun(Request $request)
     {
         $fecha1=$request->fecha1;
         $fecha2=$request->fecha2;
