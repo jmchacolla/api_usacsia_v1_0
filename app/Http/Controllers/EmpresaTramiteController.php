@@ -337,8 +337,8 @@ class EmpresaTramiteController extends Controller
         ->join('propietario','propietario.pro_id','=','ep.pro_id')
         ->join('tramitecer_estado as te', 'te.et_id', '=', 'et.et_id')
         ->join('etapa', 'etapa.eta_id', '=', 'te.eta_id')
-        ->where('te.eta_id', '=', 1)
-        ->where('te.te_estado', '=', 'PROCEDE')
+        ->where('te.eta_id', 1)
+        ->where('te.te_estado', 'PROCEDE')
         ->orderBy('te.te_fecha')
         ->distinct()
         ->get();
@@ -616,6 +616,7 @@ class EmpresaTramiteController extends Controller
     }
 
 
+
     public function empresatramite_estado(Request $request,$et_id)
     {
         
@@ -627,7 +628,11 @@ class EmpresaTramiteController extends Controller
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una tramite de carnet sanitario con ese código.'])],404);
         }
         return response()->json(['status'=>'ok','mensaje'=>'exito','empresa_tramite'=>$empresa_tramite],200);
-    }
-       
 
+        }
+
+
+    
 }
+
+
