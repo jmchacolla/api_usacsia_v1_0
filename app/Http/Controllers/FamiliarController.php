@@ -13,83 +13,68 @@ use App\Models\Imagen;
 
 use Carbon;
 
-class FamiliarController extends Controller
-{
-     public function store(Request $request)
-    {
+class FamiliarController extends Controller{
+	
+     public function store(Request $request){
 
         $fam_parentesco=$request->fam_parentesco;
+		if($fam_parentesco=='MADRE'|| $fam_parentesco=='PADRE'){
 
+	        $familiar=new Familiar();
+	        $familiar->per_id=$request->per_id_familiar;
+	        $familiar->per_id_familiar=$request->per_id;
+	        $familiar->fam_parentesco='HIJO(A)';
+	        $familiar->userid_at='2';
+	        $familiar->save();
+	        if($fam_parentesco=='MADRE'){
+		        $familiar2=new Familiar();
+		        $familiar2->per_id=$request->per_id;
+		        $familiar2->per_id_familiar=$request->per_id_familiar;
+		        $familiar2->fam_parentesco='MADRE';
+		        $familiar2->userid_at='2';
+		        $familiar2->save();
+	        }else {
 
-        if($fam_parentesco=='MADRE'|| $fam_parentesco=='PADRE')
-        {
-
-        $familiar=new Familiar();
-        $familiar->per_id=$request->per_id_familiar;
-        $familiar->per_id_familiar=$request->per_id;
-        $familiar->fam_parentesco='HIJO(A)';
-        $familiar->userid_at='2';
-        $familiar->save();
-        
-        if($fam_parentesco=='MADRE')
-        {
-        $familiar2=new Familiar();
-        $familiar2->per_id=$request->per_id;
-        $familiar2->per_id_familiar=$request->per_id_familiar;
-        $familiar2->fam_parentesco='MADRE';
-        $familiar2->userid_at='2';
-        $familiar2->save();
-        }
-
-        else {
-
-        $familiar2=new Familiar();
-        $familiar2->per_id=$request->per_id;
-        $familiar2->per_id_familiar=$request->per_id_familiar;
-        $familiar2->fam_parentesco='PADRE';
-        $familiar2->userid_at='2';
-        $familiar2->save();
+		        $familiar2=new Familiar();
+		        $familiar2->per_id=$request->per_id;
+		        $familiar2->per_id_familiar=$request->per_id_familiar;
+		        $familiar2->fam_parentesco='PADRE';
+		        $familiar2->userid_at='2';
+		        $familiar2->save();
+			}
 
         }
+		if($fam_parentesco=='HERMANO(A)'){
+	        $familiar=new Familiar();
+	        $familiar->per_id=$request->per_id_familiar;
+	        $familiar->per_id_familiar=$request->per_id;
+	        $familiar->fam_parentesco='HERMANO(A)';
+	        $familiar->userid_at='2';
+	        $familiar->save();
+	        
+	        $familiar2=new Familiar();
+	        $familiar2->per_id=$request->per_id;
+	        $familiar2->per_id_familiar=$request->per_id_familiar;
+	        $familiar2->fam_parentesco='HERMANO(A)';
+	        $familiar2->userid_at='2';
+	        $familiar2->save();
 
         }
+        if($fam_parentesco=='TUTOR(A)'){
 
-        if($fam_parentesco=='HERMANO(A)')
-        {
-
-        $familiar=new Familiar();
-        $familiar->per_id=$request->per_id_familiar;
-        $familiar->per_id_familiar=$request->per_id;
-        $familiar->fam_parentesco='HERMANO(A)';
-        $familiar->userid_at='2';
-        $familiar->save();
-        
-        $familiar2=new Familiar();
-        $familiar2->per_id=$request->per_id;
-        $familiar2->per_id_familiar=$request->per_id_familiar;
-        $familiar2->fam_parentesco='HERMANO(A)';
-        $familiar2->userid_at='2';
-        $familiar2->save();
-
-        }
-
-
-         if($fam_parentesco=='TUTOR(A)')
-        {
-
-        $familiar=new Familiar();
-        $familiar->per_id=$request->per_id_familiar;
-        $familiar->per_id_familiar=$request->per_id;
-        $familiar->fam_parentesco='TUTELADO(A)';
-        $familiar->userid_at='2';
-        $familiar->save();
-        
-        $familiar2=new Familiar();
-        $familiar2->per_id=$request->per_id;
-        $familiar2->per_id_familiar=$request->per_id_familiar;
-        $familiar2->fam_parentesco='TUTOR(A)';
-        $familiar2->userid_at='2';
-        $familiar2->save();
+	        $familiar=new Familiar();
+	        $familiar->per_id=$request->per_id_familiar;
+	        $familiar->per_id_familiar=$request->per_id;
+	        $familiar->fam_parentesco='TUTELADO(A)';
+	        $familiar->userid_at='2';
+	        $familiar->save();
+	        
+	        $familiar2=new Familiar();
+	        $familiar2->per_id=$request->per_id;
+	        $familiar2->per_id_familiar=$request->per_id_familiar;
+	        $familiar2->fam_parentesco='TUTOR(A)';
+	        $familiar2->userid_at='2';
+	        $familiar2->save();
 
         }
 
@@ -98,29 +83,26 @@ class FamiliarController extends Controller
          return response()->json(["msg" => "exito","familiar" => $resultado], 200);
     }
 
-     public function show($per_id)
+    public function show($per_id)
     {
     
-    $persona=Persona::find($per_id);
-
-
-     if (!$persona)
+    	$persona=Persona::find($per_id);
+		 if (!$persona)
         {
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una persona con ese código.'])],404);
         }
 
-    $familiares=Familiar::select('familiar.fam_id','persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','familiar.fam_id','fam_parentesco','paciente.pac_id')->join('persona','persona.per_id','=','familiar.per_id_familiar')->join('paciente','paciente.per_id','=','familiar.per_id_familiar')->where('familiar.per_id',$per_id)->get();
+    	$familiares=Familiar::select('familiar.fam_id','persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','familiar.fam_id','fam_parentesco','paciente.pac_id')->join('persona','persona.per_id','=','familiar.per_id_familiar')->join('paciente','paciente.per_id','=','familiar.per_id_familiar')->where('familiar.per_id',$per_id)->get();
 
-    $resultado=compact('persona','familiares');
+    	$resultado=compact('persona','familiares');
 
- return response()->json(['status'=>'ok','mensaje'=>'exito','familiar'=>$resultado],200); 
+ 			return response()->json(['status'=>'ok','mensaje'=>'exito','familiar'=>$resultado],200); 
 
     }
 
-
-    public function crear_persona_familiar(Request $request)
-{
-    $validator = Validator::make($request->all(), [
+	public function crear_persona_familiar(Request $request)
+	{
+   		$validator = Validator::make($request->all(), [
             
             'per_id' => 'required',
             'per_ci' => 'required', ]);
@@ -163,103 +145,90 @@ class FamiliarController extends Controller
         $fam_parentesco=$request->fam_parentesco;
 
 
-        if($fam_parentesco=='MADRE'|| $fam_parentesco=='PADRE')
-        {
+        if($fam_parentesco=='MADRE'|| $fam_parentesco=='PADRE'){
 
-        $familiar=new Familiar();
-        $familiar->per_id=$request->per_id;
-        $familiar->per_id_familiar=$persona->per_id;
-        $familiar->fam_parentesco='HIJO(A)';
-        $familiar->userid_at='2';
-        $familiar->save();
-        
-        if($fam_parentesco=='MADRE')
-        {
-        $familiar2=new Familiar();
-        $familiar2->per_id=$persona->per_id;
-        $familiar2->per_id_familiar=$request->per_id;
-        $familiar2->fam_parentesco='MADRE';
-        $familiar2->userid_at='2';
-        $familiar2->save();
-        }
+		        $familiar=new Familiar();
+		        $familiar->per_id=$request->per_id;
+		        $familiar->per_id_familiar=$persona->per_id;
+		        $familiar->fam_parentesco='HIJO(A)';
+		        $familiar->userid_at='2';
+		        $familiar->save();
+		        
+		        if($fam_parentesco=='MADRE')
+		        {
+		        $familiar2=new Familiar();
+		        $familiar2->per_id=$persona->per_id;
+		        $familiar2->per_id_familiar=$request->per_id;
+		        $familiar2->fam_parentesco='MADRE';
+		        $familiar2->userid_at='2';
+		        $familiar2->save();
+		        }else {
 
-        else {
+		        $familiar2=new Familiar();
+		        $familiar2->per_id=$persona->per_id;
+		        $familiar2->per_id_familiar=$request->per_id;
+		        $familiar2->fam_parentesco='PADRE';
+		        $familiar2->userid_at='2';
+		        $familiar2->save();
 
-        $familiar2=new Familiar();
-        $familiar2->per_id=$persona->per_id;
-        $familiar2->per_id_familiar=$request->per_id;
-        $familiar2->fam_parentesco='PADRE';
-        $familiar2->userid_at='2';
-        $familiar2->save();
-
-        }
+		        }
 
         }
 
-        if($fam_parentesco=='HERMANO(A)')
-        {
+        if($fam_parentesco=='HERMANO(A)'){
 
-        $familiar=new Familiar();
-        $familiar->per_id=$request->per_id;
-        $familiar->per_id_familiar=$persona->per_id;
-        $familiar->fam_parentesco='HERMANO(A)';
-        $familiar->userid_at='2';
-        $familiar->save();
-        
-        $familiar2=new Familiar();
-        $familiar2->per_id=$persona->per_id;
-        $familiar2->per_id_familiar=$request->per_id;
-        $familiar2->fam_parentesco='HERMANO(A)';
-        $familiar2->userid_at='2';
-        $familiar2->save();
-
-        }
-
-         if($fam_parentesco=='TUTOR(A)')
-        {
-
-        $familiar=new Familiar();
-        $familiar->per_id=$request->per_id;
-        $familiar->per_id_familiar=$persona->per_id;
-        $familiar->fam_parentesco='TUTELADO(A)';
-        $familiar->userid_at='2';
-        $familiar->save();
-        
-        $familiar2=new Familiar();
-        $familiar2->per_id=
-        $familiar2->per_id_familiar=$request->per_id;
-        $familiar2->fam_parentesco='TUTOR(A)';
-        $familiar2->userid_at='2';
-        $familiar2->save();
+	        $familiar=new Familiar();
+	        $familiar->per_id=$request->per_id;
+	        $familiar->per_id_familiar=$persona->per_id;
+	        $familiar->fam_parentesco='HERMANO(A)';
+	        $familiar->userid_at='2';
+	        $familiar->save();
+	        
+	        $familiar2=new Familiar();
+	        $familiar2->per_id=$persona->per_id;
+	        $familiar2->per_id_familiar=$request->per_id;
+	        $familiar2->fam_parentesco='HERMANO(A)';
+	        $familiar2->userid_at='2';
+	        $familiar2->save();
 
         }
+		if($fam_parentesco=='TUTOR(A)'){
 
+	        $familiar=new Familiar();
+	        $familiar->per_id=$request->per_id;
+	        $familiar->per_id_familiar=$persona->per_id;
+	        $familiar->fam_parentesco='TUTELADO(A)';
+	        $familiar->userid_at='2';
+	        $familiar->save();
+	        
+	        $familiar2=new Familiar();
+	        $familiar2->per_id=
+	        $familiar2->per_id_familiar=$request->per_id;
+	        $familiar2->fam_parentesco='TUTOR(A)';
+	        $familiar2->userid_at='2';
+	        $familiar2->save();
 
-        $resultado=compact('personas','imagen','familiar','familiar2');
+        }
+		$resultado=compact('personas','imagen','familiar','familiar2');
 
          return response()->json([
                 "msg" => "exito",
                 "persona" => $resultado
             ], 200
         );
-}
+	}
 
 
     public function update(Request $request, $per_id)
     {
-         $persona=Persona::find($per_id);
-
-
-     if (!$persona)
-        {
+        $persona=Persona::find($per_id);
+		if (!$persona)
+        {	
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una persona con ese código.'])],404);
         }
-
-    $familiares=Familiar::select('familiar.fam_id','persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','familiar.fam_id','fam_parentesco')->join('persona','persona.per_id','=','familiar.per_id_familiar')->where('familiar.per_id',$per_id)->get();
-
-    $resultado=compact('persona','familiares');
-
- return response()->json(['status'=>'ok','mensaje'=>'exito','familiar'=>$resultado],200); 
+		$familiares=Familiar::select('familiar.fam_id','persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','familiar.fam_id','fam_parentesco')->join('persona','persona.per_id','=','familiar.per_id_familiar')->where('familiar.per_id',$per_id)->get();
+		$resultado=compact('persona','familiares');
+		return response()->json(['status'=>'ok','mensaje'=>'exito','familiar'=>$resultado],200); 
     }
 
 
