@@ -354,16 +354,27 @@ class Persona_tramiteController extends Controller
 
         $reporte=Persona_tramite::where('pt_fecha_ini', '>=', $fecha1)
         ->where('pt_fecha_ini', '<=', $fecha2)
+        ->whereNull('pt_transaccion_banco')
         ->get();
         foreach ($reporte as $value) {
             $tramite=Tramite::find($value->tra_id);
             $persona=Persona::find($value->per_id);
-
             $value->tra_nombre=$tramite->tra_nombre;
             $value->per_nombre_completo=$persona->per_nombres.' '.$persona->per_apellido_primero.' '.$persona->per_apellido_segundo;
             $value->per_ci=$persona->per_ci.' '.$persona->per_ci_expedido;
         }
-        return response()->json(['status'=>'ok','reporte'=>$reporte],200);
+        $reportecasbanco=Persona_tramite::where('pt_fecha_ini', '>=', $fecha1)
+        ->where('pt_fecha_ini', '<=', $fecha2)
+        ->whereNotNull('pt_transaccion_banco')
+        ->get();
+        foreach ($reportecasbanco as $value) {
+            $tramite=Tramite::find($value->tra_id);
+            $persona=Persona::find($value->per_id);
+            $value->tra_nombre=$tramite->tra_nombre;
+            $value->per_nombre_completo=$persona->per_nombres.' '.$persona->per_apellido_primero.' '.$persona->per_apellido_segundo;
+            $value->per_ci=$persona->per_ci.' '.$persona->per_ci_expedido;
+        }
+        return response()->json(['status'=>'ok','reporte'=>$reporte, 'reportecasbanco'=>$reportecasbanco],200);
     }
 
      public function persona_tramite_aprobados(Request $request){
