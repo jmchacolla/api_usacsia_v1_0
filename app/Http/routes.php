@@ -122,12 +122,15 @@
     Route::get('estadopruebamedica/{pm_id}', 'Prueba_medicaController@estadopruebamedica');
 /*PRUEBA ENFERMEDAD*/
     Route::resource('prueba_enfermedad','Prueba_enfermedadController',['only' => ['store', 'update', 'destroy', 'show','index']]);
-/*    */
+
+
+/*  NOOOOOOOOOOOOOOOOOOOO SEEE USAAAAAAAAAAAAAA  */
     Route::get('consulta/{pm_id}','Prueba_medicaController@listar_enfermedades_prueba');
     Route::post('consulta','Prueba_EnfermedadController@crear_prueba_medica_enfermedad');
+
 /*CARIES*/
     Route::resource('caries','CariesController',['only' => ['store', 'update', 'destroy', 'show','index']]);
-
+/*  NOOOOOOOOOOOOOOOOOOOO SEEE USAAAAAAAAAAAAAA  */
     /*--*/
 
 
@@ -146,6 +149,7 @@
     Route::get('municipio/{pro_id}','MunicipioController@municipio_provincia');
     //listar zona por municipio
     Route::get('zona/{mun_id}', 'ZonaController@index');
+    //editar zonas
     Route::resource('zonass','ZonaController',['only' => ['index', 'store', 'update', 'show','destroy']]);
 
     //listar funcionarios por cargo 
@@ -409,9 +413,9 @@
     Route::get('reportecaja_cesform', 'EmpresaTramiteController@reportecaja_cesform');
     Route::get('reportecaja_orden', 'OrdenPagoController@reportecaja_orden');
 
-     Route::get('persona_tramite_aprobados','Persona_tramiteController@persona_tramite_aprobados');
+/*Route::get('persona_tramite_aprobados','Persona_tramiteController@persona_tramite_aprobados');*/
 //edad de personas
-     Route::get('persona_edad/{fecha}','PersonaController@persona_edad');
+    Route::get('persona_edad/{fecha}','PersonaController@persona_edad');
      // operaciones con la tabla familiar
 
     Route::resource('familiar','FamiliarController',['only' => ['store', 'update', 'show']]);
