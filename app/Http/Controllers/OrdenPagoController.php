@@ -65,6 +65,7 @@ class OrdenPagoController extends Controller
         if($request->op_fecha_pagado){$ordenpago->op_fecha_pagado=$request->op_fecha_pagado;}
         if($request->op_descripcion){$ordenpago->op_descripcion=$request->op_descripcion;}
         if($request->op_estado_pago){$ordenpago->op_estado_pago=$request->op_estado_pago;}
+        if($request->op_transaccion_banco){$ordenpago->op_transaccion_banco=$request->op_transaccion_banco;}
         $ordenpago->save();
         return response()->json(['status'=>'ok',"msg" => "Exito", "ordenpago" => $ordenpago], 200);
     }

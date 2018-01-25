@@ -74,13 +74,14 @@ class EmpresaTramiteController extends Controller
         $empt->tra_id=$request->tra_id;
         $empt->ess_id=$request->ess_id;
         $empt->fun_id=$request->fun_id;
+        $empt->et_tipo_tramite=$request->et_tipo_tramite;//veririficar nuevo renovacion
+        // if($request->et_transaccion_banco){$empt->et_transaccion_banco=$request->et_transaccion_banco;}
         // $empt->et_numero_tramite=$request->et_numero_tramite;//se asigna cuando paga los 10 bs en bd
         // $empt->et_vigencia_pago=$request->et_vigencia_pago;se completa despues de pagar en bd
         // $empt->et_fecha_ini=$request->et_fecha_ini; //DEFAULT ('now'::text)::date,
         // $empt->et_fecha_fin=$request->et_fecha_fin;//cuando et_estado_tramite=APROVADO;
         // $empt->et_estado_pago=$request->et_estado_pago; //DEFAULT 'PAGADO'::text,
         // $empt->et_estado_tramite=$request->et_estado_tramite; //DEFAULT 'INICIADO'::text,
-        $empt->et_tipo_tramite=$request->et_tipo_tramite;//veririficar nuevo renovacion
         // $empt->et_vigencia_documento=$request->et_vigencia_documento;// la db debe insertar segun el tramite
         $empt->save();
         return response()->json(['status'=>'ok',"mensaje"=>"creado exitosamente","empt"=>$empt], 200);
@@ -140,6 +141,7 @@ class EmpresaTramiteController extends Controller
         if($request->et_estado_tramite){$empt->et_estado_tramite=$request->et_estado_tramite;} //DEFAULT 'PENDIENTE'::text,
         if($request->et_monto){$empt->et_monto=$request->et_monto;}
         if($request->et_tipo_tramite){$empt->et_tipo_tramite=$request->et_tipo_tramite;}//veririficar nuevo renovacion
+        if($request->et_transaccion_banco){$empt->et_transaccion_banco=$request->et_transaccion_banco;}
         $empt->save();
         return response()->json(['status'=>'ok',"mensaje"=>"modificado exitosamente","empt"=>$empt], 200);
     }
