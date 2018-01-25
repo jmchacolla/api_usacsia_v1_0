@@ -593,13 +593,15 @@ class EmpresaTramiteController extends Controller
         $reporte=EmpresaTramite::where('et_fecha_ini', '>=', $fecha1)
         ->where('et_fecha_ini', '<=', $fecha2)
         ->where('et_estado_pago','!=', 'PENDIENTE')
+        ->whereNull('et_transaccion_banco')
         ->get();
         foreach ($reporte as $value) {
-            $tramite=Tramite::find($value->tra_id);
+            $tramite=Tramite::where('tra_id', $value->tra_id)->first();
             $establecimiento=EstablecimientoSolicitante::find($value->ess_id);
             $empresa=Empresa::where('ess_id', $establecimiento->ess_id)->first();
             $empro=EmpresaPropietario::where('emp_id', $empresa->emp_id)->first();
             $propietario=Propietario::find($empro->pro_id);
+            $value->tra_nombre=$tramite->tra_nombre;
             if($propietario->pro_tipo=='N'){
                 $pnat=PersonaNatural::where('pro_id', $propietario->pro_id)->first();
                 $persona=Persona::find($pnat->per_id);
@@ -611,9 +613,32 @@ class EmpresaTramiteController extends Controller
                 $value->propietario=$pj->pjur_razon_social;
                 $value->identificador=$pj->pjur_nit;
             }
-            $value->tra_nombre=$tramite->tra_nombre;
         }
-        return response()->json(['status'=>'ok','reporte'=>$reporte],200);
+        $reportecesfbanco=EmpresaTramite::where('et_fecha_ini', '>=', $fecha1)
+        ->where('et_fecha_ini', '<=', $fecha2)
+        ->where('et_estado_pago','!=', 'PENDIENTE')
+        ->whereNotNull('et_transaccion_banco')
+        ->get();
+        foreach ($reportecesfbanco as $value) {
+            $tramite=Tramite::where('tra_id', $value->tra_id)->first();
+            $establecimiento=EstablecimientoSolicitante::find($value->ess_id);
+            $empresa=Empresa::where('ess_id', $establecimiento->ess_id)->first();
+            $empro=EmpresaPropietario::where('emp_id', $empresa->emp_id)->first();
+            $propietario=Propietario::find($empro->pro_id);
+            $value->tra_nombre=$tramite->tra_nombre;
+            if($propietario->pro_tipo=='N'){
+                $pnat=PersonaNatural::where('pro_id', $propietario->pro_id)->first();
+                $persona=Persona::find($pnat->per_id);
+                $value->propietario=$persona->per_nombres.' '.$persona->per_apellido_primero.' '.$persona->per_apellido_segundo;
+                $value->identificador=$persona->per_ci.' '.$persona->per_ci_expedido;
+            }
+            if($propietario->pro_tipo=='J'){
+                $pj=PersonaJuridica::where('pro_id', $propietario->pro_id)->first();
+                $value->propietario=$pj->pjur_razon_social;
+                $value->identificador=$pj->pjur_nit;
+            }
+        }
+        return response()->json(['status'=>'ok','reporte'=>$reporte, 'reportecesfbanco'=>$reportecesfbanco],200);
 
     }
 
