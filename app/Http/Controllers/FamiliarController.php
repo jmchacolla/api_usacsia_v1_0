@@ -234,7 +234,7 @@ class FamiliarController extends Controller{
 
     public function familiar_buscar($per_id)
     {
-        $persona=Familiar::find($per_id);
+        $persona=Familiar::where('per_id',$per_id)->first();
 		if (!$persona)
         {
             /*return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una persona con ese código.'])],404);*/

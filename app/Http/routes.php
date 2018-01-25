@@ -419,6 +419,8 @@
     Route::post('personas_familiar','FamiliarController@crear_persona_familiar');
     //familiar
      Route::get('familiar_buscar/{per_id}','FamiliarController@familiar_buscar');
+     //edad de personas
+     Route::get('persona_edad2/{per_id}','PersonaController@persona_edad2');
     
 
 
