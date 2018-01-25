@@ -630,7 +630,9 @@ class EmpresaTramiteController extends Controller
             return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra una tramite de carnet sanitario con ese código.'])],404);
         }
         return response()->json(['status'=>'ok','mensaje'=>'exito','empresa_tramite'=>$empresa_tramite],200);
+
         }
+
 
     
 }

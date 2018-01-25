@@ -366,9 +366,6 @@ class Persona_tramiteController extends Controller
         return response()->json(['status'=>'ok','reporte'=>$reporte],200);
     }
 
-
-
-
      public function persona_tramite_aprobados(Request $request){
 
    
