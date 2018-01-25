@@ -410,6 +410,15 @@
     Route::get('reportecaja_orden', 'OrdenPagoController@reportecaja_orden');
 
      Route::get('persona_tramite_aprobados','Persona_tramiteController@persona_tramite_aprobados');
+//edad de personas
+     Route::get('persona_edad/{fecha}','PersonaController@persona_edad');
+     // operaciones con la tabla familiar
+
+    Route::resource('familiar','FamiliarController',['only' => ['store', 'update', 'show']]);
+    // permite la creacion de  familiares de una persona
+    Route::post('personas_familiar','FamiliarController@crear_persona_familiar');
+    //familiar
+     Route::get('familiar_buscar/{per_id}','FamiliarController@familiar_buscar');
     
 
 
