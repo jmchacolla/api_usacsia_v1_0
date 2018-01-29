@@ -48,7 +48,7 @@ class PersonaController extends Controller
         $persona->per_nombres= Str::upper($request->per_nombres);
         $persona->per_apellido_primero= Str::upper($request->per_apellido_primero);
         $persona->per_apellido_segundo= Str::upper($request->per_apellido_segundo);
-        $persona->per_fecha_nacimiento=  Carbon::now();//$request->per_fecha_nacimiento;
+        $persona->per_fecha_nacimiento=  $request->per_fecha_nacimiento;//Carbon::now();
         $persona->per_genero= $request->per_genero;
         $persona->per_email= $request->per_email;
         $persona->per_numero_celular= $request->per_numero_celular;
