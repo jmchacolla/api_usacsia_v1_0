@@ -139,6 +139,10 @@ class Ficha_inspeccionController extends Controller
         $ficha_inspeccion->fi_exibe_carne =$request->fi_exibe_carne;
         $ficha_inspeccion->fi_extinguidor =$request->fi_extinguidor;
         $ficha_inspeccion->fi_botiquin =$request->fi_botiquin;
+
+        $ficha_inspeccion->fi_latitud =$request->fi_latitud;
+        $ficha_inspeccion->fi_longitud =$request->fi_longitud;
+
         $ficha_inspeccion->userid_at='2';
         $ficha_inspeccion->save();
 
@@ -194,6 +198,10 @@ class Ficha_inspeccionController extends Controller
         $ficha_inspeccion->fi_exibe_carne =$request->fi_exibe_carne;
         $ficha_inspeccion->fi_extinguidor =$request->fi_extinguidor;
         $ficha_inspeccion->fi_botiquin =$request->fi_botiquin;
+
+        $ficha_inspeccion->fi_latitud =$request->fi_latitud;
+        $ficha_inspeccion->fi_longitud =$request->fi_longitud;
+
         $ficha_inspeccion->userid_at='2';
         $ficha_inspeccion->save();
 
@@ -278,6 +286,10 @@ class Ficha_inspeccionController extends Controller
         $ficha_inspeccion->fi_exibe_carne =$request->fi_exibe_carne;
         $ficha_inspeccion->fi_extinguidor =$request->fi_extinguidor;
         $ficha_inspeccion->fi_botiquin =$request->fi_botiquin;
+
+        $ficha_inspeccion->fi_latitud =$request->fi_latitud;
+        $ficha_inspeccion->fi_longitud =$request->fi_longitud;
+
         $ficha_inspeccion->userid_at='2';
         $ficha_inspeccion->save();
 
@@ -365,6 +377,10 @@ class Ficha_inspeccionController extends Controller
         $ficha_inspeccion->fi_exibe_carne =$request->fi_exibe_carne;
         $ficha_inspeccion->fi_extinguidor =$request->fi_extinguidor;
         $ficha_inspeccion->fi_botiquin =$request->fi_botiquin;
+
+        $ficha_inspeccion->fi_latitud =$request->fi_latitud;
+        $ficha_inspeccion->fi_longitud =$request->fi_longitud;
+
         $ficha_inspeccion->userid_at='2';
         $ficha_inspeccion->save();
 
@@ -430,6 +446,10 @@ class Ficha_inspeccionController extends Controller
         $ficha_inspeccion->fi_exibe_carne =$request->fi_exibe_carne;
         $ficha_inspeccion->fi_extinguidor =$request->fi_extinguidor;
         $ficha_inspeccion->fi_botiquin =$request->fi_botiquin;
+
+        $ficha_inspeccion->fi_latitud =$request->fi_latitud;
+        $ficha_inspeccion->fi_longitud =$request->fi_longitud;
+
         $ficha_inspeccion->userid_at='2';
         $ficha_inspeccion->save();
 
@@ -506,6 +526,10 @@ class Ficha_inspeccionController extends Controller
         $ficha_inspeccion->fi_exibe_carne =$request->fi_exibe_carne;
         $ficha_inspeccion->fi_extinguidor =$request->fi_extinguidor;
         $ficha_inspeccion->fi_botiquin =$request->fi_botiquin;
+
+        $ficha_inspeccion->fi_latitud =$request->fi_latitud;
+        $ficha_inspeccion->fi_longitud =$request->fi_longitud;
+
         $ficha_inspeccion->userid_at='2';
         $ficha_inspeccion->save();
 
