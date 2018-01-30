@@ -275,6 +275,8 @@
    /* Route::put('aprobacion1/{et_id}','TramitecerEstadoController@editarAp1');*/
     //w permite editar para la aprobacion de jefe certificado
     /*Route::put('aprobacion2/{et_id}','TramitecerEstadoController@editarAp2');*/
+    /*jhon clasificacion de especialidad por clasificacion gral*/
+    Route::get('buscarcle/{cg_id}', 'ClasificacionEspecialidadController@buscarcle');
     //subclasificacion por cle_id
     Route::get('buscarsub/{cle_id}', 'SubclasificacionController@buscarSub');
     //categoria por sub_id
@@ -390,6 +392,11 @@
     Route::resource('orden_pago','OrdenPagoController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::get('verordenpago/{op_id}', 'OrdenPagoController@verordenpago');
     Route::get('ordenpagoestado', 'OrdenPagoController@ordenpagoestado');
+    /*jhon reportes caja*/
+    Route::get('reportecaja_cas', 'Persona_tramiteController@reportecaja_cas');
+    Route::get('reportecaja_cesform', 'EmpresaTramiteController@reportecaja_cesform');
+    Route::get('reportecaja_orden', 'OrdenPagoController@reportecaja_orden');
+    
 
 
 
