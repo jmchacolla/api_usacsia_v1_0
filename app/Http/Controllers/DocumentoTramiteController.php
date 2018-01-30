@@ -85,7 +85,8 @@ class DocumentoTramiteController extends Controller
                 if($value->dt_observado){
                         $tramitecer_estado->te_estado='OBSERVADO';
                 }else{
-                        $tramitecer_estado->te_estado='APROBADO';
+                        // $tramitecer_estado->te_estado='APROBADO';
+                    $tramitecer_estado->te_estado='PROCEDE';
                 }
                  $tramitecer_estado->te_observacion=$tramitecer_estado->te_observacion." ".$value->dt_observacion;
             }

@@ -316,7 +316,11 @@
 
 //w lista de empresas por funcionario 18-1-2018
     Route::get('empresatramite_validos/{fun_id}','EmpresaTramiteController@empresatramite_validos');
-
+    /*vero -  lista de tramites establecimiento para realizar inspeccion*/
+    Route::get('tramitecer_asignar_inpeccion','EmpresaTramiteController@tramitecer_asignar_inpeccion');
+    Route::get('tramitecer_asignados_inspeccion','EmpresaTramiteController@tramitecer_asignados_inspeccion');
+    Route::post('editar_lista_tramitecer_estado','EmpresaTramiteController@editar_lista_tramitecer_estado');
+    
      /*jhon----operacines con receta*/
      Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
      

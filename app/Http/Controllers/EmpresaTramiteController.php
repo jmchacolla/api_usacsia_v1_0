@@ -27,6 +27,7 @@ use App\Models\Ficha_inspeccion;
 use App\Models\Ficha_categoria;
 use App\Models\FichaCategoriaSancion;
 use App\Models\ImagenEstablecimiento;
+use App\Models\TramitecerEstado;
 
 
 
@@ -317,6 +318,139 @@ class EmpresaTramiteController extends Controller
         return response()->json(['status'=>'ok',"mensaje"=>"Lista estado",'empresa_tramite'=>$empresa_tramite], 200);
 
     }
+
+
+    //LISTA DE TRAMITES PARA ASIGNAR A INSECTORES
+        public function tramitecer_asignar_inpeccion()
+    {
+        $empresa_tramite=Zona_inspeccion::select('et.et_id','_zona.zon_nombre','per_nombres','per_apellido_primero','per_apellido_segundo','ess.ess_avenida_calle','ess.ess_numero','et.et_id', 'et.tra_id', 'et.ess_id', 'et.et_numero_tramite', 'et.et_vigencia_pago', 'et.et_fecha_ini', 'et.et_estado_pago', 'et.et_estado_tramite', 'et.et_monto', 'et.et_tipo_tramite','ess.ess_id','ess.ess_razon_social', 'ess.ess_telefono', 'ess.ess_correo_electronico', 'ess.ess_tipo','empresa.emp_id','empresa.ess_id', 'empresa.emp_kardex', 'te.te_id', 'te.te_estado', 'te.te_fecha', 'etapa.eta_id', 'propietario.pro_id','propietario.pro_tipo','ess.ess_id as ess_propietario','ess.ess_id as ess_ci_nit')
+        ->join('_zona','_zona.zon_id','=','zona_inspeccion.zon_id')
+        ->join('funcionario','funcionario.fun_id','=','zona_inspeccion.fun_id')
+        ->join('persona','persona.per_id','=','funcionario.per_id')
+        ->join('establecimiento_solicitante as ess','ess.zon_id','=','_zona.zon_id')
+        ->join('empresa_tramite as et','et.ess_id','=','ess.ess_id')
+        ->join('empresa','empresa.ess_id','=','et.ess_id')
+        ->join('empresa_propietario as ep','ep.emp_id','=','empresa.emp_id')
+        ->join('propietario','propietario.pro_id','=','ep.pro_id')
+        ->join('tramitecer_estado as te', 'te.et_id', '=', 'et.et_id')
+        ->join('etapa', 'etapa.eta_id', '=', 'te.eta_id')
+        ->where('te.eta_id', '=', 1)
+        ->where('te.te_estado', '=', 'PROCEDE')
+        ->orderBy('te.te_fecha')
+        ->distinct()
+        ->get();
+
+        for ($i=0; $i < count($empresa_tramite); $i++) {
+            if($empresa_tramite[$i]->pro_tipo=="J")
+            {
+                $pjuridica=PersonaJuridica::select('pjur_razon_social','pjur_nit')
+                ->where('p_juridica.pro_id',$empresa_tramite[$i]->pro_id)
+                ->first();
+                $empresa_tramite[$i]->ess_propietario=$pjuridica->pjur_razon_social;
+                $empresa_tramite[$i]->ess_ci_nit=$pjuridica->pjur_nit;
+            }else{
+                $pnatural=PersonaNatural::select('per_nombres','per_apellido_primero','per_apellido_segundo','per_ci')
+                ->join('persona','persona.per_id','=','p_natural.per_id')
+                ->where('p_natural.pro_id',$empresa_tramite[$i]->pro_id)
+                ->first();
+                $empresa_tramite[$i]->ess_propietario=$pnatural->per_nombres.' '.$pnatural->per_apellido_primero.' '.$pnatural->per_apellido_segundo;
+                $empresa_tramite[$i]->ess_ci_nit=$pnatural->per_ci;
+            }
+        }
+
+       
+        if (!$empresa_tramite) {
+            return response()->json(['errors'=>array(['code'=>404, 'message'=>'No se encuentran registros.'])],404);
+        }
+        return response()->json(['status'=>'ok',"mensaje"=>"Lista estado",'empresa_tramite'=>$empresa_tramite], 200);
+
+    }
+
+
+    //APROBAR PARA QUE VEA EL INSPECTOR------------------
+    public function editar_lista_tramitecer_estado(Request $request)
+    {
+        /*convirtiendo $request vector a object*/
+        if(count($request->ids)){
+            $requesti_array=$request->ids;
+            for ($i=0; $i < count($requesti_array); $i++) {
+                $et_id=$requesti_array[$i];
+                $tramitecer_estado = TramitecerEstado::where('et_id',$et_id)->where('eta_id',1)->first();
+                if($tramitecer_estado){
+                    $tramitecer_estado->te_estado='APROBADO';
+                    $tramitecer_estado->save();
+                }
+                 $tramitecer_estado = TramitecerEstado::where('et_id',$et_id)->where('eta_id',8)->first();
+                if($tramitecer_estado){
+                    $tramitecer_estado->te_estado='APROBADO';
+                    $tramitecer_estado->save();
+                }
+            }
+        return response()->json(['status'=>'ok',"mensaje"=>"editado exitosamente","tramitecer_estado"=>$tramitecer_estado], 200);
+        }else{
+            return response()->json(['status'=>'ok',"mensaje"=>"sin editar"], 200);
+        }
+    }
+
+
+
+    //LISTA DE TRAMITES  ASIGNADOS A INSECTORES
+        public function tramitecer_asignados_inspeccion()
+    {
+        $empresa_tramite=Zona_inspeccion::select('et.et_id','_zona.zon_nombre','per_nombres','per_apellido_primero','per_apellido_segundo','ess.ess_avenida_calle','ess.ess_numero', 'et.tra_id', 'et.et_numero_tramite', 'et.et_vigencia_pago', 'et.et_fecha_ini', 'et.et_estado_pago', 'et.et_estado_tramite', 'et.et_monto', 'et.et_tipo_tramite','ess.ess_id','ess.ess_razon_social', 'ess.ess_telefono', 'ess.ess_correo_electronico', 'ess.ess_tipo','empresa.emp_id','empresa.ess_id', 'empresa.emp_kardex', 'te.te_id', 'te.te_estado', 'te.te_fecha', 'etapa.eta_id', 'propietario.pro_id','propietario.pro_tipo','ess.ess_id as ess_propietario','ess.ess_id as ess_ci_nit','te.updated_at','te.te_id as fi_id ')
+        ->join('_zona','_zona.zon_id','=','zona_inspeccion.zon_id')
+        ->join('funcionario','funcionario.fun_id','=','zona_inspeccion.fun_id')
+        ->join('persona','persona.per_id','=','funcionario.per_id')
+        ->join('establecimiento_solicitante as ess','ess.zon_id','=','_zona.zon_id')
+        ->join('empresa_tramite as et','et.ess_id','=','ess.ess_id')
+        ->join('empresa','empresa.ess_id','=','et.ess_id')
+        ->join('empresa_propietario as ep','ep.emp_id','=','empresa.emp_id')
+        ->join('propietario','propietario.pro_id','=','ep.pro_id')
+        ->join('tramitecer_estado as te', 'te.et_id', '=', 'et.et_id')
+        ->join('etapa', 'etapa.eta_id', '=', 'te.eta_id')
+        ->where('te.eta_id', '=', 1)
+        ->where('te.te_estado', '=', 'APROBADO')
+        ->orderBy('te.updated_at','asc')
+        ->distinct()
+        ->get();
+
+       
+        for ($i=0; $i < count($empresa_tramite); $i++) {
+            if($empresa_tramite[$i]->pro_tipo=="J")
+            {
+                $pjuridica=PersonaJuridica::select('pjur_razon_social','pjur_nit')
+                ->where('p_juridica.pro_id',$empresa_tramite[$i]->pro_id)
+                ->first();
+                $empresa_tramite[$i]->ess_propietario=$pjuridica->pjur_razon_social;
+                $empresa_tramite[$i]->ess_ci_nit=$pjuridica->pjur_nit;
+            }else{
+                $pnatural=PersonaNatural::select('per_nombres','per_apellido_primero','per_apellido_segundo','per_ci')
+                ->join('persona','persona.per_id','=','p_natural.per_id')
+                ->where('p_natural.pro_id',$empresa_tramite[$i]->pro_id)
+                ->first();
+                $empresa_tramite[$i]->ess_propietario=$pnatural->per_nombres.' '.$pnatural->per_apellido_primero.' '.$pnatural->per_apellido_segundo;
+                $empresa_tramite[$i]->ess_ci_nit=$pnatural->per_ci;
+            }
+             $et_id=$empresa_tramite[$i]->et_id;
+            $ficha_inspeccion=Ficha_inspeccion::select('fi_id')
+            ->where('et_id',$et_id)
+            ->first();
+            if($ficha_inspeccion){
+                $empresa_tramite[$i]->fi_id=$ficha_inspeccion->fi_id;
+            }else{
+                $empresa_tramite[$i]->fi_id=null;
+            }
+        }
+
+       
+        if (!$empresa_tramite) {
+            return response()->json(['errors'=>array(['code'=>404, 'message'=>'No se encuentran registros.'])],404);
+        }
+        return response()->json(['status'=>'ok',"mensaje"=>"Lista estado",'empresa_tramite'=>$empresa_tramite], 200);
+
+    }
+
+
     //lista para inspectores only
     public function empresatramite_validos($fun_id)
     {
