@@ -143,6 +143,7 @@ class EmpresaTramiteController extends Controller
         $empt->save();
         return response()->json(['status'=>'ok',"mensaje"=>"modificado exitosamente","empt"=>$empt], 200);
     }
+    //LISTA EMPRESAS BUSQUEDA
     public function buscarpropietario($parametro)
     {   
         $persona=Persona::select('persona.per_id','persona.zon_id','persona.per_ci','persona.per_tipo_documento','persona.per_pais','persona.per_ci_expedido','persona.per_nombres','persona.per_apellido_primero','persona.per_apellido_segundo','persona.per_fecha_nacimiento','persona.per_genero','persona.per_email','persona.per_numero_celular','persona.per_clave_publica','persona.per_avenida_calle','persona.per_numero','persona.per_ocupacion', 'establecimiento_solicitante.zon_id','establecimiento_solicitante.ess_razon_social','establecimiento_solicitante.ess_telefono','establecimiento_solicitante.ess_correo_electronico','establecimiento_solicitante.ess_tipo','establecimiento_solicitante.ess_avenida_calle','establecimiento_solicitante.ess_numero','establecimiento_solicitante.ess_stand','establecimiento_solicitante.ess_latitud','establecimiento_solicitante.ess_longitud','establecimiento_solicitante.ess_altitud', 'empresa.emp_id','empresa.ess_id','empresa.emp_kardex','empresa.emp_nit','empresa.emp_url_nit','empresa.emp_licencia', 'empresa.emp_url_licencia', 'empresa_tramite.et_id','empresa_tramite.tra_id','empresa_tramite.ess_id','empresa_tramite.fun_id','empresa_tramite.et_numero_tramite','empresa_tramite.et_vigencia_pago','empresa_tramite.et_fecha_ini','empresa_tramite.et_fecha_fin','empresa_tramite.et_estado_pago','empresa_tramite.et_estado_tramite','empresa_tramite.et_monto','empresa_tramite.et_tipo_tramite','empresa_tramite.et_vigencia_documento')
@@ -163,8 +164,10 @@ class EmpresaTramiteController extends Controller
             ->join('establecimiento_solicitante', 'establecimiento_solicitante.ess_id', '=', 'empresa.ess_id')
             ->join('empresa_tramite', 'empresa_tramite.ess_id', '=', 'establecimiento_solicitante.ess_id')
             ->where('p_juridica.pjur_nit', $parametro)
+
             ->orderBy('empresa_tramite.et_id','desc')
             ->get()/*->first()*/;
+
             if (!$persona) {
                 return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
             }
@@ -454,6 +457,25 @@ class EmpresaTramiteController extends Controller
     //lista para inspectores only
     public function empresatramite_validos($fun_id)
     {
+
+        /*$empresa_tramite=Zona_inspeccion::where('zona_inspeccion.fun_id',$fun_id)
+        ->join('establecimiento_solicitante','establecimiento_solicitante.zon_id','=','zona_inspeccion.zon_id')
+        ->join('empresa_tramite','empresa_tramite.ess_id','=','establecimiento_solicitante.ess_id')
+        ->join('empresa','empresa.ess_id','=','empresa_tramite.ess_id')
+        ->join('empresa_propietario','empresa_propietario.emp_id','=','empresa.emp_id')
+        ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
+
+        //->join('ficha_inspeccion','ficha_inspeccion.et_id','!=','empresa_tramite.et_id')
+        
+        ->join('tramitecer_estado', 'tramitecer_estado.et_id', '=', 'empresa_tramite.et_id')
+        ->join('etapa', 'etapa.eta_id', '=', 'tramitecer_estado.eta_id')
+        ->where('tramitecer_estado.eta_id', '=', 1)
+        ->where('tramitecer_estado.te_estado', '=', 'APROBADO')
+
+
+        ->orderBy('tramitecer_estado.te_fecha')
+        ->distinct()*/
+
         
 
         // $empresa_tramite=Zona_inspeccion::where('zona_inspeccion.fun_id',$fun_id)
@@ -467,6 +489,7 @@ class EmpresaTramiteController extends Controller
         // ->where('tramitecer_estado.eta_id', '=', 1)
         // ->where('tramitecer_estado.te_estado', '=', 'APROBADO')
         // ->orderBy('tramitecer_estado.te_fecha')
+
   
     
         // ->select('empresa_tramite.et_id', 'empresa_tramite.et_id', 'empresa_tramite.tra_id', 'empresa_tramite.ess_id', 'empresa_tramite.et_numero_tramite', 'empresa_tramite.et_vigencia_pago', 'empresa_tramite.et_fecha_ini', 'empresa_tramite.et_estado_pago', 'empresa_tramite.et_estado_tramite', 'empresa_tramite.et_monto', 'empresa_tramite.et_tipo_tramite','establecimiento_solicitante.ess_id','establecimiento_solicitante.ess_razon_social', 'establecimiento_solicitante.ess_telefono', 'establecimiento_solicitante.ess_correo_electronico', 'establecimiento_solicitante.ess_tipo','empresa.emp_id','empresa.ess_id', 'empresa.emp_kardex', 'tramitecer_estado.te_id', 'tramitecer_estado.te_estado', 'tramitecer_estado.te_fecha', 'etapa.eta_id', 'propietario.pro_id','propietario.pro_tipo')
@@ -493,6 +516,7 @@ class EmpresaTramiteController extends Controller
 
        
         for ($i=0; $i < count($empresa_tramite); $i++) {
+
             if($empresa_tramite[$i]->pro_tipo=="J")
             {
                 $pjuridica=PersonaJuridica::select('pjur_razon_social','pjur_nit')
@@ -556,6 +580,9 @@ class EmpresaTramiteController extends Controller
         $fichasancion=FichaCategoriaSancion::where('fic_id', $ficha->fic_id);
         return response()->json(['status'=>'ok','mensaje'=>'exito','ficha'=>$ficha, 'fichacategoria'=>$fichacategoria, 'fichasancion'=>$fichasancion],200);
     }
+
+
+
     public function reportecaja_cesform(Request $request)
     {
         $fecha1=$request->fecha1;
@@ -585,7 +612,9 @@ class EmpresaTramiteController extends Controller
             $value->tra_nombre=$tramite->tra_nombre;
         }
         return response()->json(['status'=>'ok','reporte'=>$reporte],200);
+
     }
+
 
 
     public function empresatramite_estado(Request $request,$et_id)
@@ -603,6 +632,5 @@ class EmpresaTramiteController extends Controller
 
     
 }
-
 
 

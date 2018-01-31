@@ -330,8 +330,8 @@ class Persona_tramiteController extends Controller
       
         return response()->json(['status'=>'ok','mensaje'=>'exito','persona_tramite'=>$persona_tramite],200);
     }
-    public function ver_estado_cs($per_ci)
-    {
+    public function ver_estado_cs($per_ci){
+
         $persona_tramite= Persona::select('persona.per_nombres','per_apellido_primero','per_apellido_segundo','persona_tramite.pt_id','pt_estado_tramite')
         ->where('per_ci',$per_ci)
         ->join('persona_tramite','persona_tramite.per_id','=','persona.per_id')
@@ -365,7 +365,10 @@ class Persona_tramiteController extends Controller
 
 
 
-public function persona_tramite_aprobados(Request $request){
+
+     public function persona_tramite_aprobados(Request $request){
+
+   
         $fecha=$request->fecha;
 
         $persona_tramite=Carnet_sanitario::where('pt_fecha_fin',$fecha)
@@ -375,5 +378,6 @@ public function persona_tramite_aprobados(Request $request){
         return response()->json(['status'=>'ok','persona_tramite'=>$persona_tramite],200);
 
     }
+
 
 }

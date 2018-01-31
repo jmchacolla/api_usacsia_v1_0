@@ -178,8 +178,18 @@ return response()->json([
         return response()->json(["msg" => "exito", "usuario" => $usuario], 200);
         
     }
-    public function destroy($id)
+    
+    // lista los funcionarios que no tienen cuenta 
+   /* public function usuarios_nofuncionarios()
     {
-        //
-    }
+        $usuarios=Funcionario::select('funcionario.fun_id','fun_profesion','fun_cargo','fun_estado','persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci','per_fecha_nacimiento')
+        ->join('persona','persona.per_id','=','funcionario.per_id')
+       ->join('_usuario','_usuario.usu_identificador','!=','funcionario.per_id')
+       ->where('_usuario.usu_tipo','!=','E')
+
+        ->orderBy('per_nombres')
+        ->get();
+
+        return response()->json(['status'=>'ok',"msg"=>"exito",'usuario'=>$usuarios], 200);
+    }*/
 }

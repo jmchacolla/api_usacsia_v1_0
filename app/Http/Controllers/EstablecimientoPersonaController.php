@@ -26,8 +26,7 @@ class EstablecimientoPersonaController extends Controller
         $aprobados=0;
         $total=$personas_x_establecimiento->count();
 
-
-          foreach ($personas_x_establecimiento  as $value) {
+        foreach ($personas_x_establecimiento  as $value) {
                 $datos_ultimo_tramite= Persona_tramite::select('pt_estado_tramite')
                 ->where('persona_tramite.per_id', $value->per_id)
                 ->first();

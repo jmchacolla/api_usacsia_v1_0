@@ -48,7 +48,7 @@
     
     Route::resource('parasito_tratamiento','Parasito_tratamientoController',['only'=>['store','destroy']]);
     //tratamientos que no estan asignados a un parasito
-    Route::get('tratamiento2/{par_id}','Parasito_tratamientoController@sin_asignar');
+    /*Route::get('tratamiento2/{par_id}','Parasito_tratamientoController@sin_asignar');*/
     Route::resource('muestra','MuestraController', ['only'=>['store','index','show']]);
     Route::get('buscar_numero_muestra/{mue_id}','MuestraController@buscar_numero_muestra');
     
@@ -187,7 +187,8 @@
 
       // listar usuaios funcionarios ya creados
      Route::get('usuarios_fun','UserController@usuarios_funcionarios');
-
+// listar funcionarios que no tienen loguin
+/*Route::get('usuarios_nofun','UserController@usuarios_nofuncionarios');*/
       /*jhon 201217*/
       /*SEGUIMIENTO TRAMITE CaS*/
      Route::get('seguimiento', 'Persona_tramiteController@seguimiento');
@@ -238,8 +239,8 @@
     /*wen   asignar zona a inspector 29-12-2017*/
     Route::get('asignar/{zon_id}', 'Zona_inspeccionController@asignar');
     /*wen   listar por inspector inspector 29-12-2017*/
-    Route::get('list_insN/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorN');
-    Route::get('list_insJ/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorJ');
+   /* Route::get('list_insN/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorN');
+    Route::get('list_insJ/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorJ');*/
     /*wen   listar por inspector inspector 4-1-2018*/
     Route::get('inspN/{fun_id}', 'EmpresaTramiteController@lista_x_inspectorN2');
      /*wen   lista  distrito 4-1-2018*/
@@ -316,14 +317,18 @@
     //w ver la ficha inspeccion 6 fi_id 18-1-2018
     Route::get('ficha_inspeccion_f6/{fi_id}','Ficha_inspeccionController@ficha_inspeccion_verf6');
 
-//w lista de empresas por funcionario 18-1-2018
+    //w lista de empresas por funcionario 18-1-2018
     Route::get('empresatramite_validos/{fun_id}','EmpresaTramiteController@empresatramite_validos');
-    Route::get('empresatramite_estado/{et_id}','EmpresaTramiteController@empresatramite_estado');
+
+    //w cambia el estado_tramite
+    Route::put('empresatramite_estado/{et_id}','EmpresaTramiteController@empresatramite_estado');
+
     /*vero -  lista de tramites establecimiento para realizar inspeccion*/
     Route::get('tramitecer_asignar_inpeccion','EmpresaTramiteController@tramitecer_asignar_inpeccion');
     Route::get('tramitecer_asignados_inspeccion','EmpresaTramiteController@tramitecer_asignados_inspeccion');
     Route::post('editar_lista_tramitecer_estado','EmpresaTramiteController@editar_lista_tramitecer_estado');
     
+
      /*jhon----operacines con receta*/
      Route::resource('receta','RecetaController',['only' => ['store', 'update', 'destroy', 'show','index']]);
      
@@ -393,6 +398,12 @@
     Route::resource('orden_pago','OrdenPagoController',['only'=>['store','update', 'destroy', 'show', 'index']]);
     Route::get('verordenpago/{op_id}', 'OrdenPagoController@verordenpago');
     Route::get('ordenpagoestado', 'OrdenPagoController@ordenpagoestado');
+
+    //aprobados segun fecha 23-01-2018
+    Route::get('persona_tramite_aprobados','Persona_tramiteController@persona_tramite_aprobados');
+    //observados segun fecha 23-01-2018 -- aun no se usa
+    Route::get('persona_tramite_observadosl','Persona_tramiteController@persona_tramite_observadosl');
+
     /*jhon reportes caja*/
     Route::get('reportecaja_cas', 'Persona_tramiteController@reportecaja_cas');
     Route::get('reportecaja_cesform', 'EmpresaTramiteController@reportecaja_cesform');
@@ -400,6 +411,7 @@
 
      Route::get('persona_tramite_aprobados','Persona_tramiteController@persona_tramite_aprobados');
     
+
 
 
 
