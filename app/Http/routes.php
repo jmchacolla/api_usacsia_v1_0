@@ -290,7 +290,7 @@
     //ver ficha ins por et_id
 /*    Route::get('vera/{et_id}', 'TramitecerEstadoController@ver');*/
     //w permite cambiar el estado de una etapa seleccionada 5-1-2018  //PENDIENTE
-    Route::put('wen2/{et_id}/{eta_id}','TramitecerEstadoController@prueba');
+    Route::put('tramitecer_estado_busca/{et_id}/{eta_id}','TramitecerEstadoController@tramitecer_estado_busca');
     //w permite ver editar la tabla tramitecer_Es //borrar 8-1-2018
    /* Route::put('celulr/{et_id}/{eta_id}','TramitecerEstadoController@prueba');*/
     //w permite ver el estado de un tramite segun etapa 5-1-2018  //PENDIENTE
@@ -318,6 +318,7 @@
 
 //w lista de empresas por funcionario 18-1-2018
     Route::get('empresatramite_validos/{fun_id}','EmpresaTramiteController@empresatramite_validos');
+    Route::get('empresatramite_estado/{et_id}','EmpresaTramiteController@empresatramite_estado');
     /*vero -  lista de tramites establecimiento para realizar inspeccion*/
     Route::get('tramitecer_asignar_inpeccion','EmpresaTramiteController@tramitecer_asignar_inpeccion');
     Route::get('tramitecer_asignados_inspeccion','EmpresaTramiteController@tramitecer_asignados_inspeccion');
@@ -396,6 +397,8 @@
     Route::get('reportecaja_cas', 'Persona_tramiteController@reportecaja_cas');
     Route::get('reportecaja_cesform', 'EmpresaTramiteController@reportecaja_cesform');
     Route::get('reportecaja_orden', 'OrdenPagoController@reportecaja_orden');
+
+     Route::get('persona_tramite_aprobados','Persona_tramiteController@persona_tramite_aprobados');
     
 
 

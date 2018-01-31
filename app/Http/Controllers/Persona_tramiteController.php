@@ -19,6 +19,7 @@ use App\Models\Receta;
 use App\Models\Prueba_medica;
 use App\Models\Prueba_laboratorio;
 use App\Models\Establecimiento_persona;
+use App\Models\Carnet_sanitario;
 
 
 
@@ -360,6 +361,19 @@ class Persona_tramiteController extends Controller
             $value->per_ci=$persona->per_ci.' '.$persona->per_ci_expedido;
         }
         return response()->json(['status'=>'ok','reporte'=>$reporte],200);
+    }
+
+
+
+public function persona_tramite_aprobados(Request $request){
+        $fecha=$request->fecha;
+
+        $persona_tramite=Carnet_sanitario::where('pt_fecha_fin',$fecha)
+        ->join('persona_tramite','persona_tramite.pt_id','=','carnet_sanitario.pt_id')
+        ->join('persona','persona.per_id','=','persona_tramite.per_id')
+        ->get(['persona.per_id','per_nombres','per_apellido_primero','per_apellido_segundo','per_ci','per_ci_expedido','per_ocupacion','persona_tramite.pt_estado_tramite','pt_vigencia_documento','pt_tipo_tramite']);
+        return response()->json(['status'=>'ok','persona_tramite'=>$persona_tramite],200);
+
     }
 
 }
