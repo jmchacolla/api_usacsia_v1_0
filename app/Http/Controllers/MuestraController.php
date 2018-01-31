@@ -95,7 +95,7 @@ class MuestraController extends Controller
             ->where('prueba_laboratorio.mue_id',$idemuestra)
             ->first();
             if(count($existe)!=0){
-                return response()->json(['status'=>'ok','msg'=>"con prueba",'pruebalabo'=>$existe],200); 
+                return response()->json(['status'=>'ok','msg'=>"con prueba",'pruebalabo'=>$existe,'muestra_encontrada'=>$muestra],200); 
             }
         }
         return response()->json(['status'=>'ok',"msg" => "sin prueba",'muestra'=>$muestra,'hoy'=>$hoy],200); 

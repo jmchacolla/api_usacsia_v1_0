@@ -236,7 +236,7 @@ class EstablecimientoSolicitanteController extends Controller
         }
 
         $empresa=Empresa::where('ess_id', $ess_id)->first();
-        $empresatramite=EmpresaTramite::where('ess_id', $ess_id)->first();
+        $empresatramite=EmpresaTramite::where('ess_id', $ess_id)->orderBy('created_at','desc')->first();
         $zon_id=$est_sol->zon_id;
         $zona=Zona::find($zon_id);
         $propietario=EmpresaPropietario::where('emp_id',$empresa->emp_id)
@@ -277,8 +277,7 @@ class EstablecimientoSolicitanteController extends Controller
             return response()->json(["mensaje"=>"No se encuentra el establecimiento"]);
         }
 
-        $est_sol = EstablecimientoSolicitante::select()
-        ->join('empresa','empresa.ess_id','=','establecimiento_solicitante.ess_id')
+        $est_sol = EstablecimientoSolicitante::join('empresa','empresa.ess_id','=','establecimiento_solicitante.ess_id')
         ->join('empresa_propietario','empresa_propietario.emp_id','=','empresa.emp_id')
         ->join('propietario','propietario.pro_id','=','empresa_propietario.pro_id')
         ->join('_zona','_zona.zon_id','=','establecimiento_solicitante.zon_id')
