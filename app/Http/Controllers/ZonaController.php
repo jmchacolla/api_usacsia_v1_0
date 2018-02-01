@@ -75,7 +75,7 @@ class ZonaController extends Controller
         $zona = Zona::all();
         return response()->json(['status'=>'ok','mensaje'=>'exito','zona'=>$zona],200);
     }*/
-    //crear la zona inspeccion del inspector
+    //editar la zona inspeccion del inspector
      public function update(Request $request,$zon_id)
     {
         // crear al funcionario si existe la persona
@@ -88,6 +88,16 @@ class ZonaController extends Controller
         $zona->save();
 
         return response()->json(['status'=>'ok',"msg" => "exito", "zona" => $zona ], 200);
+    }
+    public function destroy($zon_id)
+    {
+        $zona=Zona::find($zon_id);
+        if (!$zona) {
+            return response()->json(['errors'=>array(['code'=>404,'message'=>'No se encuentra un registro con ese código.'])],404);
+        }
+        $zona->delete();
+        return response()->json(['status'=>'ok',"mensaje"=>"exito","zona"=>$zona], 200);
+
     }
     
 }

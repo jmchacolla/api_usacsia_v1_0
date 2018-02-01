@@ -47,7 +47,7 @@ class Persona_tramite extends Model
     /**
      * @var array
      */
-    protected $fillable = ['tra_id', 'per_id', 'pt_numero_tramite', 'pt_vigencia_pago', 'pt_fecha_ini', 'pt_fecha_fin', 'pt_estado_pago', 'pt_estado_tramite', 'pt_monto', 'pt_tipo_tramite'];
+    protected $fillable = ['tra_id', 'per_id', 'pt_numero_tramite', 'pt_vigencia_pago', 'pt_fecha_ini', 'pt_fecha_fin', 'pt_estado_pago', 'pt_estado_tramite', 'pt_monto', 'pt_tipo_tramite', 'pt_transaccion_banco'];
     protected $hidden = ['created_at','updated_at','userid_at','deleted_at'];
     protected $dates=['deleted_at'];
     /**

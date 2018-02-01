@@ -65,6 +65,7 @@ class OrdenPagoController extends Controller
         if($request->op_fecha_pagado){$ordenpago->op_fecha_pagado=$request->op_fecha_pagado;}
         if($request->op_descripcion){$ordenpago->op_descripcion=$request->op_descripcion;}
         if($request->op_estado_pago){$ordenpago->op_estado_pago=$request->op_estado_pago;}
+        if($request->op_transaccion_banco){$ordenpago->op_transaccion_banco=$request->op_transaccion_banco;}
         $ordenpago->save();
         return response()->json(['status'=>'ok',"msg" => "Exito", "ordenpago" => $ordenpago], 200);
     }
@@ -104,6 +105,7 @@ class OrdenPagoController extends Controller
         $reporteorden=OrdenPago::where('op_fecha_pagado', '>=', $fecha1)
         ->where('op_fecha_pagado', '<=', $fecha2)
         ->where('op_estado_pago','=', 'PAGADO')
+        ->whereNull('op_transaccion_banco')
         ->get();
         
         foreach ($reporteorden as $value) {
@@ -127,6 +129,33 @@ class OrdenPagoController extends Controller
             $value->ro_tramite='CRETIFICADO SANITARIO PAGO ARANCEL';
 
         }
-        return response()->json(['status'=>'ok','reporteorden'=>$reporteorden],200);
+        $reporteordenbanco=OrdenPago::where('op_fecha_pagado', '>=', $fecha1)
+        ->where('op_fecha_pagado', '<=', $fecha2)
+        ->where('op_estado_pago','=', 'PAGADO')
+        ->whereNotNull('op_transaccion_banco')
+        ->get();
+        
+        foreach ($reporteordenbanco as $value) {
+            $etramite=EmpresaTramite::find($value->et_id);
+            $establecimiento=EstablecimientoSolicitante::find($etramite->ess_id);
+            $empresa=Empresa::where('ess_id', $establecimiento->ess_id)->first();
+            $empro=EmpresaPropietario::where('emp_id', $empresa->emp_id)->first();
+            $propietario=Propietario::find($empro->pro_id);
+            if($propietario->pro_tipo=='N'){
+                $pnat=PersonaNatural::where('pro_id', $propietario->pro_id)->first();
+                $persona=Persona::find($pnat->per_id);
+                $value->propietario=$persona->per_nombres.' '.$persona->per_apellido_primero.' '.$persona->per_apellido_segundo;
+                $value->identificador=$persona->per_ci.' '.$persona->per_ci_expedido;
+            }
+            if($propietario->pro_tipo=='J'){
+                $pj=PersonaJuridica::where('pro_id', $propietario->pro_id)->first();
+                $value->propietario=$pj->pjur_razon_social;
+                $value->identificador=$pj->pjur_nit;
+            }
+
+            $value->ro_tramite='CRETIFICADO SANITARIO PAGO ARANCEL';
+
+        }
+        return response()->json(['status'=>'ok','reporteorden'=>$reporteorden, 'reporteordenbanco'=>$reporteordenbanco],200);
     }
 }

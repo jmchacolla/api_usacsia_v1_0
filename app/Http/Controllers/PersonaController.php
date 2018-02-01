@@ -287,4 +287,21 @@ class PersonaController extends Controller
             );
         }
 
+    public function persona_edad(/*Request $request*/ $fecha)
+    {
+        /*$fecha=$request->fecha;*/
+
+        $edad=Persona::edad($fecha);
+        return response()->json(['mensaje'=>'exito','edad_paciente'=>$edad],200);
+    }
+    public function persona_edad2($per_id)
+    {
+        $persona=Persona::find($per_id);
+        $fecha=$persona->per_fecha_nacimiento;
+
+        $edad=Persona::edad($fecha);
+        return response()->json(['mensaje'=>'exito','edad_paciente'=>$edad],200);
+    }
+  
+
 }
