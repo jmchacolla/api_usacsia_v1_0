@@ -285,7 +285,7 @@ class EstablecimientoSolicitanteController extends Controller
         ->get()->first();
 
         $imagen=ImagenEstablecimiento::where('ess_id',$ess_id)->first();
-        $rubros=RubroEmpresa::where('emp_id',$est_sol->emp_id)->get();
+        $rubros=RubroEmpresa::where('emp_id',$est_sol->emp_id)->join('subclasificacion','subclasificacion.sub_nombre','like','rubro_empresa.re_nombre')->select('sub_id','cle_id','sub_codigo','sub_nombre')->get();
         $persona;
         $pjuridica;
         if($est_sol->pro_tipo=="J")
