@@ -172,6 +172,10 @@
    
     //JHON empresa
     Route::resource('establecimiento_solicitante','EstablecimientoSolicitanteController', ['only' =>['index', 'store', 'update', 'show']]);
+    //vero verifica si existe el nombre del establecimiento
+    Route::get('existe_nombre_establecimiento','EstablecimientoSolicitanteController@existe_nombre_establecimiento');
+    //vero
+    Route::get('ver_para_editar/{ess_id}','EstablecimientoSolicitanteController@ver_para_editar');
     //jhon empresa operaciones
     Route::resource('empresa', 'EmpresaController', ['only' => ['index', 'store']]);
 
