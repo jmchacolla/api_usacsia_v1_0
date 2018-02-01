@@ -133,9 +133,9 @@ class EstablecimientoSolicitanteController extends Controller
         return response()->json(['status'=>'ok',"msg" => "exito", "establecimiento" => $result], 200);
     }
     //actualizar
-    public function update(Request $request)
+    public function update(Request $request,$ess_id)
     {
-        $est_sol=EstablecimientoSolicitante::find($request->ess_id);
+        $est_sol=EstablecimientoSolicitante::find($ess_id);
         if(!$est_sol){
             return response()->json(["mensaje"=>"No se encuentra el establecimiento"]);
         }
@@ -147,7 +147,7 @@ class EstablecimientoSolicitanteController extends Controller
         $requeste_object=json_decode($requeste_string);
 
 
-        $est_sol = new EstablecimientoSolicitante();
+        $est_sol = EstablecimientoSolicitante::find($ess_id);
         $est_sol->zon_id=$requeste_object->zon_id;
         $est_sol->ess_razon_social=Str::upper($requeste_object->ess_razon_social);
         $est_sol->ess_telefono=$requeste_object->ess_telefono;
@@ -163,14 +163,17 @@ class EstablecimientoSolicitanteController extends Controller
         $est_sol->ess_hora_fin=$requeste_object->ess_hora_fin;//guarda vacio si no se envia nada
         $est_sol->save();
 
-        $imagen_establecimiento=new ImagenEstablecimiento();
-        $imagen_establecimiento->ess_id=$est_sol->ess_id;
-        $imagen_establecimiento->ima_nombre=$requeste_object->ie_nombre;
-        $imagen_establecimiento->ie_enlace=$requeste_object->ie_enlace;
-        $imagen_establecimiento->save();
+        $imagen_establecimiento=ImagenEstablecimiento::where('ess_id',$ess_id)->first();
+        if($imagen_establecimiento && $requeste_object->ie_nombre){
+            $imagen_establecimiento->ima_nombre=$requeste_object->ie_nombre;
+            $imagen_establecimiento->ie_enlace=$requeste_object->ie_enlace;
+            $imagen_establecimiento->save();
+        }
+        
+        
 
 
-        $empresa = new Empresa();
+        $empresa = Empresa::where('ess_id',$ess_id)->first();
         $empresa->ess_id=$est_sol->ess_id;
         if($requeste_object->emp_nit){$empresa->emp_nit=$requeste_object->emp_nit;}
 
@@ -178,6 +181,12 @@ class EstablecimientoSolicitanteController extends Controller
         $empresa->emp_url_licencia=$requeste_object->emp_url_licencia;
         $empresa->save();
 
+
+        /*eliminando los rubros que habian*/
+        $rubroempresa = RubroEmpresa::where('emp_id',$empresa->emp_id)->get();
+        foreach ($rubroempresa as $value) {
+            $value->delete();
+        }
         /*convirtiendo $request vector a object*/
         $aux;
         $requestv_array=$request->vector;
@@ -192,35 +201,15 @@ class EstablecimientoSolicitanteController extends Controller
             $rubroempresa->save();
         }
 
-        $empresapropietario = new EmpresaPropietario();
-        $empresapropietario->emp_id=$empresa->emp_id;
-        $empresapropietario->pro_id=$requeste_object->pro_id;
-        $empresapropietario->save();
-
         /*crear pendiente en empresa_tramite*/
         /*crear tramitecer_emp por cada etapa*/
-        $algun_tramite_concluido=EmpresaTramite::select()
-        ->where('ess_id',$est_sol->ess_id)
-        ->where('et_estado_tramite', 'APROBADO')
-        ->first();
-
-        $empresatramite = new EmpresaTramite();
-        $empresatramite->tra_id=$requeste_object->tra_id;
-        if($algun_tramite_concluido){
-            $empresatramite->et_tipo_tramite='RENOVACIÓN';
-        }else{
-            $empresatramite->et_estado_tramite='NUEVO';
-        }
-        $empresatramite->ess_id=$est_sol->ess_id;
-        $empresatramite->save();
-
 
         /*
         enviar
         empresa
         */
         $result=compact('est_sol','empresa','rubroempresa');
-        return response()->json(['status'=>'ok',"msg" => "exito", "establecimiento" => $result], 200);
+        return response()->json(['status'=>'ok',"msg" => "editado", "establecimiento" => $result], 200);
 
 
     }
@@ -299,7 +288,7 @@ class EstablecimientoSolicitanteController extends Controller
             ->where('p_natural.pro_id',$est_sol->pro_id)
             ->first();
         }
-        $result=compact('est_sol','rubros','persona','pjuridica');
+        $result=compact('est_sol','rubros','persona','pjuridica','imagen');
         return response()->json(['status'=>'ok',"msg" => "exito", "establecimiento" => $result], 200);
 
        
